@@ -1,4 +1,3 @@
-
 // Iniciador do Projeto - Caso queira verificar como está basta executar esse arquivo - Castilho
 package TelaMetro1.Entrada;
 import javax.swing.JFrame;

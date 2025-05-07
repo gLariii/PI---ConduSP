@@ -12,7 +12,7 @@ public class RoundedTextField extends JTextField {
         this.radius = radius; // Radius(quão arredontado em radius será)
         setOpaque(false); // Permite que o fundo seja desenhado manualmente, ou seja o Swing não vai pintar o fundo manualmente
     }
-    //desenhar fundo arredondado
+    // Desenhar fundo arredondado
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create(); //desenho mais avançado ( cantos mais suaves)
@@ -26,7 +26,7 @@ public class RoundedTextField extends JTextField {
         super.paintComponent(g);
         g2.dispose();
     }
-    //desenhar a borda externa do campo mesmo com os cantos arredondados
+    // Desenhar a borda externa do campo mesmo com os cantos arredondados
     @Override
     protected void paintBorder(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();

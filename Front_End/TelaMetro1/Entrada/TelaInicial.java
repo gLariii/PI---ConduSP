@@ -27,6 +27,7 @@ public class TelaInicial extends JPanel {
     private JTextField senhaTextField;
     private JButton entrarButton;
     private JLabel perfilLabel;
+    private ImageIcon rgIcon;
 
     private void initComponents() {
         ImageIcon perfilIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/perfil.png"));
@@ -39,10 +40,18 @@ public class TelaInicial extends JPanel {
         perfilLabel.setBounds(100, 10, larguraPerfil, alturaPerfil);
         add(perfilLabel);
 
+        // Ícone do RG
+        ImageIcon rgIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/perfil2.png"));
+        int larguraRgIcon = 20;
+        int alturaRgIcon = 20;
+        Image imagemRgIconRedimensionada = rgIconOriginal.getImage().getScaledInstance(larguraRgIcon, alturaRgIcon,
+                Image.SCALE_SMOOTH);
+        rgIcon = new ImageIcon(imagemRgIconRedimensionada);
+
         // Campo de Texto RG - Castilho
-        rgTextField = new RoundedTextField("RG:",15);
+        rgTextField = new RoundedTextField("RG:", 15);
         rgTextField.setBounds(30, 100, 210, 28);
-        rgTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "RG:", 15));
+        rgTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "RG:", 15, rgIcon));
         rgTextField.setForeground(Color.BLACK);
         rgTextField.setCaretColor(getAzulMetro());
         rgTextField.setBackground(Color.WHITE);
@@ -64,7 +73,7 @@ public class TelaInicial extends JPanel {
         add(rgTextField);
 
         // Campo de Texto Senha - Castilho
-        senhaTextField = new RoundedTextField("Senha:",15);
+        senhaTextField = new RoundedTextField("Senha:", 15);
         senhaTextField.setBounds(30, 140, 210, 28);
         senhaTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "Senha:", 15));
         senhaTextField.setCaretColor(getAzulMetro());
@@ -129,11 +138,17 @@ public class TelaInicial extends JPanel {
         private Color focusColor;
         private String placeholder;
         private int radius;
+        private ImageIcon icon;
 
         public PlaceholderBorder(Color focusColor, String placeholder, int radius) {
             this.focusColor = focusColor;
             this.placeholder = placeholder;
             this.radius = radius;
+        }
+
+        public PlaceholderBorder(Color focusColor, String placeholder, int radius, ImageIcon icon) {
+            this(focusColor, placeholder, radius);
+            this.icon = icon;
         }
 
         @Override
@@ -142,24 +157,35 @@ public class TelaInicial extends JPanel {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setStroke(new BasicStroke(2));
 
+            // 1. Pinta a borda do campo
             g2d.setColor(focusColor);
             g2d.draw(new RoundRectangle2D.Double(x, y, width - 1, height - 1, radius, radius));
 
-            JTextField textField = (JTextField) c;
-            if (textField.getText().equals(placeholder)) {
-                g2d.setColor(Color.GRAY);
-                FontMetrics fm = g.getFontMetrics();
-                int placeholderX = x + 5;
-                int placeholderY = y + fm.getAscent() + (height - fm.getHeight()) / 2;
-                g2d.drawString(placeholder, placeholderX, placeholderY);
+            // 2. Pinta o ícone (se houver)
+            if (icon != null) {
+                int iconX = x + 5;
+                int iconY = y + (height - icon.getIconHeight()) / 2;
+                icon.paintIcon(c, g2d, iconX, iconY);
             }
+
+            // 3. Pinta o placeholder (ou o texto digitado)
+            JTextField textField = (JTextField) c;
+            String textToDraw = (textField.getText().isEmpty()) ? placeholder : textField.getText();
+            g2d.setColor(textField.getText().isEmpty() ? Color.GRAY : textField.getForeground());
+            FontMetrics fm = g.getFontMetrics();
+            // Calcule o X do texto com base na largura do ícone + espaçamento
+            int textX = x + (icon != null ? 5 + icon.getIconWidth() + 5 : 5);
+            int textY = y + fm.getAscent() + (height - fm.getHeight()) / 2;
+            g2d.drawString(textToDraw, textX, textY);
 
             g2d.dispose();
         }
 
         @Override
         public Insets getBorderInsets(Component c) {
-            return new Insets(5, 5, 5, 5);
+            // Ajuste os insets para acomodar o ícone (se houver)
+            int left = (icon != null) ? 5 + icon.getIconWidth() + 5 : 5; // Espaçamento antes e depois do ícone
+            return new Insets(5, left, 5, 5);
         }
 
         @Override
