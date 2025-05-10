@@ -1,20 +1,14 @@
 package TelaMetro1.Entrada;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import java.awt.Color;
-import java.awt.Graphics;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import java.awt.Image;
-import java.awt.event.FocusListener;
-import java.awt.event.FocusEvent;
-import javax.swing.border.Border;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.geom.RoundRectangle2D;
+import javax.swing.border.Border;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.text.JTextComponent;
 
 public class TelaInicial extends JPanel {
     public TelaInicial() {
@@ -24,12 +18,22 @@ public class TelaInicial extends JPanel {
     }
 
     private JTextField rgTextField;
+    private JPasswordField passwordField;
     private JTextField senhaTextField;
     private JButton entrarButton;
     private JLabel perfilLabel;
+    private JLabel rgIconLabel;
+    private JLabel cadeadoLabel;
+    private JButton togglePasswordButton; 
     private ImageIcon rgIcon;
+    private ImageIcon cadeadoIcon;
+    private ImageIcon eyeVisibleIcon;
+    private Font helveticaFont;
+    private boolean isPasswordPressed = false;
 
     private void initComponents() {
+        helveticaFont = new Font("Helvetica", Font.PLAIN, 16);
+
         ImageIcon perfilIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/perfil.png"));
         int larguraPerfil = 80;
         int alturaPerfil = 80;
@@ -40,7 +44,6 @@ public class TelaInicial extends JPanel {
         perfilLabel.setBounds(100, 10, larguraPerfil, alturaPerfil);
         add(perfilLabel);
 
-        // Ícone do RG
         ImageIcon rgIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/perfil2.png"));
         int larguraRgIcon = 20;
         int alturaRgIcon = 20;
@@ -48,13 +51,29 @@ public class TelaInicial extends JPanel {
                 Image.SCALE_SMOOTH);
         rgIcon = new ImageIcon(imagemRgIconRedimensionada);
 
+        rgIconLabel = new JLabel(rgIcon);
+        rgIconLabel.setBounds(5, 104, larguraRgIcon, alturaRgIcon);
+        add(rgIconLabel);
+
+
+        ImageIcon cadeadoIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/cadeado.png"));
+        int larguraCadeadoIcon = 20;
+        int alturaCadeadoIcon = 20;
+        Image imagemCadeadoIconRedimensionada = cadeadoIconOriginal.getImage().getScaledInstance(larguraCadeadoIcon, alturaCadeadoIcon, Image.SCALE_SMOOTH);
+        cadeadoIcon = new ImageIcon(imagemCadeadoIconRedimensionada);
+
+        cadeadoLabel = new JLabel(cadeadoIcon);
+        cadeadoLabel.setBounds(5, 144, larguraCadeadoIcon, alturaCadeadoIcon);
+        add(cadeadoLabel);
+
         // Campo de Texto RG - Castilho
         rgTextField = new RoundedTextField("RG:", 15);
-        rgTextField.setBounds(30, 100, 210, 28);
-        rgTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "RG:", 15, rgIcon));
+        rgTextField.setBounds(30, 100, 230, 28);
+        rgTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "RG:", 15));
         rgTextField.setForeground(Color.BLACK);
         rgTextField.setCaretColor(getAzulMetro());
         rgTextField.setBackground(Color.WHITE);
+        rgTextField.setFont(helveticaFont);
         rgTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -72,36 +91,59 @@ public class TelaInicial extends JPanel {
         });
         add(rgTextField);
 
-        // Campo de Texto Senha - Castilho
+        // Campo de Senha - Castilho
+        passwordField = new RoundedPasswordField("Senha:", 15);
+        passwordField.setBounds(30, 140, 200, 28);
+        passwordField.setBorder(new PlaceholderBorder(getAzulMetro(), "Senha:", 15));
+        passwordField.setCaretColor(getAzulMetro());
+        passwordField.setBackground(Color.WHITE);
+        passwordField.setFont(helveticaFont);
+        add(passwordField);
+
         senhaTextField = new RoundedTextField("Senha:", 15);
-        senhaTextField.setBounds(30, 140, 210, 28);
+        senhaTextField.setBounds(30, 140, 200, 28);
         senhaTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "Senha:", 15));
+        senhaTextField.setForeground(Color.BLACK);
         senhaTextField.setCaretColor(getAzulMetro());
         senhaTextField.setBackground(Color.WHITE);
-        senhaTextField.addFocusListener(new FocusListener() {
+        senhaTextField.setFont(helveticaFont);
+        senhaTextField.setVisible(false);
+        senhaTextField.setEditable(false);
+        add(senhaTextField);
+
+        eyeVisibleIcon = new ImageIcon(getClass().getResource("/Assets/Imagens/olho_visivel.png"));
+
+        togglePasswordButton = new JButton(eyeVisibleIcon);  // Inicializa o botão AQUI!
+        togglePasswordButton.setBounds(235, 140, 28, 28);
+        togglePasswordButton.setBorderPainted(false);
+        togglePasswordButton.setContentAreaFilled(false);
+        togglePasswordButton.setFocusPainted(false);
+        togglePasswordButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void focusGained(FocusEvent e) {
-                if (senhaTextField.getText().equals("Senha:")) {
-                    senhaTextField.setText("");
-                }
+            public void mousePressed(MouseEvent e) {
+                senhaTextField.setText(String.valueOf(passwordField.getPassword()));
+                passwordField.setVisible(false);
+                senhaTextField.setVisible(true);
+                isPasswordPressed = true;
             }
 
             @Override
-            public void focusLost(FocusEvent e) {
-                if (senhaTextField.getText().isEmpty()) {
-                    senhaTextField.setText("Senha:");
-                }
+            public void mouseReleased(MouseEvent e) {
+                passwordField.setVisible(true);
+                senhaTextField.setVisible(false);
+                isPasswordPressed = false;
             }
         });
-        add(senhaTextField);
+        add(togglePasswordButton);
 
         // Botão Entrar - Castilho
         entrarButton = new JButton("Entrar");
-        entrarButton.setBounds(90, 180, 100, 40);
+        entrarButton.setBounds(65, 180, 150, 40);
         entrarButton.setOpaque(false);
         entrarButton.setContentAreaFilled(false);
         entrarButton.setBorder(new RoundedBorder(Color.WHITE, 3, 15));
         entrarButton.setForeground(Color.WHITE);
+        entrarButton.setFont(helveticaFont);
         entrarButton.addMouseListener(new MouseAdapter() {
             Color originalBorderColor = Color.WHITE;
             int originalBorderThickness = 3;
@@ -118,7 +160,7 @@ public class TelaInicial extends JPanel {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                entrarButton.setBorder(new RoundedBorder(originalBorderColor, originalBorderThickness, 15));
+                entrarButton.setBorder(new RoundedBorder(originalBorderColor, originalBorderThickness, 3));
                 entrarButton.setForeground(originalTextColor);
             }
         });
@@ -138,17 +180,11 @@ public class TelaInicial extends JPanel {
         private Color focusColor;
         private String placeholder;
         private int radius;
-        private ImageIcon icon;
 
         public PlaceholderBorder(Color focusColor, String placeholder, int radius) {
             this.focusColor = focusColor;
             this.placeholder = placeholder;
             this.radius = radius;
-        }
-
-        public PlaceholderBorder(Color focusColor, String placeholder, int radius, ImageIcon icon) {
-            this(focusColor, placeholder, radius);
-            this.icon = icon;
         }
 
         @Override
@@ -157,24 +193,21 @@ public class TelaInicial extends JPanel {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setStroke(new BasicStroke(2));
 
-            // 1. Pinta a borda do campo
             g2d.setColor(focusColor);
             g2d.draw(new RoundRectangle2D.Double(x, y, width - 1, height - 1, radius, radius));
 
-            // 2. Pinta o ícone (se houver)
-            if (icon != null) {
-                int iconX = x + 5;
-                int iconY = y + (height - icon.getIconHeight()) / 2;
-                icon.paintIcon(c, g2d, iconX, iconY);
-            }
 
-            // 3. Pinta o placeholder (ou o texto digitado)
-            JTextField textField = (JTextField) c;
-            String textToDraw = (textField.getText().isEmpty()) ? placeholder : textField.getText();
-            g2d.setColor(textField.getText().isEmpty() ? Color.GRAY : textField.getForeground());
+            JTextComponent textField = (JTextComponent) c;
+            String textToDraw = "";
+            if (textField == passwordField && !isPasswordPressed) {
+                textToDraw = placeholder;
+            } else {
+                textToDraw = (textField.getText().isEmpty()) ? placeholder : textField.getText();
+            }
+            g2d.setColor(textField.getText().isEmpty() && (textField != senhaTextField || isPasswordPressed) ? Color.GRAY : textField.getForeground());
+            g2d.setFont(helveticaFont);
             FontMetrics fm = g.getFontMetrics();
-            // Calcule o X do texto com base na largura do ícone + espaçamento
-            int textX = x + (icon != null ? 5 + icon.getIconWidth() + 5 : 5);
+            int textX = x + 5;
             int textY = y + fm.getAscent() + (height - fm.getHeight()) / 2;
             g2d.drawString(textToDraw, textX, textY);
 
@@ -183,9 +216,7 @@ public class TelaInicial extends JPanel {
 
         @Override
         public Insets getBorderInsets(Component c) {
-            // Ajuste os insets para acomodar o ícone (se houver)
-            int left = (icon != null) ? 5 + icon.getIconWidth() + 5 : 5; // Espaçamento antes e depois do ícone
-            return new Insets(5, left, 5, 5);
+            return new Insets(5, 5, 5, 5);
         }
 
         @Override
@@ -224,6 +255,35 @@ public class TelaInicial extends JPanel {
         @Override
         public boolean isBorderOpaque() {
             return false;
+        }
+    }
+    class RoundedPasswordField extends JPasswordField {
+        private int radius;
+
+        public RoundedPasswordField(String text, int radius) {
+            super(text);
+            this.radius = radius;
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
+
+            super.paintComponent(g);
+            g2.dispose();
+        }
+
+        @Override
+        protected void paintBorder(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setColor(getForeground());
+            g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, radius, radius);
+            g2.dispose();
         }
     }
 }

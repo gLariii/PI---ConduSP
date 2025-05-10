@@ -1,3 +1,4 @@
+// Ajustes da Palavra Confirme seus dados, Condução SP e o fundo do painel - Castilho
 package TelaMetro1.Entrada;
 
 import javax.swing.JPanel;
@@ -24,16 +25,16 @@ public class LoginPainel extends JPanel {
     private void initComponents() {
         tituloLabel = new JLabel("Confirme seus dados");
         tituloLabel.setForeground(Color.WHITE);
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        tituloLabel.setBounds(45, 15, 250, 30);
+        tituloLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
+        tituloLabel.setBounds(45, 15, 400, 30);
 
         TelaInicial telaInicial = new TelaInicial();
         telaInicial.setBounds(10, 50, 280, 230);
 
         rodapeLabel = new JLabel("Condução SP");
         rodapeLabel.setForeground(Color.WHITE);
-        rodapeLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        rodapeLabel.setBounds(95, 290, 120, 20);
+        rodapeLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
+        rodapeLabel.setBounds(95, 290, 400, 20);
 
         add(tituloLabel);
         add(telaInicial);
