@@ -1,28 +1,28 @@
-package TelaMetro1;
+package Front_End.ChaveReversoraTela;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class ChaveReversoraTela extends JFrame {
-    private String[] backgrounds = {
-        "C:\\Users\\25.00552-1\\OneDrive - Instituto Mauá de Tecnologia\\PI\\Front\\ChaveReversora\\Imagens\\ChaveReversoraFrente.jpg",
-        "C:\\Users\\25.00552-1\\OneDrive - Instituto Mauá de Tecnologia\\PI\\Front\\ChaveReversora\\Imagens\\ChaveReversoraNeutro.jpg"
-    };
-    private int index = 0;
+public class ChaveReversoraTela extends JPanel {
 
+    private String[] backgrounds = {
+        "C:\\Users\\sergi\\OneDrive\\Documentos\\PI---ConduSP\\Front_End\\ChaveReversoraTela\\ChaveReversoraFrente.jpg",
+        "C:\\Users\\sergi\\OneDrive\\Documentos\\PI---ConduSP\\Front_End\\ChaveReversoraTela\\ChaveReversoraNeutro.jpg"
+    };
+
+    private int index = 0;
     private BackgroundPanel backgroundPanel;
     private JButton btnTrocar;
+    private JFrame parentFrame;
 
-    public ChaveReversoraTela() {
-        setTitle("Trocar Background");
-        setSize(800, 600);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+    public ChaveReversoraTela(JFrame frame) {
+        this.parentFrame = frame;
 
+        setLayout(new BorderLayout());
         backgroundPanel = new BackgroundPanel();
-        backgroundPanel.setLayout(null);  // Manter o layout null
-        setContentPane(backgroundPanel);
+        backgroundPanel.setLayout(null);
+        add(backgroundPanel, BorderLayout.CENTER);
 
         btnTrocar = new JButton("Trocar Background");
 
@@ -31,9 +31,8 @@ public class ChaveReversoraTela extends JFrame {
         btnTrocar.setContentAreaFilled(false);
         btnTrocar.setBorderPainted(false);
         btnTrocar.setFocusPainted(false);
-        btnTrocar.setForeground(new Color(0, 0, 0, 0)); 
+        btnTrocar.setForeground(new Color(0, 0, 0, 0));
 
-        // Ação do botão
         btnTrocar.addActionListener(e -> {
             index = (index + 1) % backgrounds.length;
             backgroundPanel.setImage(backgrounds[index]);
@@ -42,27 +41,29 @@ public class ChaveReversoraTela extends JFrame {
         backgroundPanel.add(btnTrocar);
         backgroundPanel.setImage(backgrounds[index]);
 
-        setVisible(true);
-
-        // Ajusta o layout ao redimensionar
+        // Ajustar botão ao redimensionar
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                backgroundPanel.repaint(); // Redesenha a imagem de fundo
-                adjustButtonSizeAndPosition(); // Ajusta o botão no redimensionamento
+                backgroundPanel.repaint();
+                adjustButtonSizeAndPosition();
             }
         });
 
-        adjustButtonSizeAndPosition(); // Ajusta a posição inicial
+        adjustButtonSizeAndPosition();
+
+        // Botão de voltar
+        JButton btnVoltar = new JButton("Voltar");
+        btnVoltar.setBounds(10, 10, 100, 30);
+        btnVoltar.addActionListener(e -> voltarParaCabine());
+        backgroundPanel.add(btnVoltar);
     }
 
-    // Método para ajustar o botão conforme o tamanho da janela
     private void adjustButtonSizeAndPosition() {
         int buttonWidth = 200;
         int buttonHeight = 220;
         int x = (getWidth() - buttonWidth) / 2;
         int y = (getHeight() - buttonHeight) / 2 - 40;
 
-        // Aumenta o tamanho proporcionalmente se a janela for redimensionada
         if (getWidth() > 800) {
             buttonWidth = 400;
             buttonHeight = 440;
@@ -70,11 +71,16 @@ public class ChaveReversoraTela extends JFrame {
             y = (getHeight() - buttonHeight) / 2 - 40;
         }
 
-        // Mantém o botão centralizado e ajusta o tamanho conforme necessário
         btnTrocar.setBounds(x, y, buttonWidth, buttonHeight);
     }
 
-    // Painel que desenha imagem de fundo redimensionada
+    private void voltarParaCabine() {
+        parentFrame.setContentPane(new Front_End.CabineDeControleTela.CabineDeControleTela(parentFrame));
+        parentFrame.revalidate();
+        parentFrame.repaint();
+    }
+
+    // Painel interno com imagem
     class BackgroundPanel extends JPanel {
         private Image image;
 
@@ -90,9 +96,5 @@ public class ChaveReversoraTela extends JFrame {
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(ChaveReversoraTela::new);
     }
 }
