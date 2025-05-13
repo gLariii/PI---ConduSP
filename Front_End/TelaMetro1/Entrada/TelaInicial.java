@@ -28,6 +28,7 @@ public class TelaInicial extends JPanel {
     private ImageIcon rgIcon;
     private ImageIcon cadeadoIcon;
     private ImageIcon eyeVisibleIcon;
+    private ImageIcon eyeHiddenIcon;
     private Font helveticaFont;
     private boolean isPasswordPressed = false;
 
@@ -86,6 +87,7 @@ public class TelaInicial extends JPanel {
             public void focusLost(FocusEvent e) {
                 if (rgTextField.getText().isEmpty()) {
                     rgTextField.setText("RG:");
+                    rgTextField.setForeground(Color.GRAY);
                 }
             }
         });
@@ -112,30 +114,44 @@ public class TelaInicial extends JPanel {
         add(senhaTextField);
 
         // Larissa o Olho ta aqui - OLha aqui Larissaaaaaaaaaaaaaaaaaaaaaaaaaaa olhaa o olho
-        eyeVisibleIcon = new ImageIcon(getClass().getResource("/Assets/Imagens/olho_visivel.png"));
+        // Ícones do olho
 
-        togglePasswordButton = new JButton(eyeVisibleIcon);  // Inicializa o botão AQUI!
+        ImageIcon eyeVisibleIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/olho_visivel.png"));
+        Image eyeVisibleImage = eyeVisibleIconOriginal.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        eyeVisibleIcon = new ImageIcon(eyeVisibleImage);
+
+        ImageIcon eyeHiddenIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/olho_escondido.png"));
+        Image eyeHiddenImage = eyeHiddenIconOriginal.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        eyeHiddenIcon = new ImageIcon(eyeHiddenImage);
+
+        
+        // Botão do olho (mostrar/ocultar senha)
+        togglePasswordButton = new JButton(eyeVisibleIcon);  // Usa ícone visível inicialmente
         togglePasswordButton.setBounds(235, 140, 28, 28);
         togglePasswordButton.setBorderPainted(false);
         togglePasswordButton.setContentAreaFilled(false);
         togglePasswordButton.setFocusPainted(false);
-        togglePasswordButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                senhaTextField.setText(String.valueOf(passwordField.getPassword()));
-                passwordField.setVisible(false);
-                senhaTextField.setVisible(true);
-                isPasswordPressed = true;
-            }
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
+        // Alterna entre mostrar/ocultar senha
+        togglePasswordButton.addActionListener(e -> {
+            if (isPasswordPressed) {
+                // Ocultar senha
                 passwordField.setVisible(true);
                 senhaTextField.setVisible(false);
-                isPasswordPressed = false;
+                togglePasswordButton.setIcon(eyeVisibleIcon);
+            } else {
+                // Mostrar senha
+                senhaTextField.setText("Senha:");
+                senhaTextField.setForeground(Color.GRAY);
+                passwordField.setVisible(false);
+                senhaTextField.setVisible(true);
+                togglePasswordButton.setIcon(eyeHiddenIcon);
             }
+            isPasswordPressed = !isPasswordPressed;
         });
+
         add(togglePasswordButton);
+
 
         // Botão Entrar - Castilho
         entrarButton = new JButton("Entrar");
