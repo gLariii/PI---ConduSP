@@ -111,6 +111,7 @@ public class TelaInicial extends JPanel {
         senhaTextField.setEditable(false);
         add(senhaTextField);
 
+        // Larissa o Olho ta aqui - OLha aqui Larissaaaaaaaaaaaaaaaaaaaaaaaaaaa olhaa o olho
         eyeVisibleIcon = new ImageIcon(getClass().getResource("/Assets/Imagens/olho_visivel.png"));
 
         togglePasswordButton = new JButton(eyeVisibleIcon);  // Inicializa o botão AQUI!
