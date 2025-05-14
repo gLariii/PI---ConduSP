@@ -1,5 +1,5 @@
-package Front_End.ModuloDeComunicaçãoTela;
-import Front_End.CabineDeControleTela.CabineDeControleTela;
+package ModuloDeComunicaçãoTela;
+import CabineDeControleTela.CabineDeControleTela;
 import javax.swing.*;
 import java.awt.*;
 public class PATela extends JPanel {

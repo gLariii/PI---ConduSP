@@ -1,14 +1,15 @@
-package Front_End.ChaveReversoraTela;
+package ChaveReversoraTela;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import CabineDeControleTela.CabineDeControleTela;
 
 public class ChaveReversoraTela extends JPanel {
 
     private String[] backgrounds = {
-        "C:\\Users\\sergi\\OneDrive\\Documentos\\PI---ConduSP\\Front_End\\ChaveReversoraTela\\ChaveReversoraFrente.jpg",
-        "C:\\Users\\sergi\\OneDrive\\Documentos\\PI---ConduSP\\Front_End\\ChaveReversoraTela\\ChaveReversoraNeutro.jpg"
+        "/Front_End/ChaveReversoraTela/ChaveReversoraFrente.jpg",
+        "/Front_End/ChaveReversoraTela/ChaveReversoraNeutro.jpg"
     };
 
     private int index = 0;
@@ -75,7 +76,7 @@ public class ChaveReversoraTela extends JPanel {
     }
 
     private void voltarParaCabine() {
-        parentFrame.setContentPane(new Front_End.CabineDeControleTela.CabineDeControleTela(parentFrame));
+        parentFrame.setContentPane(new CabineDeControleTela(parentFrame));
         parentFrame.revalidate();
         parentFrame.repaint();
     }

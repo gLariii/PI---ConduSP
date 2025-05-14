@@ -1,6 +1,6 @@
-package Front_End.CabineDeControleTela;
-import Front_End.ChaveReversoraTela.ChaveReversoraTela;
-import Front_End.ModuloDeComunicaçãoTela.ModuloDeComunicacaoTelaInicial;
+package CabineDeControleTela;
+import ChaveReversoraTela.ChaveReversoraTela;
+import ModuloDeComunicaçãoTela.ModuloDeComunicacaoTelaInicial;
 
 import javax.swing.*;
 import java.awt.*;

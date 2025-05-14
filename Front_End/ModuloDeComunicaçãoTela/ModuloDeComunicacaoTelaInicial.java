@@ -1,7 +1,7 @@
-package Front_End.ModuloDeComunicaçãoTela;
+package ModuloDeComunicaçãoTela;
 import javax.swing.*;
 
-import Front_End.CabineDeControleTela.CabineDeControleTela;
+import CabineDeControleTela.CabineDeControleTela;
 
 import java.awt.*;
 
