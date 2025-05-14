@@ -1,77 +1,56 @@
 package DDUTela;
 
 import javax.swing.*;
+
+import CabineDeControleTela.CabineDeControleTela;
+
 import java.awt.*;
 
-public class FE extends JFrame {
-    public FE() {
-        setTitle("DDU FE");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+public class FE extends JPanel {
 
-        JPanel painel = new JPanel(null);
+    private JFrame parentFrame;
+
+    public FE(JFrame frame) {
+        this.parentFrame = frame;
+        setLayout(null);
 
         ImageIcon icon = new ImageIcon(getClass().getResource("/DDUTela/assets/images/DDUfe.jpg"));
-
         Image imagem = icon.getImage().getScaledInstance(1920, 1080, Image.SCALE_SMOOTH);
-
         JLabel fundo = new JLabel(new ImageIcon(imagem));
         fundo.setBounds(0, 0, 1920, 1080);
 
-        setContentPane(painel);
+        // Botões
+        JButton botao1 = criarBotao(390, 870, e -> trocarTela(new DDUPrincipal(parentFrame)));
+        JButton botao2 = criarBotao(780, 870, e -> trocarTela(new FE(parentFrame)));
+        JButton botao3 = criarBotao(900, 870, e -> trocarTela(new INFOPASS(parentFrame)));
+        JButton botao5 = criarBotao(1300, 880, e -> trocarTela(new MANUT(parentFrame)));
+        JButton btnVoltar = new JButton("Voltar");
+        btnVoltar.setBounds(10, 10, 100, 30);
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
 
-        setVisible(true);
 
-        JButton botao1 = new JButton(""); 
-        botao1.setBounds(390, 870, 100, 80); 
-        botao1.addActionListener(e -> {new DDUPrincipal(); dispose();});
-        botao1.setOpaque(false);
-        botao1.setContentAreaFilled(false);
-        botao1.setBorderPainted(false);
-        botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(botao1);
+        add(botao2);
+        add(botao3);
+        add(botao5);
+        add(btnVoltar);
+        add(fundo);
+    }
 
-        JButton botao2 = new JButton("");  
-        botao2.setBounds(780, 870, 100, 80); 
-        botao2.addActionListener(e -> {new FE(); dispose();});
-        botao2.setOpaque(false);
-        botao2.setContentAreaFilled(false);
-        botao2.setBorderPainted(false);
-        botao2.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        JButton botao3 = new JButton(""); 
-        botao3.setBounds(900, 870, 100, 80); 
-        botao3.addActionListener(e -> {new INFOPASS(); dispose();});
-        botao3.setOpaque(false);
-        botao3.setContentAreaFilled(false);
-        botao3.setBorderPainted(false);
-        botao3.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    private JButton criarBotao(int x, int y, java.awt.event.ActionListener acao) {
+        JButton btn = new JButton("");
+        btn.setBounds(x, y, 100, 80);
+        btn.addActionListener(acao);
+        btn.setOpaque(false);
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
 
-        JButton botao4 = new JButton("");  
-        botao4.setBounds(1038, 880, 100, 80); 
-        botao4.addActionListener(e -> {new MANUT(); dispose();});
-        botao4.setOpaque(false);
-        botao4.setContentAreaFilled(false);
-        botao4.setBorderPainted(false);
-        botao4.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        JButton botao5 = new JButton("");  
-        botao5.setBounds(1300, 880, 100, 80); 
-        botao5.addActionListener(e -> {new MANUT(); dispose();});
-        botao5.setOpaque(false);
-        botao5.setContentAreaFilled(false);
-        botao5.setBorderPainted(false);
-        botao5.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        painel.add(botao1);
-        painel.add(botao2);
-        painel.add(botao3);
-        painel.add(botao4);
-        painel.add(botao5);
-        painel.add(fundo);
-        
-        setContentPane(painel);
- 
-        setVisible(true);
-
+    private void trocarTela(JPanel novaTela) {
+        parentFrame.setContentPane(novaTela);
+        parentFrame.revalidate();
+        parentFrame.repaint();
     }
 }

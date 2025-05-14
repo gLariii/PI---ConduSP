@@ -8,8 +8,8 @@ import CabineDeControleTela.CabineDeControleTela;
 public class ChaveReversoraTela extends JPanel {
 
     private String[] backgrounds = {
-        "/Front_End/ChaveReversoraTela/ChaveReversoraFrente.jpg",
-        "/Front_End/ChaveReversoraTela/ChaveReversoraNeutro.jpg"
+        "ChaveReversoraFrente.jpg",
+        "ChaveReversoraNeutro.jpg"
     };
 
     private int index = 0;
@@ -86,7 +86,7 @@ public class ChaveReversoraTela extends JPanel {
         private Image image;
 
         public void setImage(String path) {
-            image = new ImageIcon(path).getImage();
+            image = new ImageIcon(getClass().getResource(path)).getImage();
             repaint();
         }
 

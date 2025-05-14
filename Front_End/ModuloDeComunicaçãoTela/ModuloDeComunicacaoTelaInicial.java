@@ -15,7 +15,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         this.parentFrame = frame;
         setLayout(null);
         // Carrega imagem (caminho absoluto ou relativo ajustado)
-        ImageIcon icon = new ImageIcon(getClass().getResource("/Front_End/ModuloDeComunicaçãoTela/Imagens/Modulo de comunicação 1.jpg"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/Modulo de comunicação 1.jpg"));
         imagemDeFundo = icon.getImage();
 
         // Botões
@@ -30,21 +30,10 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botao1);
 
-        JButton botao2 = new JButton("Cabine De Controle");
-        botao2.setSize(400, 100); // Define o tamanho do botão
-
-        // Posição inicial (vai ajustar automaticamente ao exibir)
-        int panelWidth = 1920;  // Largura estimada (ou use getWidth() após visível)
-        int panelHeight = 1080; // Altura estimada
-
-        int x = (panelWidth - botao2.getWidth()) / 2;      // Centraliza horizontalmente
-        int y = panelHeight - botao2.getHeight() - 80;     // 50px acima do rodapé
-
-        botao2.setLocation(x, y);
-
-        botao2.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame)));
-        botao2.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        add(botao2);
+        JButton btnVoltar = new JButton("Voltar");
+        btnVoltar.setBounds(10, 10, 100, 30);
+        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame)));
+        add(btnVoltar);
     }
 
     @Override

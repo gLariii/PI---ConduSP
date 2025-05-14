@@ -1,5 +1,6 @@
 package CabineDeControleTela;
 import ChaveReversoraTela.ChaveReversoraTela;
+import DDUTela.DDUPrincipal;
 import ModuloDeComunicaçãoTela.ModuloDeComunicacaoTelaInicial;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ public class CabineDeControleTela extends JPanel {
         this.parentFrame = frame;
         setLayout(null);
         // Carrega imagem (caminho absoluto ou relativo ajustado)
-        ImageIcon icon = new ImageIcon(getClass().getResource("/Front_End/CabineDeControleTela/Imagens/01 - Painel (1).jpg"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/01 - Painel (1).jpg"));
         imagemDeFundo = icon.getImage();
 
         // Botões
@@ -40,6 +41,17 @@ public class CabineDeControleTela extends JPanel {
         botao2.setForeground(new Color(0, 0, 0, 0));
         botao2.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botao2);
+
+        JButton botao3 = new JButton("DDU Tela Principal");
+        botao3.setBounds(150, 455, 270, 120);
+        botao3.addActionListener(e -> substituirPainel(new DDUPrincipal(parentFrame)));
+        botao3.setOpaque(false);
+        botao3.setContentAreaFilled(false);
+        botao3.setBorderPainted(false);
+        botao3.setFocusPainted(false);
+        botao3.setForeground(new Color(0, 0, 0, 0));
+        botao3.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(botao3);
     }
 
     @Override
