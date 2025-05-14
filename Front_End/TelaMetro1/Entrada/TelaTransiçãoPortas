@@ -1,4 +1,4 @@
-package com.mycompany.simulacao_metro;
+package TelaMetro1.Entrada;
 
 import javax.swing.*;
 import java.awt.*;
