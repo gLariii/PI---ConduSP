@@ -13,6 +13,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+//Fundo da tela de inicio(com a logo, imagem) - Castilho
 public class ImagemPainel extends JPanel {
     private LoginPainel loginPainel;
     private JLabel logoLabel;

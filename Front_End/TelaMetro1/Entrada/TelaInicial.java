@@ -11,10 +11,14 @@ import java.awt.event.MouseEvent;
 import javax.swing.text.JTextComponent;
 
 public class TelaInicial extends JPanel {
+
     public TelaInicial() {
         setOpaque(false);
         setLayout(null);
         initComponents();
+        passwordField.setText("Senha:");
+        passwordField.setForeground(Color.GRAY);
+        passwordField.setEchoChar((char) 0); // mostra o texto normal
     }
 
     private JTextField rgTextField;
@@ -80,7 +84,7 @@ public class TelaInicial extends JPanel {
             public void focusGained(FocusEvent e) {
                 if (rgTextField.getText().equals("RG:")) {
                     rgTextField.setText("");
-                    rgTextField.setForeground(Color.BLACK); // Garante que a cor do texto seja preta ao digitar
+                    rgTextField.setForeground(Color.BLACK); 
                 }
             }
 
@@ -101,26 +105,29 @@ public class TelaInicial extends JPanel {
         passwordField.setCaretColor(getAzulMetro());
         passwordField.setBackground(Color.WHITE);
         passwordField.setFont(helveticaFont);
-        passwordField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (new String(passwordField.getPassword()).equals("Senha:")) {
-                    passwordField.setText("");
-                }
-                passwordField.setForeground(Color.BLACK); // Garante que a cor do texto seja preta ao digitar novamente
+        passwordField.addFocusListener(new FocusListener() { 
+            @Override 
+            public void focusGained(FocusEvent e) { 
+            String senhaAtual = new String(passwordField.getPassword());
+            if (senhaAtual.equals("Senha:")) {
+                passwordField.setText("");
+                passwordField.setForeground(Color.BLACK);
+                passwordField.setEchoChar('\u2022'); // bolinhas
             }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (new String(passwordField.getPassword()).isEmpty()) {
+    }  
+            @Override 
+            public void focusLost(FocusEvent e) { 
+                if (new String(passwordField.getPassword()).isEmpty()) { 
                     passwordField.setText("Senha:");
                     passwordField.setForeground(Color.GRAY);
-                }
-            }
+                    passwordField.setEchoChar((char) 0); // mostra o texto normal
+                } 
+            } 
         });
-        add(passwordField);
-
-        senhaTextField = new RoundedTextField("", 15); // Inicializa sem texto
+        
+        add(passwordField); 
+        
+        senhaTextField = new RoundedTextField("", 15); // Inicial sem texto
         senhaTextField.setBounds(30, 140, 200, 28);
         senhaTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "Senha:", 15));
         senhaTextField.setForeground(Color.BLACK);
@@ -129,6 +136,24 @@ public class TelaInicial extends JPanel {
         senhaTextField.setFont(helveticaFont);
         senhaTextField.setVisible(false);
         senhaTextField.setEditable(false);
+        senhaTextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (senhaTextField.getText().equals("Senha:")) {
+                    senhaTextField.setText("");
+                    senhaTextField.setForeground(Color.BLACK);
+                }
+            }
+        
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (senhaTextField.getText().isEmpty()) {
+                    senhaTextField.setText("Senha:");
+                    senhaTextField.setForeground(Color.GRAY);
+                }
+            }
+        });
+        
         add(senhaTextField);
 
         // Larissa o Olho ta aqui - OLha aqui Larissaaaaaaaaaaaaaaaaaaaaaaaaaaa olhaa o olho
@@ -154,29 +179,42 @@ public class TelaInicial extends JPanel {
         togglePasswordButton.addActionListener(e -> {
             if (isPasswordPressed) {
                 // Ocultar senha
+                passwordField.setText(senhaTextField.getText());
+                if (passwordField.getText().equals("Senha:")) {
+                    passwordField.setText((""));
+                    passwordField.setEchoChar((char) 0);
+                } else {
+                    passwordField.setEchoChar('\u2022');
+                }
                 passwordField.setVisible(true);
                 senhaTextField.setVisible(false);
                 togglePasswordButton.setIcon(eyeVisibleIcon);
                 senhaTextField.setEditable(false);
                 passwordField.requestFocusInWindow();
-                revalidate();
-                repaint();
-                // Verifica se o campo está vazio e remove o placeholder
-                if (new String(passwordField.getPassword()).equals("Senha:")) {
-                    passwordField.setText("");
-                }
             } else {
                 // Mostrar senha
-                senhaTextField.setText(new String(passwordField.getPassword()));
+                String password = new String(passwordField.getPassword());
+                if (password.equals("Senha:")) {
+                    password = "";
+                }
+                if (password.isEmpty()) {
+                    senhaTextField.setText("Senha:");
+                    senhaTextField.setForeground(Color.GRAY);
+                } else {
+                    senhaTextField.setText(password);
+                    senhaTextField.setForeground(Color.BLACK);
+                }
+
+                senhaTextField.setText(password);                
+                senhaTextField.setText(password);
                 senhaTextField.setForeground(Color.BLACK);
-                passwordField.setVisible(false); // Oculta o passwordField
-                senhaTextField.setVisible(true);  // Mostra o textField com a senha
+                passwordField.setVisible(false);
+                senhaTextField.setVisible(true);
                 senhaTextField.setEditable(true);
                 togglePasswordButton.setIcon(eyeHiddenIcon);
                 senhaTextField.requestFocusInWindow();
-                revalidate();
-                repaint();
             }
+            
             isPasswordPressed = !isPasswordPressed;
         });
 
