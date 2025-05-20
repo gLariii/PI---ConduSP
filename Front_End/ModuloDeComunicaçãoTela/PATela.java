@@ -12,7 +12,7 @@ public class PATela extends JPanel {
         this.parentFrame = frame;
         setLayout(null);
         // Carrega imagem (caminho absoluto ou relativo ajustado)
-        ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/módulo de comunicação - PA.jpg"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/Modulo de comunicação Microfone PA.jpg"));
         imagemDeFundo = icon.getImage();
 
         // Botões
@@ -20,6 +20,15 @@ public class PATela extends JPanel {
         btnVoltar.setBounds(10, 10, 100, 30);
         btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame)));   
         add(btnVoltar);
+
+        JButton botao1 = new JButton("Módulo de comunicação");
+        botao1.setBounds(505, 260, 250, 100);
+        botao1.addActionListener(e -> substituirPainel(new ModuloDeComunicacaoTelaInicial(parentFrame)));
+        
+        botao1.setForeground(new Color(0, 0, 0, 0));
+        botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(botao1);
+
     }
 
     @Override

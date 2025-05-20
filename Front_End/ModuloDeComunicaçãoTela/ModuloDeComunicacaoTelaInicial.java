@@ -15,12 +15,12 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         this.parentFrame = frame;
         setLayout(null);
         // Carrega imagem (caminho absoluto ou relativo ajustado)
-        ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/Modulo de comunicação 1.jpg"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/Modulo de comunicação.jpg"));
         imagemDeFundo = icon.getImage();
 
         // Botões
         JButton botao1 = new JButton("PA");
-        botao1.setBounds(505, 200, 250, 100);
+        botao1.setBounds(505, 260, 250, 100);
         botao1.addActionListener(e -> substituirPainel(new PATela(parentFrame)));
         botao1.setOpaque(false);
         botao1.setContentAreaFilled(false);
@@ -30,6 +30,17 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botao1);
 
+        JButton botao2 = new JButton("Ajustes");
+        botao2.setBounds(1130, 695, 250, 100);
+        botao2.addActionListener(e -> substituirPainel(new PALista(parentFrame)));
+        botao2.setOpaque(false);
+        botao2.setContentAreaFilled(false);
+        botao2.setBorderPainted(false);
+        botao2.setFocusPainted(false);
+        botao2.setForeground(new Color(0, 0, 0, 0));
+        botao2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(botao2);
+        
         JButton btnVoltar = new JButton("Voltar");
         btnVoltar.setBounds(10, 10, 100, 30);
         btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame)));
