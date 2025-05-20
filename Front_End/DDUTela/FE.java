@@ -14,16 +14,21 @@ public class FE extends JPanel {
         this.parentFrame = frame;
         setLayout(null);
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/DDUTela/assets/images/DDUfe.jpg"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/DDUTela/assets/images/DDUFE.jpg"));
         Image imagem = icon.getImage().getScaledInstance(1920, 1080, Image.SCALE_SMOOTH);
         JLabel fundo = new JLabel(new ImageIcon(imagem));
         fundo.setBounds(0, 0, 1920, 1080);
 
         // Botões
-        JButton botao1 = criarBotao(390, 870, e -> trocarTela(new DDUPrincipal(parentFrame)));
-        JButton botao2 = criarBotao(780, 870, e -> trocarTela(new FE(parentFrame)));
-        JButton botao3 = criarBotao(900, 870, e -> trocarTela(new INFOPASS(parentFrame)));
-        JButton botao5 = criarBotao(1300, 880, e -> trocarTela(new MANUT(parentFrame)));
+        JButton botao1 = new JButton("");
+        botao1.setBounds(545, 809, 60, 50);
+        botao1.addActionListener(e -> trocarTela(new DDUMenu(parentFrame)));
+        botao1.setOpaque(false);
+        botao1.setContentAreaFilled(false);  
+        botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton botao2 = criarBotao(797, 812, e -> trocarTela(new FE(parentFrame)));
+        JButton botao3 = criarBotao(883, 815, e -> trocarTela(new INFOPASS(parentFrame)));
+        JButton botao5 = criarBotao(1140, 821, e -> trocarTela(new MANUT(parentFrame)));
         JButton btnVoltar = new JButton("Voltar");
         btnVoltar.setBounds(10, 10, 100, 30);
         btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
@@ -39,11 +44,10 @@ public class FE extends JPanel {
 
     private JButton criarBotao(int x, int y, java.awt.event.ActionListener acao) {
         JButton btn = new JButton("");
-        btn.setBounds(x, y, 100, 80);
+        btn.setBounds(x, y, 60, 55);
         btn.addActionListener(acao);
         btn.setOpaque(false);
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
+        btn.setContentAreaFilled(false);  
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
@@ -53,4 +57,6 @@ public class FE extends JPanel {
         parentFrame.revalidate();
         parentFrame.repaint();
     }
+
+    
 }

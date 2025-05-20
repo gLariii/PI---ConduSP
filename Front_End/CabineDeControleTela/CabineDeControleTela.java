@@ -1,6 +1,7 @@
 package CabineDeControleTela;
 import ChaveReversoraTela.ChaveReversoraTela;
-import DDUTela.DDUPrincipal;
+import DDUTela.DDUMenu;
+import DDUTela.INFOPASS;
 import ModuloDeComunicaçãoTela.ModuloDeComunicacaoTelaInicial;
 
 import javax.swing.*;
@@ -44,7 +45,7 @@ public class CabineDeControleTela extends JPanel {
 
         JButton botao3 = new JButton("DDU Tela Principal");
         botao3.setBounds(150, 455, 270, 120);
-        botao3.addActionListener(e -> substituirPainel(new DDUPrincipal(parentFrame)));
+        botao3.addActionListener(e -> substituirPainel(new DDUMenu(parentFrame)));
         botao3.setOpaque(false);
         botao3.setContentAreaFilled(false);
         botao3.setBorderPainted(false);
