@@ -46,34 +46,34 @@ public class TelaInicial extends JPanel {
                 Image.SCALE_SMOOTH);
         ImageIcon perfilIconRedimensionado = new ImageIcon(imagemPerfilRedimensionada);
         perfilLabel = new JLabel(perfilIconRedimensionado);
-        perfilLabel.setBounds(100, 10, larguraPerfil, alturaPerfil);
+        perfilLabel.setBounds(160, 70, larguraPerfil, alturaPerfil);
         add(perfilLabel);
 
         ImageIcon rgIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/perfil2.png"));
-        int larguraRgIcon = 20;
-        int alturaRgIcon = 20;
+        int larguraRgIcon = 24;
+        int alturaRgIcon = 30;
         Image imagemRgIconRedimensionada = rgIconOriginal.getImage().getScaledInstance(larguraRgIcon, alturaRgIcon,
                 Image.SCALE_SMOOTH);
         rgIcon = new ImageIcon(imagemRgIconRedimensionada);
 
         rgIconLabel = new JLabel(rgIcon);
-        rgIconLabel.setBounds(5, 104, larguraRgIcon, alturaRgIcon);
+        rgIconLabel.setBounds(50, 180, larguraRgIcon, alturaRgIcon);
         add(rgIconLabel);
 
 
         ImageIcon cadeadoIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/cadeado.png"));
-        int larguraCadeadoIcon = 20;
-        int alturaCadeadoIcon = 20;
+        int larguraCadeadoIcon = 24;
+        int alturaCadeadoIcon = 30;
         Image imagemCadeadoIconRedimensionada = cadeadoIconOriginal.getImage().getScaledInstance(larguraCadeadoIcon, alturaCadeadoIcon, Image.SCALE_SMOOTH);
         cadeadoIcon = new ImageIcon(imagemCadeadoIconRedimensionada);
 
         cadeadoLabel = new JLabel(cadeadoIcon);
-        cadeadoLabel.setBounds(5, 144, larguraCadeadoIcon, alturaCadeadoIcon);
+        cadeadoLabel.setBounds(50, 230, larguraCadeadoIcon, alturaCadeadoIcon);
         add(cadeadoLabel);
 
         // Campo de Texto RG - Castilho
         rgTextField = new RoundedTextField("RG:", 15);
-        rgTextField.setBounds(30, 100, 230, 28);
+        rgTextField.setBounds(80, 180, 240, 30);
         rgTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "RG:", 15));
         rgTextField.setForeground(Color.BLACK);
         rgTextField.setCaretColor(getAzulMetro());
@@ -100,7 +100,7 @@ public class TelaInicial extends JPanel {
 
         // Campo de Senha - Castilho
         passwordField = new RoundedPasswordField("Senha:", 15);
-        passwordField.setBounds(30, 140, 200, 28);
+        passwordField.setBounds(80, 230, 210, 30);
         passwordField.setBorder(new PlaceholderBorder(getAzulMetro(), "Senha:", 15));
         passwordField.setCaretColor(getAzulMetro());
         passwordField.setBackground(Color.WHITE);
@@ -128,7 +128,7 @@ public class TelaInicial extends JPanel {
         add(passwordField); 
         
         senhaTextField = new RoundedTextField("", 15); // Inicial sem texto
-        senhaTextField.setBounds(30, 140, 200, 28);
+        senhaTextField.setBounds(80, 230, 210, 30);
         senhaTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "Senha:", 15));
         senhaTextField.setForeground(Color.BLACK);
         senhaTextField.setCaretColor(getAzulMetro());
@@ -170,7 +170,7 @@ public class TelaInicial extends JPanel {
 
         // Botão do olho (mostrar/ocultar senha)
         togglePasswordButton = new JButton(eyeVisibleIcon);
-        togglePasswordButton.setBounds(235, 140, 28, 28);
+        togglePasswordButton.setBounds(290, 230, 30, 30);
         togglePasswordButton.setBorderPainted(false);
         togglePasswordButton.setContentAreaFilled(false);
         togglePasswordButton.setFocusPainted(false);
@@ -223,12 +223,12 @@ public class TelaInicial extends JPanel {
 
         // Botão Entrar - Castilho
         entrarButton = new JButton("Entrar");
-        entrarButton.setBounds(65, 180, 150, 40);
+        entrarButton.setBounds(130, 290, 130, 40);
         entrarButton.setOpaque(false);
         entrarButton.setContentAreaFilled(false);
         entrarButton.setBorder(new RoundedBorder(Color.WHITE, 3, 15));
         entrarButton.setForeground(Color.WHITE);
-        entrarButton.setFont(helveticaFont);
+        entrarButton.setFont(helveticaFont.deriveFont(Font.PLAIN, 30f));
         entrarButton.addMouseListener(new MouseAdapter() {
             Color originalBorderColor = Color.WHITE;
             int originalBorderThickness = 3;

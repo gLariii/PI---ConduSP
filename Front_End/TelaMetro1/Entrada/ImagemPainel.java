@@ -55,7 +55,7 @@ public class ImagemPainel extends JPanel {
 
     private void initComponents() {
         loginPainel = new LoginPainel();
-        loginPainel.setBounds(85, 170, 290, 320);
+        loginPainel.setBounds(85, 170, 500, 640);
         loginPainel.setLayout(null);
         add(loginPainel);
 
