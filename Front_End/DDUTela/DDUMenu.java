@@ -57,15 +57,4 @@ public class DDUMenu extends JPanel {
         parentFrame.revalidate();
         parentFrame.repaint();
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Cabine de Controle");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1920, 1080);
-            frame.setLocationRelativeTo(null);
-            frame.setContentPane(new INFOPASS(frame));
-            frame.setVisible(true);
-        });
-    }
 }

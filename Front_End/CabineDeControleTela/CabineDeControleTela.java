@@ -1,10 +1,12 @@
 package CabineDeControleTela;
 import ChaveReversoraTela.ChaveReversoraTela;
 import DDUTela.DDUMenu;
-import DDUTela.INFOPASS;
 import ModuloDeComunicaçãoTela.ModuloDeComunicacaoTelaInicial;
-
+import VDUTelas.VDUMenu;
 import javax.swing.*;
+
+import BoteiraLateralTelas.BoteiraLateralTela;
+
 import java.awt.*;
 
 public class CabineDeControleTela extends JPanel {
@@ -53,6 +55,24 @@ public class CabineDeControleTela extends JPanel {
         botao3.setForeground(new Color(0, 0, 0, 0));
         botao3.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botao3);
+
+        JButton botao4 = new JButton("VDU Tela Principal");
+        botao4.setBounds(1450, 455, 320, 120);
+        botao4.addActionListener(e -> substituirPainel(new VDUMenu(parentFrame)));
+        botao4.setOpaque(false);
+        botao4.setContentAreaFilled(false);
+        botao4.setBorderPainted(false);
+        botao4.setFocusPainted(false);
+        botao4.setForeground(new Color(0, 0, 0, 0));
+        botao4.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(botao4);
+
+        JButton botao5 = new JButton("<html>B<br>a<br>r<br>r<br>a<br><br>L<br>a<br>t<br>e<br>r<br>a<br>l</html>");
+        botao5.setBounds(10, 420, 70, 270);
+        botao5.addActionListener(e -> substituirPainel(new AreaLateral(parentFrame)));
+        
+        botao5.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(botao5);
     }
 
     @Override
