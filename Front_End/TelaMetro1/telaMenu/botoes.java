@@ -18,4 +18,18 @@ public class botoes {
         botaoAulas.setBounds(400, 250, 200, 50); 
         return botaoAulas;
     }
+
+    public static JButton criarBotaoFeedBackPessoal() {
+        JButton botaoAulas = new JButton("FeedBack");
+        botaoAulas.setFont(new Font("Arial", Font.PLAIN, 20)); 
+        botaoAulas.setBounds(400, 250, 200, 50); 
+        return botaoAulas;
+    }
+    
+    public static JButton criarBotaoSupervisor() {
+        JButton botaoAulas = new JButton("Supervisor");
+        botaoAulas.setFont(new Font("Arial", Font.PLAIN, 20)); 
+        botaoAulas.setBounds(400, 250, 200, 50); 
+        return botaoAulas;
+    }
 }

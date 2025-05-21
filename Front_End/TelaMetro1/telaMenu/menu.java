@@ -1,6 +1,8 @@
 package TelaMetro1.telaMenu;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+
 import java.awt.*;
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -27,7 +29,7 @@ public class menu extends JPanel {
         JLabel bemVindo = new JLabel("Bem Vindos!");
         bemVindo.setFont(new Font("Serif", Font.BOLD, 48)); 
         bemVindo.setForeground(Color.WHITE); 
-        bemVindo.setBounds(250, 140, 400, 60); 
+        bemVindo.setBounds(250, 140, 400, 60);
         add(bemVindo);
     }
 
