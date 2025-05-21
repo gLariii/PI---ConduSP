@@ -29,10 +29,7 @@ public class FE extends JPanel {
         JButton botao2 = criarBotao(797, 812, e -> trocarTela(new FE(parentFrame)));
         JButton botao3 = criarBotao(883, 815, e -> trocarTela(new INFOPASS(parentFrame)));
         JButton botao5 = criarBotao(1140, 821, e -> trocarTela(new MANUT(parentFrame)));
-        JButton btnVoltar = new JButton("Voltar");
-        btnVoltar.setBounds(10, 10, 100, 30);
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
-
+        JButton btnVoltar = criarBotao(10, 10, e -> trocarTela(new CabineDeControleTela(parentFrame)));
 
         add(botao1);
         add(botao2);
