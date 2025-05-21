@@ -59,13 +59,13 @@ public class ImagemPainel extends JPanel {
         loginPainel.setLayout(null);
         add(loginPainel);
 
-        ImageIcon logoIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/Logo2.png"));
-        int largura = 360;
-        int altura = 125;
+        ImageIcon logoIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/logoMetro.png"));
+        int largura = 430;
+        int altura = 75;
         Image imagemRedimensionada = logoIconOriginal.getImage().getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
         ImageIcon logoIconRedimensionado = new ImageIcon(imagemRedimensionada);
         logoLabel = new JLabel(logoIconRedimensionado);
-        logoLabel.setBounds(60, 50, largura, altura);
+        logoLabel.setBounds(70, 90, largura, altura);
         add(logoLabel);
     }
 

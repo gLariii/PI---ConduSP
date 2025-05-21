@@ -160,7 +160,7 @@ public class TelaInicial extends JPanel {
         // Ícones do olho
 
         ImageIcon eyeVisibleIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/olho_visivel.png"));
-        Image eyeVisibleImage = eyeVisibleIconOriginal.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image eyeVisibleImage = eyeVisibleIconOriginal.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         eyeVisibleIcon = new ImageIcon(eyeVisibleImage);
 
         ImageIcon eyeHiddenIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/olho_escondido.png"));
@@ -228,13 +228,13 @@ public class TelaInicial extends JPanel {
         entrarButton.setContentAreaFilled(false);
         entrarButton.setBorder(new RoundedBorder(Color.WHITE, 3, 15));
         entrarButton.setForeground(Color.WHITE);
-        entrarButton.setFont(helveticaFont.deriveFont(Font.PLAIN, 30f));
+        entrarButton.setFont(helveticaFont.deriveFont(Font.PLAIN, 25f));
         entrarButton.addMouseListener(new MouseAdapter() {
             Color originalBorderColor = Color.WHITE;
             int originalBorderThickness = 3;
             Color originalTextColor = Color.WHITE;
             Color hoverBorderColor = new Color(173, 216, 230);
-            int hoverBorderThickness = 5;
+            int hoverBorderThickness = 4;
             Color hoverTextColor = new Color(173, 216, 230);
 
             @Override
@@ -245,7 +245,7 @@ public class TelaInicial extends JPanel {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                entrarButton.setBorder(new RoundedBorder(originalBorderColor, originalBorderThickness, 3));
+                entrarButton.setBorder(new RoundedBorder(originalBorderColor, originalBorderThickness, 5));
                 entrarButton.setForeground(originalTextColor);
             }
         });
