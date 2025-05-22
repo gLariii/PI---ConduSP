@@ -1,111 +1,109 @@
-package CabineDeControleTela; 
+package CabineDeControleTela;
+import ChaveReversoraTela.ChaveReversoraTela;
+import DDUTela.DDUMenu;
+import ModuloDeComunicaçãoTela.ModuloDeComunicacaoTelaInicial;
+import VDUTelas.VDUMenu;
 
-import BoteiraLateralTelas.BoteiraLateralTela; 
-import ChaveReversoraTela.ChaveReversoraTela; 
-import DDUTela.DDUMenu; 
-import ModuloDeComunicaçãoTela.ModuloDeComunicacaoTelaInicial; 
-import VDUTelas.VDUMenu; 
-import java.awt.*; 
-import javax.swing.*; 
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
-public class CabineDeControleTela extends JPanel { 
-    private Image imagemDeFundo; 
-    private JFrame parentFrame; 
-    public CabineDeControleTela(JFrame frame) { 
-        this.parentFrame = frame; 
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximiza a janela
-        frame.setUndecorated(true); // Remove bordas e barra de título
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        setLayout(null); // Manter layout absoluto para definir posições manualmente 
-    } 
+import javax.swing.*;
 
-    @Override 
-    protected void paintComponent(Graphics g) { 
-        super.paintComponent(g); 
-        // Aqui, garantimos que a imagem de fundo seja ajustada conforme o tamanho da tela 
-        if (imagemDeFundo == null) { 
-            ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/01 - Painel (1).jpg")); 
-            imagemDeFundo = icon.getImage(); 
-        } 
-        g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this); 
-        // Agora, ajustamos os botões depois que o painel foi renderizado 
+public class CabineDeControleTela extends JPanel {
 
-        adicionarBotoes(); 
+    private Image imagemDeFundo;
+    private JFrame parentFrame;
 
-    } 
+    // Botões como atributos
+    private JButton botao1, botao2, botao3, botao4, botao5;
 
-    private void adicionarBotoes() { 
+    public CabineDeControleTela(JFrame frame) {
+        this.parentFrame = frame;
+        setLayout(null);
+        adicionarBotoes();
 
-        // Botões com posições relativas ao tamanho do painel 
-        JButton botao1 = new JButton(""); 
-        botao1.setBounds((int)(getWidth() * 0.29), (int)(getHeight() * 0.53), (int)(getWidth() * 0.08), (int)(getHeight() * 0.05)); 
-        botao1.addActionListener(e -> substituirPainel(new ChaveReversoraTela(parentFrame))); 
-        personalizarBotao(botao1); 
-        add(botao1); 
+        // Listener para redimensionar os botões conforme a tela
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                reposicionarBotoes();
+            }
+        });
+    }
 
-        JButton botao2 = new JButton(""); 
-        botao2.setBounds((int)(getWidth() * 0.25), (int)(getHeight() * 0.38), (int)(getWidth() * 0.08), (int)(getHeight() * 0.08)); 
-        botao2.addActionListener(e -> substituirPainel(new ModuloDeComunicacaoTelaInicial(parentFrame))); 
-        personalizarBotao(botao2);
-        add(botao2); 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (imagemDeFundo == null) {
+            ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/01 - Painel (1).jpg"));
+            imagemDeFundo = icon.getImage();
+        }
+        g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
+    }
 
-        JButton botao3 = new JButton(""); 
-        botao3.setBounds((int)(getWidth() * 0.06), (int)(getHeight() * 0.43), (int)(getWidth() * 0.16), (int)(getHeight() * 0.14)); 
-        botao3.addActionListener(e -> substituirPainel(new DDUMenu(parentFrame)));
-        personalizarBotao(botao3); 
-        add(botao3); 
+    private void adicionarBotoes() {
+        botao1 = criarBotao(() -> substituirPainel(new ChaveReversoraTela(parentFrame)));
+        add(botao1);
 
-        JButton botao4 = new JButton(""); 
-        botao4.setBounds((int)(getWidth() * 0.75), (int)(getHeight() * 0.42), (int)(getWidth() * 0.17), (int)(getHeight() * 0.15)); 
-        botao4.addActionListener(e -> substituirPainel(new VDUMenu(parentFrame))); 
-        personalizarBotao(botao4);  
-        add(botao4); 
+        botao2 = criarBotao(() -> substituirPainel(new ModuloDeComunicacaoTelaInicial(parentFrame)));
+        add(botao2);
 
-        JButton botao5 = new JButton("<html>B<br>a<br>r<br>r<br>a<br><br>L<br>a<br>t<br>e<br>r<br>a<br>l</html>"); 
-        botao5.setBounds((int)(getWidth() * 0.005), (int)(getHeight() * 0.55), (int)(getWidth() * 0.035), (int)(getHeight() * 0.25)); 
-        botao5.addActionListener(e -> substituirPainel(new BoteiraLateralTela(parentFrame))); 
-        botao5.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-        botao5.setOpaque(false);
-        botao5.setContentAreaFilled(false);  
-        add(botao5); 
+        botao3 = criarBotao(() -> substituirPainel(new DDUMenu(parentFrame)));
+        add(botao3);
 
-        // Revalida o painel para garantir que a disposição seja feita corretamente 
-        revalidate(); 
-        repaint(); 
+        botao4 = criarBotao(() -> substituirPainel(new VDUMenu(parentFrame)));
+        add(botao4);
 
-    } 
+        botao5 = new JButton("<html>B<br>a<br>r<br>r<br>a<br><br>L<br>a<br>t<br>e<br>r<br>a<br>l</html>");
+        botao5.addActionListener(e -> substituirPainel(new AreaLateral(parentFrame)));
+        botao5.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(botao5);
 
-    private void personalizarBotao(JButton botao) { 
+        reposicionarBotoes();
+    }
 
-        botao.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+    private JButton criarBotao(Runnable action) {
+        JButton botao = new JButton("");
+        botao.addActionListener(e -> action.run());
+        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botao.setOpaque(false);
-        botao.setContentAreaFilled(false); 
+        botao.setContentAreaFilled(false);
         botao.setBorderPainted(false);
+        botao.setFocusPainted(false);
+        botao.setForeground(new Color(0, 0, 0, 0));
+        return botao;
+    }
 
-    } 
+    private void reposicionarBotoes() {
+        int w = getWidth();
+        int h = getHeight();
 
-    private void substituirPainel(JPanel novoPainel) { 
+        //Tamanho e Posicionamento
+        botao1.setBounds((int)(w * 0.29), (int)(h * 0.53), (int)(w * 0.08), (int)(h * 0.05));
+        botao2.setBounds((int)(w * 0.25), (int)(h * 0.38), (int)(w * 0.08), (int)(h * 0.08));
+        botao3.setBounds((int)(w * 0.06), (int)(h * 0.43), (int)(w * 0.16), (int)(h * 0.14));
+        botao4.setBounds((int)(w * 0.75), (int)(h * 0.42), (int)(w * 0.17), (int)(h * 0.15));
+        botao5.setBounds((int)(w * 0.005), (int)(h * 0.5), (int)(w * 0.035), (int)(h * 0.25));
 
-        parentFrame.setContentPane(novoPainel); 
-        parentFrame.revalidate(); 
-        parentFrame.repaint(); 
+        repaint();
+    }
 
-    } 
+    private void substituirPainel(JPanel novoPainel) {
+        parentFrame.setContentPane(novoPainel);
+        parentFrame.revalidate();
+        parentFrame.repaint();
+    }
 
-    public static void main(String[] args) { 
-
-        SwingUtilities.invokeLater(() -> { 
-
-            JFrame frame = new JFrame("Cabine de Controle"); 
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-            frame.setSize(1920, 1080); 
-            frame.setLocationRelativeTo(null); 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Cabine de Controle");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(1920, 1080);
+            frame.setLocationRelativeTo(null);
+            
+            
             frame.setContentPane(new CabineDeControleTela(frame));
-            frame.setVisible(true); 
-
-        }); 
-
-    } 
-
-} 
+            frame.setVisible(true);
+        });
+    }
+}

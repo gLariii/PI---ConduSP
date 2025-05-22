@@ -1,52 +1,81 @@
 package DDUTela;
 
 import javax.swing.*;
-
 import CabineDeControleTela.CabineDeControleTela;
-
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class FE extends JPanel {
 
     private JFrame parentFrame;
+    private Image imagemDeFundo;
+
+    private JButton botao1;
+    private JButton botaoINFOPASS;
+    private JButton botaoMANUT;
+    private JButton btnVoltar;
 
     public FE(JFrame frame) {
         this.parentFrame = frame;
         setLayout(null);
+        setSize(frame.getSize());
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/DDUTela/assets/images/DDUFE.jpg"));
-        Image imagem = icon.getImage().getScaledInstance(1920, 1080, Image.SCALE_SMOOTH);
-        JLabel fundo = new JLabel(new ImageIcon(imagem));
-        fundo.setBounds(0, 0, 1920, 1080);
-
-        // Botões
-        JButton botao1 = new JButton("");
-        botao1.setBounds(545, 809, 60, 50);
-        botao1.addActionListener(e -> trocarTela(new DDUMenu(parentFrame)));
-        botao1.setOpaque(false);
-        botao1.setContentAreaFilled(false);  
-        botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JButton botao2 = criarBotao(797, 812, e -> trocarTela(new FE(parentFrame)));
-        JButton botao3 = criarBotao(883, 815, e -> trocarTela(new INFOPASS(parentFrame)));
-        JButton botao5 = criarBotao(1140, 821, e -> trocarTela(new MANUT(parentFrame)));
-        JButton btnVoltar = criarBotao(10, 10, e -> trocarTela(new CabineDeControleTela(parentFrame)));
-
-        add(botao1);
-        add(botao2);
-        add(botao3);
-        add(botao5);
-        add(btnVoltar);
-        add(fundo);
+        adicionarBotoes();
+        adicionarListenerDeRedimensionamento();
     }
 
-    private JButton criarBotao(int x, int y, java.awt.event.ActionListener acao) {
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (imagemDeFundo == null) {
+            ImageIcon icon = new ImageIcon(getClass().getResource("/DDUTela/assets/images/DDUFE.jpg"));
+            imagemDeFundo = icon.getImage();
+        }
+        g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
+    }
+
+    private void adicionarBotoes() {
+        botao1 = criarBotao(e -> trocarTela(new DDUMenu(parentFrame)));
+        botaoINFOPASS = criarBotao(e -> trocarTela(new INFOPASS(parentFrame)));
+        botaoMANUT = criarBotao(e -> trocarTela(new MANUT(parentFrame)));
+        btnVoltar = new JButton("Voltar");
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
+
+        add(botao1);
+        add(botaoINFOPASS);
+        add(botaoMANUT);
+        add(btnVoltar);
+
+        reposicionarBotoes();
+    }
+
+    private JButton criarBotao(java.awt.event.ActionListener acao) {
         JButton btn = new JButton("");
-        btn.setBounds(x, y, 60, 55);
         btn.addActionListener(acao);
         btn.setOpaque(false);
-        btn.setContentAreaFilled(false);  
+        btn.setContentAreaFilled(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
+    }
+
+    private void reposicionarBotoes() {
+        int w = getWidth();
+        int h = getHeight();
+        //Tamanho e Posicionamento
+        botao1.setBounds((int) (w * 0.285), (int) (h * 0.75), (int) (w * 0.03), (int) (h * 0.05));
+        botaoINFOPASS.setBounds((int) (w * 0.46), (int) (h * 0.755), (int) (w * 0.03), (int) (h * 0.05));
+        botaoMANUT.setBounds((int) (w * 0.595), (int) (h * 0.76), (int) (w * 0.03), (int) (h * 0.05));
+        btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
+    }
+
+    private void adicionarListenerDeRedimensionamento() {
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                reposicionarBotoes();
+            }
+        });
     }
 
     private void trocarTela(JPanel novaTela) {
@@ -54,6 +83,4 @@ public class FE extends JPanel {
         parentFrame.revalidate();
         parentFrame.repaint();
     }
-
-    
 }

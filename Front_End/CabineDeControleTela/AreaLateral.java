@@ -5,36 +5,69 @@ import javax.swing.*;
 import BoteiraLateralTelas.BoteiraLateralTela;
 
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class AreaLateral extends JPanel {
 
     private JFrame parentFrame;
+    private Image imagemDeFundoLateral;
+
+    private JButton botao1;
+    private JButton btnVoltar;
 
     public AreaLateral(JFrame frame) {
         this.parentFrame = frame;
         setLayout(null);
+        adicionarBotoes();
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/AreaLateral.png"));
-        Image imagem = icon.getImage().getScaledInstance(1920, 1080, Image.SCALE_SMOOTH);
-        JLabel fundo = new JLabel(new ImageIcon(imagem));
-        fundo.setBounds(0, 0, 1920, 1080);
+        // Listener para responsividade
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                reposicionarBotoes();
+            }
+        });
+    }
 
-        // Botões
-        JButton botao1 = new JButton("");
-        botao1.setBounds(275, 528, 143, 294);
-        botao1.addActionListener(e -> trocarTela(new BoteiraLateralTela(parentFrame)));
+    @Override 
+    protected void paintComponent(Graphics g) { 
+        super.paintComponent(g); 
+        if (imagemDeFundoLateral == null) { 
+            ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/AreaLateral.png")); 
+            imagemDeFundoLateral = icon.getImage(); 
+        } 
+        g.drawImage(imagemDeFundoLateral, 0, 0, getWidth(), getHeight(), this); 
+    } 
+
+    private void adicionarBotoes() { 
+        botao1 = new JButton("");
+        botao1.addActionListener(e -> trocarTela(new BoteiraLateralTela(parentFrame)));            
         botao1.setOpaque(false);
-        botao1.setContentAreaFilled(false); 
+        botao1.setContentAreaFilled(false);
         botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        JButton btnVoltar = new JButton("Voltar");
-        btnVoltar.setBounds(10, 10, 100, 30);
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
-
-
         add(botao1);
+
+        btnVoltar = new JButton("Voltar");
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
+        btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(btnVoltar);
-        add(fundo);
+
+        reposicionarBotoes();
+    }
+
+    private void reposicionarBotoes() {
+        int w = getWidth();
+        int h = getHeight();
+
+        // Ajuste proporcional aos valores que você tinha:
+        // Original: botao1.setBounds(275, 528, 143, 294);
+        // Proporção aproximada:
+        botao1.setBounds((int)(w * 0.14), (int)(h * 0.49), (int)(w * 0.07), (int)(h * 0.27));
+
+        // Original: btnVoltar.setBounds(10, 10, 100, 30);
+        btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
+
+        repaint();
     }
 
     private void trocarTela(JPanel novaTela) {
@@ -42,6 +75,4 @@ public class AreaLateral extends JPanel {
         parentFrame.revalidate();
         parentFrame.repaint();
     }
-
-    
 }

@@ -2,77 +2,58 @@ package ChaveReversoraTela;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import CabineDeControleTela.CabineDeControleTela;
 
 public class ChaveReversoraTela extends JPanel {
 
-    private String[] backgrounds = {
+    private final String[] backgrounds = {
         "ChaveReversoraFrente.jpg",
         "ChaveReversoraNeutro.jpg"
     };
 
     private int index = 0;
-    private BackgroundPanel backgroundPanel;
-    private JButton btnTrocar;
+    private Image imagemDeFundo;
     private JFrame parentFrame;
+    private JButton btnTrocar;
+    private JButton btnVoltar;
 
     public ChaveReversoraTela(JFrame frame) {
         this.parentFrame = frame;
+        setLayout(null);
 
-        setLayout(new BorderLayout());
-        backgroundPanel = new BackgroundPanel();
-        backgroundPanel.setLayout(null);
-        add(backgroundPanel, BorderLayout.CENTER);
+        carregarImagemFundo();
 
-        btnTrocar = new JButton("Trocar Background");
-
-        // Estilo do botão
+        // Botão para trocar o fundo
+        btnTrocar = new JButton("");
         btnTrocar.setOpaque(false);
         btnTrocar.setContentAreaFilled(false);
         btnTrocar.setBorderPainted(false);
         btnTrocar.setFocusPainted(false);
-        btnTrocar.setForeground(new Color(0, 0, 0, 0));
+        btnTrocar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnTrocar.addActionListener(e -> trocarImagemFundo());
+        add(btnTrocar);
 
-        btnTrocar.addActionListener(e -> {
-            index = (index + 1) % backgrounds.length;
-            backgroundPanel.setImage(backgrounds[index]);
-        });
-
-        backgroundPanel.add(btnTrocar);
-        backgroundPanel.setImage(backgrounds[index]);
-
-        // Ajustar botão ao redimensionar
-        addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                backgroundPanel.repaint();
-                adjustButtonSizeAndPosition();
-            }
-        });
-
-        adjustButtonSizeAndPosition();
-
-        // Botão de voltar
-        JButton btnVoltar = new JButton("Voltar");
-        btnVoltar.setBounds(10, 10, 100, 30);
+        // Botão Voltar
+        btnVoltar = new JButton("Voltar");
+        btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVoltar.addActionListener(e -> voltarParaCabine());
-        backgroundPanel.add(btnVoltar);
+        add(btnVoltar);
+
+        adicionarListenerRedimensionamento();
+        reposicionarComponentes();
     }
 
-    private void adjustButtonSizeAndPosition() {
-        int buttonWidth = 200;
-        int buttonHeight = 220;
-        int x = (getWidth() - buttonWidth) / 2;
-        int y = (getHeight() - buttonHeight) / 2 - 40;
+    private void carregarImagemFundo() {
+        ImageIcon icon = new ImageIcon(getClass().getResource(backgrounds[index]));
+        imagemDeFundo = icon.getImage();
+    }
 
-        if (getWidth() > 800) {
-            buttonWidth = 400;
-            buttonHeight = 440;
-            x = (getWidth() - buttonWidth) / 2;
-            y = (getHeight() - buttonHeight) / 2 - 40;
-        }
-
-        btnTrocar.setBounds(x, y, buttonWidth, buttonHeight);
+    private void trocarImagemFundo() {
+        index = (index + 1) % backgrounds.length;
+        carregarImagemFundo();
+        repaint();
     }
 
     private void voltarParaCabine() {
@@ -81,21 +62,29 @@ public class ChaveReversoraTela extends JPanel {
         parentFrame.repaint();
     }
 
-    // Painel interno com imagem
-    class BackgroundPanel extends JPanel {
-        private Image image;
-
-        public void setImage(String path) {
-            image = new ImageIcon(getClass().getResource(path)).getImage();
-            repaint();
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (imagemDeFundo != null) {
+            g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
         }
+    }
 
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (image != null) {
-                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+    private void reposicionarComponentes() {
+        int w = getWidth();
+        int h = getHeight();
+
+        //Tamanho e Posicionamento
+        btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
+        btnTrocar.setBounds((int)(w * 0.396), (int)(h * 0.296), (int)(w * 0.208), (int)(h * 0.407));
+    }
+
+    private void adicionarListenerRedimensionamento() {
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                reposicionarComponentes();
             }
-        }
+        });
     }
 }
