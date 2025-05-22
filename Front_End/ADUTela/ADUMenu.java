@@ -22,7 +22,7 @@ public class ADUMenu extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (imagemDeFundo == null) {
-            ImageIcon icon = new ImageIcon(getClass().getResource("/ADUMenu/images/ADU.jpg"));
+            ImageIcon icon = new ImageIcon(getClass().getResource("/ADUTela/images/ADUMenu.jpg"));
             imagemDeFundo = icon.getImage();
         }
         g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
