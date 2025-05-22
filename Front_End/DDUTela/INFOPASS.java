@@ -53,10 +53,41 @@ public class INFOPASS extends JPanel {
     }
 
     private JButton criarBotao(java.awt.event.ActionListener acao) {
-        JButton btn = new JButton("");
+        JButton btn = new JButton("") {
+            private boolean isHovering = false;
+
+            {
+                addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent e) {
+                        isHovering = true;
+                        repaint();
+                    }
+
+                    @Override
+                    public void mouseExited(java.awt.event.MouseEvent e) {
+                        isHovering = false;
+                        repaint();
+                    }
+                });
+            }
+
+            @Override
+            protected void paintBorder(Graphics g) {
+                if (isHovering) {
+                    Graphics2D g2 = (Graphics2D) g;
+                    g2.setColor(Color.YELLOW);
+                    g2.setStroke(new BasicStroke(2));
+                    g2.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+                }
+            }
+        };
+
         btn.addActionListener(acao);
         btn.setOpaque(false);
         btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
@@ -71,7 +102,6 @@ public class INFOPASS extends JPanel {
     private void reposicionarBotoes() {
         int w = getWidth();
         int h = getHeight();
-        //Tamanho e Posicionamento
         botao1.setBounds((int) (w * 0.285), (int) (h * 0.748), (int) (w * 0.03), (int) (h * 0.05));
         botao2.setBounds((int) (w * 0.415), (int) (h * 0.751), (int) (w * 0.03), (int) (h * 0.05));
         botao3.setBounds((int) (w * 0.46), (int) (h * 0.755), (int) (w * 0.03), (int) (h * 0.05));

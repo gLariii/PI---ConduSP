@@ -51,13 +51,46 @@ public class DDUMenu extends JPanel {
     }
 
     private JButton criarBotao(java.awt.event.ActionListener acao) {
-        JButton btn = new JButton("");
+        JButton btn = new JButton("") {
+            private boolean isHovering = false;
+    
+            {
+                addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent e) {
+                        isHovering = true;
+                        repaint();
+                    }
+    
+                    @Override
+                    public void mouseExited(java.awt.event.MouseEvent e) {
+                        isHovering = false;
+                        repaint();
+                    }
+                });
+            }
+    
+            @Override
+            protected void paintBorder(Graphics g) {
+                if (isHovering) {
+                    Graphics2D g2 = (Graphics2D) g;
+                    g2.setColor(Color.YELLOW); // Cor da borda no hover
+                    g2.setStroke(new BasicStroke(2));
+                    g2.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+                    }
+            }
+        };
+    
         btn.addActionListener(acao);
         btn.setOpaque(false);
         btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setForeground(Color.BLACK); // cor padrão da borda
         return btn;
     }
+    
 
     private void reposicionarBotoes() {
         int w = getWidth();

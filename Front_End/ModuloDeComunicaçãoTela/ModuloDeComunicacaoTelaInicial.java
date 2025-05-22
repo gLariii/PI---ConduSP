@@ -11,8 +11,8 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     private Image imagemDeFundo;
     private JFrame parentFrame;
 
-    private JButton botao1;
-    private JButton botao2;
+    private CircleButton botao1;
+    private CircleButton botao2;
     private JButton btnVoltar;
 
     public ModuloDeComunicacaoTelaInicial(JFrame frame) {
@@ -28,28 +28,16 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     }
 
     private void criarBotoes() {
-        botao1 = criarBotao("PA", e -> substituirPainel(new PATela(parentFrame)));
-        botao2 = criarBotao("Ajustes", e -> substituirPainel(new PALista(parentFrame)));
+        botao1 = new CircleButton("", e -> substituirPainel(new PATela(parentFrame)));
+        botao2 = new CircleButton("", e -> substituirPainel(new PALista(parentFrame)));
         btnVoltar = new JButton("Voltar");
-        
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame)));
+
 
         add(botao1);
         add(botao2);
         add(btnVoltar);
-    }
-
-    private JButton criarBotao(String texto, java.awt.event.ActionListener acao) {
-        JButton btn = new JButton(texto);
-        btn.addActionListener(acao);
-        btn.setOpaque(false);
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setForeground(new Color(0, 0, 0, 0)); // invisível
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        return btn;
     }
 
     @Override
@@ -62,11 +50,13 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         int w = getWidth();
         int h = getHeight();
 
-        //Tamanho e Posicionamento
-        botao1.setBounds((int)(w * 0.263), (int)(h * 0.25), (int)(w * 0.13), (int)(h * 0.093));
-        botao2.setBounds((int)(w * 0.6), (int)(h * 0.669), (int)(w * 0.13), (int)(h * 0.093));    
+        // Tamanho e Posicionamento
+        botao1.setBounds((int)(w * 0.164), (int)(h * 0.257), (int)(w * 0.04), (int)(h * 0.06));
+        botao2.setBounds((int)(w * 0.649), (int)(h * 0.855), (int)(w * 0.04), (int)(h * 0.06));
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
     }
+
+    
 
     private void adicionarListenerRedimensionamento() {
         this.addComponentListener(new ComponentAdapter() {
@@ -83,5 +73,56 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         parentFrame.repaint();
     }
 
-
+    // Classe personalizada para botões circulares
+    class CircleButton extends JButton {
+        private boolean isHovering = false;
+    
+        public CircleButton(String texto, java.awt.event.ActionListener acao) {
+            super(texto);
+            addActionListener(acao);
+            setOpaque(false);
+            setContentAreaFilled(false);
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
+            setFocusPainted(false);
+            setBorderPainted(false);
+            setForeground(Color.BLACK);
+    
+            // Mouse listener para detectar hover
+            addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    isHovering = true;
+                    repaint();
+                }
+    
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    isHovering = false;
+                    repaint();
+                }
+            });
+        }
+    
+        
+    
+        @Override
+        protected void paintBorder(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g;
+            if (isHovering) {
+                g2.setColor(Color.YELLOW); // cor da borda de hover
+                g2.setStroke(new BasicStroke(2));
+            } else {
+                g2.setColor(getForeground());
+                g2.setStroke(new BasicStroke(1));
+            }
+            g2.drawOval(0, 0, getWidth() - 1, getHeight() - 1);
+        }
+    
+        @Override
+        public boolean contains(int x, int y) {
+            int radius = getWidth() / 2;
+            return Math.pow(x - getWidth() / 2, 2) + Math.pow(y - getHeight() / 2, 2) <= Math.pow(radius, 2);
+        }
+    }
 }
+    
