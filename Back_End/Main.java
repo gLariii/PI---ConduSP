@@ -8,8 +8,9 @@ import java.util.List;
 
 import Controller.FeedbackGeralController;
 import Controller.FeedbackUsuarioController;
-// import Model.Usuario; // You might need this if LoginController returns Usuario object
+import Model.Usuario;// alguma hr vai precisar rlx
 
+// por hr estou usando a classe para testar os codigos e a conexão com bd
 public class Main {
 
     public static void main(String[] args) {
@@ -44,7 +45,7 @@ public class Main {
         if (sucesso) {
             System.out.println("Usuário cadastrado com sucesso!");
         } else {
-            System.out.println("Erro ao cadastrar usuário.");
+            //já tem verificação em outro lugar n precisa especificar aqui
         }
 
     }

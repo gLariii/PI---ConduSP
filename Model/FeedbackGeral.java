@@ -19,8 +19,6 @@ public class FeedbackGeral {
         this.data = data;
     }
 
-    // Getters e Setters
-
     public int getId() {
         return id;
     }

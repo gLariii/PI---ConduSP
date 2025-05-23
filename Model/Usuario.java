@@ -7,13 +7,11 @@ public class Usuario {
     private String nome;
     private String tipoUsuario;
 
-    // Construtor para autenticação
     public Usuario(String rg, String senha) {
         this.rg = rg;
         this.senha = senha;
     }
 
-    // Construtor completo
     public Usuario(int id, String rg, String senha, String nome, String tipoUsuario) {
         this.id = id;
         this.rg = rg;
@@ -22,7 +20,6 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
     }
 
-    // Getters e Setters
     public int getId() {
         return id;
     }

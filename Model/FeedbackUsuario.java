@@ -9,8 +9,6 @@ public class FeedbackUsuario {
     private String observacoes;
     private Timestamp data;
 
-    
-    // Getter e Setter para idFeedback
     public int getIdFeedback() {
         return idFeedback;
     }
@@ -19,7 +17,6 @@ public class FeedbackUsuario {
         this.idFeedback = idFeedback;
     }
 
-    // Getter e Setter para idUsuario
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -28,7 +25,6 @@ public class FeedbackUsuario {
         this.idUsuario = idUsuario;
     }
 
-    // Getter e Setter para pontuacao
     public int getPontuacao() {
         return pontuacao;
     }
@@ -37,7 +33,6 @@ public class FeedbackUsuario {
         this.pontuacao = pontuacao;
     }
 
-    // Getter e Setter para observacoes
     public String getObservacoes() {
         return observacoes;
     }
@@ -46,7 +41,6 @@ public class FeedbackUsuario {
         this.observacoes = observacoes;
     }
 
-    // Getter e Setter para data
     public Timestamp getData() {
         return data;
     }

@@ -48,5 +48,22 @@ public class UsuarioDAO
         return false;
     }
 }
+public boolean existeRg(String rg) {
+    String sql = "SELECT 1 FROM tb_usuario WHERE rg = ?";
+
+    try (Connection conn = Conexao.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, rg);
+        ResultSet rs = stmt.executeQuery();
+
+        return rs.next(); 
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
   
 }

@@ -4,6 +4,7 @@ import DAO.FeedbackUsuarioDAO;
 import Model.FeedbackUsuario;
 
 import java.sql.Timestamp;
+// controlador do feedback (manda o feedback armazenado)
 
 public class FeedbackUsuarioController {
 
