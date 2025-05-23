@@ -15,7 +15,7 @@ public class UsuarioDAO
  {
     try(Connection conn = Conexao.getConexao()) 
     {
-        String sql = "SELECT * FROM tb_usuario WHERE usuario = ? AND senha = ?";
+        String sql = "SELECT * FROM tb_usuario WHERE rg = ? AND senha = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, usuario.getLogin());
         stmt.setString(2, usuario.getSenha());//tem q ser a senha do banco de dados?

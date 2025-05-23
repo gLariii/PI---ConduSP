@@ -1,17 +1,17 @@
 //package backend.Model;
 package Model;
-//classe usuario para o login ( login e senha)
+//classe usuario para o login ( Rg e senha)
 public class Usuario {
-    private String Login;
-    private String Senha;
+    private String Rg; // rg
+    private String Senha; // senha
 
-    public Usuario(String login, String senha) {
-        this.Login = login;
+    public Usuario(String rg, String senha) {
+        this.Rg = rg;
         this.Senha = senha;
     }
 
-    public void setLogin(String login) {
-        this.Login = login;
+    public void setLogin(String rg) {
+        this.Rg = rg;
     }
 
     public void setsenha(String senha) {
@@ -19,7 +19,7 @@ public class Usuario {
     }
 
     public String getLogin() {
-        return Login;
+        return Rg;
     }
 
     public String getSenha() {

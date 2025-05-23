@@ -6,8 +6,8 @@ import Model.Usuario;
 public class LoginController {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     
-    public boolean login(String login, String senha) {
-        Usuario usuario = new Usuario(login, senha);
+    public boolean login(String rg, String senha) {
+        Usuario usuario = new Usuario(rg, senha);
         return usuarioDAO.autenticar(usuario);
     }
 }
