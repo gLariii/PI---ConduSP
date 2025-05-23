@@ -11,6 +11,15 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.*;
 
+import Carro.Carro5VisaoGeral;
+
+
+
+
+
+
+import Carro.PortasAbertas;
+
 public class CabineDeControleTela extends JPanel {
 
     private Image imagemDeFundo;
@@ -107,7 +116,7 @@ public class CabineDeControleTela extends JPanel {
             frame.setLocationRelativeTo(null);
             
             
-            frame.setContentPane(new CabineDeControleTela(frame));
+            frame.setContentPane(new PortasAbertas(frame));
             frame.setVisible(true);
         });
     }

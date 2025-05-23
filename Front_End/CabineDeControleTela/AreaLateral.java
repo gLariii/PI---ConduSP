@@ -3,6 +3,7 @@ package CabineDeControleTela;
 import javax.swing.*;
 
 import BoteiraLateralTelas.BoteiraLateralTela;
+import Carro.Carro5VisaoGeral;
 
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -14,6 +15,7 @@ public class AreaLateral extends JPanel {
     private Image imagemDeFundoLateral;
 
     private JButton botao1;
+    private JButton btnPorta;
     private JButton btnVoltar;
 
     public AreaLateral(JFrame frame) {
@@ -47,6 +49,14 @@ public class AreaLateral extends JPanel {
         botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botao1);
 
+        btnPorta = new JButton("");
+        btnPorta.addActionListener(e -> trocarTela(new Carro5VisaoGeral(parentFrame)));            
+        btnPorta.setOpaque(false);
+        btnPorta.setContentAreaFilled(false);
+        btnPorta.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(btnPorta);
+
+
         btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -63,6 +73,8 @@ public class AreaLateral extends JPanel {
         // Original: botao1.setBounds(275, 528, 143, 294);
         // Proporção aproximada:
         botao1.setBounds((int)(w * 0.14), (int)(h * 0.49), (int)(w * 0.07), (int)(h * 0.27));
+
+        btnPorta.setBounds((int)(w * 0.252), (int)(h * 0.083), (int)(w * 0.34), (int)(h * 0.9));
 
         // Original: btnVoltar.setBounds(10, 10, 100, 30);
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
