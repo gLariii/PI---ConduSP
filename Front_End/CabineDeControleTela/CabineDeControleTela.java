@@ -13,11 +13,6 @@ import javax.swing.*;
 
 import Carro.Carro5VisaoGeral;
 
-
-
-
-
-
 import Carro.PortasAbertas;
 
 public class CabineDeControleTela extends JPanel {
@@ -45,7 +40,7 @@ public class CabineDeControleTela extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (imagemDeFundo == null) {
-            ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/01 - Painel (1).jpg"));
+            ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/CabineOperario.jpg"));
             imagemDeFundo = icon.getImage();
         }
         g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
@@ -81,7 +76,7 @@ public class CabineDeControleTela extends JPanel {
         botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botao.setOpaque(false);
         botao.setContentAreaFilled(false);
-        botao.setBorderPainted(false);
+        botao.setBorderPainted(true);
         botao.setFocusPainted(false);
         botao.setForeground(new Color(0, 0, 0, 0));
         return botao;
@@ -92,12 +87,12 @@ public class CabineDeControleTela extends JPanel {
         int h = getHeight();
 
         //Tamanho e Posicionamento
-        botao1.setBounds((int)(w * 0.29), (int)(h * 0.53), (int)(w * 0.08), (int)(h * 0.05));
+        botao1.setBounds((int)(w * 0.29), (int)(h * 0.56), (int)(w * 0.08), (int)(h * 0.05));
         botao2.setBounds((int)(w * 0.25), (int)(h * 0.38), (int)(w * 0.08), (int)(h * 0.08));
         botao3.setBounds((int)(w * 0.06), (int)(h * 0.43), (int)(w * 0.16), (int)(h * 0.14));
         botao4.setBounds((int)(w * 0.75), (int)(h * 0.42), (int)(w * 0.17), (int)(h * 0.15));
         botao5.setBounds((int)(w * 0.005), (int)(h * 0.5), (int)(w * 0.035), (int)(h * 0.25));
-        botao6.setBounds((int)(w * 0.535), (int)(h * 0.55), (int)(w * 0.04), (int)(h * 0.17));
+        botao6.setBounds((int)(w * 0.535), (int)(h * 0.60), (int)(w * 0.04), (int)(h * 0.17));
 
         repaint();
     }
@@ -109,15 +104,17 @@ public class CabineDeControleTela extends JPanel {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Cabine de Controle");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1920, 1080);
-            frame.setLocationRelativeTo(null);
-            
-            
-            frame.setContentPane(new PortasAbertas(frame));
-            frame.setVisible(true);
-        });
-    }
+    SwingUtilities.invokeLater(() -> {
+        JFrame frame = new JFrame("Cabine de Controle");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Tela cheia
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setUndecorated(true); // opcional: remove bordas e barra de título
+
+        frame.setContentPane(new PortasAbertas(frame));
+        frame.setVisible(true);
+    });
+}
+
 }

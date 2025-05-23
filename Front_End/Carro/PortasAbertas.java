@@ -9,7 +9,7 @@ public class PortasAbertas extends JPanel {
     private JFrame parentFrame;
 
     // Botões como atributos
-    private JButton botao1, btnVoltar;
+    private JButton botao1, botao2, btnVoltar;
 
     public PortasAbertas(JFrame frame) {
         this.parentFrame = frame;
@@ -38,7 +38,9 @@ public class PortasAbertas extends JPanel {
         btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame)));
         botao1 = criarBotao(() -> substituirPainel(new DispositivosDeEmergência(parentFrame)));
+        botao2 = criarBotao(() -> substituirPainel(new Soleira(parentFrame)));
         add(botao1);
+        add(botao2);
         add(btnVoltar);
         reposicionarBotoes();
     }
@@ -62,6 +64,7 @@ public class PortasAbertas extends JPanel {
 
         //Tamanho e Posicionamento
         botao1.setBounds((int)(w * 0.66), (int)(h * 0.42), (int)(w * 0.08), (int)(h * 0.14));
+        botao2.setBounds((int)(w * 0.37), (int)(h * 0.92), (int)(w * 0.28), (int)(h * 0.06));
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
         repaint();
     }
