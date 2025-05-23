@@ -1,6 +1,7 @@
 package Back_End;
 
 import Controller.LoginController;
+import Controller.UsuarioController;
 import Model.FeedbackGeral;
 
 import java.util.List;
@@ -37,6 +38,15 @@ public class Main {
                 System.out.println("--------------------------");
             }
         }
+        UsuarioController controller = new UsuarioController();
+        boolean sucesso = controller.cadastrarUsuario("1234567890", "senha123", "Maria Souza", "operario");
+
+        if (sucesso) {
+            System.out.println("Usuário cadastrado com sucesso!");
+        } else {
+            System.out.println("Erro ao cadastrar usuário.");
+        }
+
     }
 }
 

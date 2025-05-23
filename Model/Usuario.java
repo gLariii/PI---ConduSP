@@ -1,30 +1,65 @@
-//package backend.Model;
 package Model;
-//classe usuario para o login ( Rg e senha)
+
 public class Usuario {
-    private String Rg; // rg
-    private String Senha; // senha
+    private int id;
+    private String rg;
+    private String senha;
+    private String nome;
+    private String tipoUsuario;
 
+    // Construtor para autenticação
     public Usuario(String rg, String senha) {
-        this.Rg = rg;
-        this.Senha = senha;
+        this.rg = rg;
+        this.senha = senha;
     }
 
-    public void setLogin(String rg) {
-        this.Rg = rg;
+    // Construtor completo
+    public Usuario(int id, String rg, String senha, String nome, String tipoUsuario) {
+        this.id = id;
+        this.rg = rg;
+        this.senha = senha;
+        this.nome = nome;
+        this.tipoUsuario = tipoUsuario;
     }
 
-    public void setsenha(String senha) {
-        this.Senha = senha;
+    // Getters e Setters
+    public int getId() {
+        return id;
     }
 
-    public String getLogin() {
-        return Rg;
+    public String getRg() {
+        return rg;
     }
 
     public String getSenha() {
-        return Senha;
+        return senha;
     }
 
+    public String getNome() {
+        return nome;
+    }
 
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
 }
