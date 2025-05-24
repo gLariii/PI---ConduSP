@@ -15,13 +15,14 @@ public class Main {
 
     public static void main(String[] args) {
         LoginController loginController = new LoginController();
-        boolean resultadoLogin = loginController.login("1231231235", "1234");
+        boolean resultadoLogin = loginController.login("12.345.678-9", "senha123");
         System.out.println(resultadoLogin ? "Login bem-sucedido!" : "Falha no login.");
 
         FeedbackUsuarioController feedbackController = new FeedbackUsuarioController();
-        boolean resultadoFeedback = feedbackController.gerarFeedback(3, 5, "Ótimo atendimento!");
+        boolean resultadoFeedback = feedbackController.gerarFeedback(6, 5, "Ótimo atendimento!");
         System.out.println(resultadoFeedback ? "Feedback enviado com sucesso!" : "Falha ao enviar feedback.");
-        
+        //ta dando erro pq o id do usuario não existe no banco de dados
+        // mas o feedback é enviado com sucesso
         FeedbackGeralController feedbackgeralController = new FeedbackGeralController();
         List<FeedbackGeral> lista = feedbackgeralController.listarFeedbacks();
 
@@ -40,7 +41,7 @@ public class Main {
             }
         }
         UsuarioController controller = new UsuarioController();
-        boolean sucesso = controller.cadastrarUsuario("1234567890", "senha123", "Maria Souza", "operario");
+        boolean sucesso = controller.cadastrarUsuario("123451116789", "senha123", "Maria Souza", "operario");
 
         if (sucesso) {
             System.out.println("Usuário cadastrado com sucesso!");

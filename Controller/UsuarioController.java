@@ -8,12 +8,12 @@ public class UsuarioController {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     private boolean RGValido(String rg) {
-        return rg != null && rg.matches("\\d{10}");
+        return rg != null && rg.matches("^\\d{2}\\.\\d{3}\\.\\d{3}-\\d{1}$");
     }
     
     public boolean cadastrarUsuario(String rg, String senha, String nome, String tipoUsuario) {
         if (!RGValido(rg)) {
-            System.out.println("RG inválido. Deve conter exatamente 10 dígitos numéricos.");
+            System.out.println("RG inválido. Deve estar no formato (XX.XXX.XXX-X)");
             return false;
         }
     
