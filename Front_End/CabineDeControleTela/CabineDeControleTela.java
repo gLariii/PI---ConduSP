@@ -4,15 +4,12 @@ import DDUTela.DDUMenu;
 import ModuloDeComunicaçãoTela.ModuloDeComunicacaoTelaInicial;
 import VDUTelas.VDUMenu;
 import alavancaComando.AlavancaFrenagem;
-
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-
 import javax.swing.*;
 
-import Carro.Carro5VisaoGeral;
-
+import Carro.PainelExternoFechado;
 import Carro.PortasAbertas;
 
 public class CabineDeControleTela extends JPanel {
@@ -112,7 +109,7 @@ public class CabineDeControleTela extends JPanel {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setUndecorated(true); // opcional: remove bordas e barra de título
 
-        frame.setContentPane(new PortasAbertas(frame));
+        frame.setContentPane(new PainelExternoFechado(frame));
         frame.setVisible(true);
     });
 }

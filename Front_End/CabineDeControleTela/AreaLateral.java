@@ -15,6 +15,7 @@ public class AreaLateral extends JPanel {
     private Image imagemDeFundoLateral;
 
     private JButton botao1;
+    private JButton botaoTraseira;
     private JButton btnPorta;
     private JButton btnVoltar;
 
@@ -49,6 +50,13 @@ public class AreaLateral extends JPanel {
         botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botao1);
 
+        botaoTraseira = new JButton("");
+        botaoTraseira.addActionListener(e -> trocarTela(new CabineTraseira(parentFrame)));            
+        botaoTraseira.setOpaque(false);
+        botaoTraseira.setContentAreaFilled(false);
+        botaoTraseira.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(botaoTraseira);
+
         btnPorta = new JButton("");
         btnPorta.addActionListener(e -> trocarTela(new Carro5VisaoGeral(parentFrame)));            
         btnPorta.setOpaque(false);
@@ -73,6 +81,8 @@ public class AreaLateral extends JPanel {
         // Original: botao1.setBounds(275, 528, 143, 294);
         // Proporção aproximada:
         botao1.setBounds((int)(w * 0.14), (int)(h * 0.49), (int)(w * 0.07), (int)(h * 0.27));
+
+        botaoTraseira.setBounds((int)(w * 0.02), (int)(h * 0.49), (int)(w * 0.02), (int)(h * 0.15));
 
         btnPorta.setBounds((int)(w * 0.252), (int)(h * 0.083), (int)(w * 0.34), (int)(h * 0.9));
 

@@ -14,7 +14,7 @@ public class Carro5VisaoGeral extends JPanel {
     private JFrame parentFrame;
 
     // Botões como atributos
-    private JButton btnPortas, btnVoltar;
+    private JButton btnPortas, btnVoltar, btnPainel;
 
     public Carro5VisaoGeral(JFrame frame) {
         this.parentFrame = frame;
@@ -33,7 +33,7 @@ public class Carro5VisaoGeral extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (imagemDeFundo == null) {
-            ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/13 - Visão geral do carro 5.jpg"));
+            ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/13 - Visão geral do carro 5.png"));
             imagemDeFundo = icon.getImage();
         }
         g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
@@ -43,7 +43,9 @@ public class Carro5VisaoGeral extends JPanel {
         btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame)));
         btnPortas = criarBotao(() -> substituirPainel(new PortasAbertas(parentFrame)));
+        btnPainel = criarBotao(() -> substituirPainel(new PainelExternoFechado(parentFrame)));
         add(btnVoltar);
+        add(btnPainel);
         add(btnPortas);
         reposicionarBotoes();
     }
@@ -65,6 +67,7 @@ public class Carro5VisaoGeral extends JPanel {
 
         //Tamanho e Posicionamento
         btnPortas.setBounds((int)(w * 0.475), (int)(h * 0.22), (int)(w * 0.17), (int)(h * 0.7));
+        btnPainel.setBounds((int)(w * 0.71), (int)(h * 0.59), (int)(w * 0.05), (int)(h * 0.08));
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
         
         repaint();

@@ -9,7 +9,7 @@ public class Soleira extends JPanel {
     private JFrame parentFrame;
 
     // Botões como atributos
-    private JButton botao1, btnVoltar;
+    private JButton  btnVoltar;
 
     public Soleira(JFrame frame) {
         this.parentFrame = frame;
@@ -35,22 +35,15 @@ public class Soleira extends JPanel {
     }
 
     private void adicionarBotoes() {
-        btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame)));
-        botao1 = new JButton("");
-        botao1 = criarBotao(() -> substituirPainel(new PortasAbertas(parentFrame)));
-        add(botao1);
+        btnVoltar = criarBotao(() -> substituirPainel(new PortasAbertas(parentFrame)));
         add(btnVoltar);
         reposicionarBotoes();
     }
 
     private JButton criarBotao(Runnable action) {
-        JButton botao = new JButton("");
+        JButton botao = new JButton("Voltar");
         botao.addActionListener(e -> action.run());
         botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        botao.setOpaque(false);
-        botao.setContentAreaFilled(false);
-        botao.setFocusPainted(false);
         botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botao.setForeground(Color.BLACK); // cor padrão da borda
         
@@ -62,7 +55,6 @@ public class Soleira extends JPanel {
         int h = getHeight();
 
         //Tamanho e Posicionamento
-        botao1.setBounds((int)(w * 0.37), (int)(h * 0.10), (int)(w * 0.28), (int)(h * 0.10));
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
         repaint();
     }
