@@ -18,7 +18,6 @@ public class CabineTraseira extends JPanel {
         setLayout(null);
         adicionarBotoes();
 
-        // Listener para responsividade
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 reposicionarBotoes();
@@ -26,21 +25,23 @@ public class CabineTraseira extends JPanel {
         });
     }
 
-    @Override 
-    protected void paintComponent(Graphics g) { 
-        super.paintComponent(g); 
-        if (imagemDeFundoLateral == null) { 
-            ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/CabineTraseira.jpg")); 
-            imagemDeFundoLateral = icon.getImage(); 
-        } 
-        g.drawImage(imagemDeFundoLateral, 0, 0, getWidth(), getHeight(), this); 
-    } 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (imagemDeFundoLateral == null) {
+            ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/CabineTraseira.jpg"));
+            imagemDeFundoLateral = icon.getImage();
+        }
+        g.drawImage(imagemDeFundoLateral, 0, 0, getWidth(), getHeight(), this);
+    }
 
-    private void adicionarBotoes() { 
-        botao1 = new JButton("");
-        botao1.addActionListener(e -> trocarTela(new Cinturao(parentFrame)));            
+    private void adicionarBotoes() {
+        botao1 = new JButton();
+        botao1.addActionListener(e -> trocarTela(new Cinturao(parentFrame)));
         botao1.setOpaque(false);
         botao1.setContentAreaFilled(false);
+        botao1.setBorderPainted(true);
+        botao1.setFocusPainted(false);
         botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botao1);
 

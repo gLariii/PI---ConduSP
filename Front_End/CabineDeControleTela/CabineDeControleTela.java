@@ -109,7 +109,7 @@ public class CabineDeControleTela extends JPanel {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setUndecorated(true); // opcional: remove bordas e barra de título
 
-        frame.setContentPane(new PainelExternoFechado(frame));
+        frame.setContentPane(new Cinturao(frame));
         frame.setVisible(true);
     });
 }
