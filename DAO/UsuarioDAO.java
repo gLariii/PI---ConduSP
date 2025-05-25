@@ -64,6 +64,22 @@ public boolean existeRg(String rg) {
         return false;
     }
 }
+// No seu DAO/UsuarioDAO.java
+public Usuario getUsuarioByRg(String rg) {
+    String sql = "SELECT id, rg, senha, nome, tipo_usuario FROM tb_usuario WHERE rg = ?";
+    try (Connection conn = Conexao.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, rg);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            // Certifique-se de que o construtor do Usuario esteja correto ou ajuste para setters
+            return new Usuario(rs.getInt("id"), rs.getString("rg"), rs.getString("senha"), rs.getString("nome"), rs.getString("tipo_usuario"));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
 
   
 }

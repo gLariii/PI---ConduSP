@@ -24,4 +24,12 @@ public class FeedbackUsuarioDAO {
         }
     }
     
+    public void gerarFeedback(int idUsuario, int pontuacaoFinal, String resumoRespostas) {
+        // Implemente a lógica de persistência conforme necessário
+        // Exemplo: salvar feedback no banco de dados ou apenas imprimir/logar
+        System.out.println("Feedback gerado para usuário " + idUsuario + ": " + resumoRespostas + " (Pontuação: " + pontuacaoFinal + ")");
+    }
+    
 }
+
+    
