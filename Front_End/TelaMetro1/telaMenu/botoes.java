@@ -37,8 +37,8 @@ public class botoes {
         button.setOpaque(true);
         button.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(255, 255, 255, 150), 2),
-            BorderFactory.createEmptyBorder(20, 20, 20, 20)
-        ));
+            BorderFactory.createEmptyBorder(20, 20, 20, 20)))
+         ;
         button.setFocusPainted(false);
         button.setPreferredSize(preferredSize);
 
@@ -75,31 +75,32 @@ public class botoes {
     }
 
     public static JButton criarBotaoConfiguracoes() {
-    JButton button = new JButton() {
-        @Override
-        protected void paintComponent(Graphics g) {
-
-            Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            
-            if (getIcon() != null) {
-                int x = (getWidth() - getIcon().getIconWidth()) / 2;
-                int y = (getHeight() - getIcon().getIconHeight()) / 2;
-                getIcon().paintIcon(this, g2d, x, y);
+        JButton button = new JButton() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                if (getIcon() != null) {
+                    int x = (getWidth() - getIcon().getIconWidth()) / 2;
+                    int y = (getHeight() - getIcon().getIconHeight()) / 2;
+                    getIcon().paintIcon(this, g2d, x, y);
+                }
+                g2d.dispose();
             }
-            g2d.dispose();
+        };
+        
+        ImageIcon icon = carregarIcone("/Assets/Imagens/engrenagem.png", 50, 50);
+        if (icon != null) {
+            button.setIcon(icon);
         }
-    };
-    
-    ImageIcon icon = carregarIcone("/Assets/Imagens/engrenagem.png", 50, 50);
-    if (icon != null) {
-        button.setIcon(icon);
+        
+        button.setPreferredSize(new Dimension(60, 60));
+        return button;
     }
-
     
-    // Tamanho adequado para o ícone
-    button.setPreferredSize(new Dimension(60, 60));
-    
-    return button;
+    public static JButton criarBotaoFechar() {
+        return criarBotaoPadrao("Fechar", null, 0, 0,
+                              SwingConstants.CENTER, new Dimension(150, 50), 18);
+    }
 }
-    }

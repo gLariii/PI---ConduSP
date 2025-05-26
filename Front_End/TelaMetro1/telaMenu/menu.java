@@ -7,21 +7,83 @@ import java.io.IOException;
 import java.io.InputStream;
 import Assets.Cores;
 
-public class menu extends JPanel {
+public class menu extends JLayeredPane {
     private Image ImagemDeFundo, logoOriginal, logoRedimensionada;
     private JButton btnMaquinario, btnFeedbacks, btnSupervisor, btnConfiguracoes;
     private int logoWidth = 40; 
     private int logoHeight = 40; 
 
-    public menu(String imagemPath) {
-        carregarImagens(imagemPath);
-        redimensionarLogo(logoWidth, logoHeight);
-        setLayout(new BorderLayout());
-        setOpaque(false);
+    private JPanel mainContentPanel;
+    private ConfiguracoesPanel configuracoesPanel;
+    private JPanel sidebarContainerPanel;
 
-        add(criarNavBar(), BorderLayout.NORTH);
-        add(criarPainelCentral(), BorderLayout.CENTER);
+    
+    private final int SIDEBAR_WIDTH = 300; 
+
+    public menu(String imagemPath) {
+        carregarImagens(imagemPath); 
+        
+        setLayout(null); 
+
+        mainContentPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (ImagemDeFundo != null) {
+                    g.drawImage(ImagemDeFundo, 0, 0, getWidth(), getHeight(), this);
+                }
+                if (logoRedimensionada != null) {
+                    int x = getWidth() - logoWidth - 15;
+                    int y = getHeight() - logoHeight - 15;
+                    g.drawImage(logoRedimensionada, x, y, this);
+                    Graphics2D g2d = (Graphics2D) g.create();
+                    g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                    g2d.setColor(Color.WHITE);
+                    g2d.setFont(new Font("Arial", Font.PLAIN, 10)); 
+
+                    String texto = "Condução SP";
+                    int textoX = 15; 
+                    int textoY = getHeight() - 15; 
+
+                    g2d.drawString(texto, textoX, textoY);
+                    g2d.dispose();
+                }
+            }
+        };
+        mainContentPanel.setOpaque(false);
+        mainContentPanel.add(criarNavBar(), BorderLayout.NORTH);
+        mainContentPanel.add(criarPainelCentral(), BorderLayout.CENTER);
+        
+        add(mainContentPanel, JLayeredPane.DEFAULT_LAYER);
+
+        redimensionarLogo(logoWidth, logoHeight); 
+
+        sidebarContainerPanel = new JPanel(new BorderLayout());
+        sidebarContainerPanel.setOpaque(true); 
+        sidebarContainerPanel.setBackground(Cores.AZUL_METRO); 
+
+        configuracoesPanel = new ConfiguracoesPanel(() -> {
+            toggleConfigPanel(false); 
+        });
+        sidebarContainerPanel.add(configuracoesPanel, BorderLayout.CENTER);
+
+        add(sidebarContainerPanel, JLayeredPane.PALETTE_LAYER); 
+
         configurarRedimensionamentoMouse();
+
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                mainContentPanel.setBounds(0, 0, getWidth(), getHeight());
+                if (sidebarContainerPanel.isVisible()) {
+                    sidebarContainerPanel.setBounds(0, 0, SIDEBAR_WIDTH, getHeight());
+                } else {
+                    sidebarContainerPanel.setBounds(0, 0, 0, getHeight()); 
+                }
+            }
+        });
+
+        toggleConfigPanel(false);
     }
 
     private void carregarImagens(String imagemPath) {
@@ -47,7 +109,9 @@ public class menu extends JPanel {
             logoRedimensionada = logoOriginal.getScaledInstance(width, height, Image.SCALE_SMOOTH);
             this.logoWidth = width;
             this.logoHeight = height;
-            repaint();
+            if (mainContentPanel != null) { 
+                mainContentPanel.repaint(); 
+            }
         }
     }
 
@@ -63,7 +127,7 @@ public class menu extends JPanel {
     private JPanel criarNavBar() {
         JPanel navBar = new JPanel(new BorderLayout());
         navBar.setBackground(Cores.AZUL_METRO);
-        navBar.setPreferredSize(new Dimension(getWidth(), 60));
+        navBar.setPreferredSize(new Dimension(getWidth(), 60)); 
 
         JLabel titulo = new JLabel("Sistema de Gerenciamento");
         titulo.setFont(new Font("Arial", Font.BOLD, 32));
@@ -73,6 +137,10 @@ public class menu extends JPanel {
         navBar.add(titulo, BorderLayout.CENTER);
 
         btnConfiguracoes = botoes.criarBotaoConfiguracoes();
+        btnConfiguracoes.addActionListener(e -> {
+            toggleConfigPanel(true); 
+        });
+        
         JPanel painelConfig = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
         painelConfig.setOpaque(false);
         painelConfig.add(btnConfiguracoes);
@@ -83,7 +151,7 @@ public class menu extends JPanel {
 
     private JPanel criarPainelCentral() {
         JPanel centro = new JPanel(new GridBagLayout());
-        centro.setOpaque(false);
+        centro.setOpaque(false); 
 
         JPanel painelBotoes = new JPanel(new GridLayout(3, 1, 0, 40));
         painelBotoes.setOpaque(false);
@@ -107,29 +175,43 @@ public class menu extends JPanel {
         return centro;
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        if (ImagemDeFundo != null) {
-            g.drawImage(ImagemDeFundo, 0, 0, getWidth(), getHeight(), this);
+    private void toggleConfigPanel(boolean show) {
+        if (show) {
+            sidebarContainerPanel.setVisible(true);
+            animatePanel(sidebarContainerPanel, -SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight());
+        } else {
+            animatePanel(sidebarContainerPanel, 0, -SIDEBAR_WIDTH, SIDEBAR_WIDTH, getHeight(), () -> {
+                sidebarContainerPanel.setVisible(false);
+            });
         }
+    }
 
-        if (logoRedimensionada != null) {
-            int x = getWidth() - logoWidth - 15;
-            int y = getHeight() - logoHeight - 15;
-            g.drawImage(logoRedimensionada, x, y, this);
-            Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-            g2d.setColor(Color.WHITE);
-            g2d.setFont(new Font("Arial", Font.PLAIN, 10)); 
+    private void animatePanel(JPanel panel, int startX, int endX, int width, int height, Runnable onComplete) {
+        final int frames = 20; 
+        final int delay = 10; 
+        Timer timer = new Timer(delay, new AbstractAction() {
+            int currentX = startX;
+            int step = (endX - startX) / frames;
 
-            String texto = "Condução SP";
-            int textoX = 15; 
-            int textoY = getHeight() - 15; 
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                currentX += step;
+                if ((step > 0 && currentX >= endX) || (step < 0 && currentX <= endX)) {
+                    currentX = endX; 
+                    ((Timer) e.getSource()).stop();
+                    if (onComplete != null) {
+                        onComplete.run();
+                    }
+                }
+                panel.setBounds(currentX, 0, width, height);
+                revalidate();
+                repaint();
+            }
+        });
+        timer.start();
+    }
 
-            g2d.drawString(texto, textoX, textoY);
-            g2d.dispose();
-        }
+    private void animatePanel(JPanel panel, int startX, int endX, int width, int height) {
+        animatePanel(panel, startX, endX, width, height, null);
     }
 }
