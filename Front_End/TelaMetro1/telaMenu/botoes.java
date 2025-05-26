@@ -37,7 +37,7 @@ public class botoes {
         button.setOpaque(true);
         button.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(255, 255, 255, 150), 2),
-            BorderFactory.createEmptyBorder(20, 20, 20, 20)))
+            BorderFactory.createEmptyBorder(20, 40, 20, 20))) 
          ;
         button.setFocusPainted(false);
         button.setPreferredSize(preferredSize);
@@ -46,9 +46,10 @@ public class botoes {
             ImageIcon icon = carregarIcone(iconePath, iconeWidth, iconeHeight);
             if (icon != null) {
                 button.setIcon(icon);
-                button.setHorizontalTextPosition(horizontalTextPosition);
+                button.setHorizontalTextPosition(SwingConstants.RIGHT);
                 button.setVerticalTextPosition(SwingConstants.CENTER);
-                button.setIconTextGap(60);
+                button.setIconTextGap(20); 
+                button.setHorizontalAlignment(SwingConstants.LEFT); 
             }
         }
         return button;
@@ -102,5 +103,22 @@ public class botoes {
     public static JButton criarBotaoFechar() {
         return criarBotaoPadrao("Fechar", null, 0, 0,
                               SwingConstants.CENTER, new Dimension(150, 50), 18);
+    }
+
+
+    public static JButton criarBotaoVoltar() {
+      
+        JButton button = criarBotaoPadrao("", "/Assets/Imagens/seta.png", 40, 40,
+                               SwingConstants.CENTER, new Dimension(60, 60), 0);
+        
+        button.setBorderPainted(false); 
+        button.setContentAreaFilled(false); 
+        button.setFocusPainted(false); 
+        button.setIconTextGap(0); 
+        
+        button.setHorizontalAlignment(SwingConstants.CENTER);
+        button.setVerticalAlignment(SwingConstants.CENTER);
+        
+        return button;
     }
 }

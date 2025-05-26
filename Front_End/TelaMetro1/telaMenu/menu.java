@@ -54,17 +54,14 @@ public class menu extends JLayeredPane {
         mainContentPanel.add(criarNavBar(), BorderLayout.NORTH);
         mainContentPanel.add(criarPainelCentral(), BorderLayout.CENTER);
         
-        
         add(mainContentPanel, JLayeredPane.DEFAULT_LAYER);
 
         redimensionarLogo(logoWidth, logoHeight); 
-
 
         sidebarContainerPanel = new JPanel(new BorderLayout());
         sidebarContainerPanel.setOpaque(true); 
         sidebarContainerPanel.setBackground(Cores.AZUL_METRO); 
 
-      
         configuracoesPanel = new ConfiguracoesPanel(() -> {
             toggleConfigPanel(false); 
         });
@@ -72,17 +69,16 @@ public class menu extends JLayeredPane {
   
         add(sidebarContainerPanel, JLayeredPane.PALETTE_LAYER); 
 
-      
+
         supervisorPanel = new SupervisorPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
             showPanel("main"); 
         });
-    
+   
         add(supervisorPanel, JLayeredPane.MODAL_LAYER); 
-  
+ 
 
         configurarRedimensionamentoMouse();
 
-       
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
@@ -93,7 +89,7 @@ public class menu extends JLayeredPane {
                 } else {
                     sidebarContainerPanel.setBounds(0, 0, 0, getHeight()); 
                 }
-                
+     
                 supervisorPanel.setBounds(0, 0, getWidth(), getHeight()); 
             }
         });
@@ -148,7 +144,7 @@ public class menu extends JLayeredPane {
         JLabel titulo = new JLabel("Sistema de Gerenciamento");
         titulo.setFont(new Font("Arial", Font.BOLD, 32));
         titulo.setForeground(Color.WHITE);
-        titulo.setBorder(BorderFactory.createEmptyBorder(0, 350, 0, 0)); 
+        titulo.setBorder(BorderFactory.createEmptyBorder(0, 350, 0, 0));
 
         navBar.add(titulo, BorderLayout.CENTER);
 
@@ -195,9 +191,9 @@ public class menu extends JLayeredPane {
         return centro;
     }
 
-    
+
     private void showPanel(String panelName) {
-       
+
         mainContentPanel.setVisible(false); 
         sidebarContainerPanel.setVisible(false);
         supervisorPanel.setVisible(false);
@@ -207,29 +203,28 @@ public class menu extends JLayeredPane {
                 mainContentPanel.setVisible(true); 
                 break;
             case "config":
-    
                 mainContentPanel.setVisible(true); 
-                sidebarContainerPanel.setVisible(true);
+                sidebarContainerPanel.setVisible(true); 
                 break;
             case "supervisor":
                 supervisorPanel.setVisible(true); 
                 break;
         }
         revalidate(); 
-        repaint();   }
+        repaint();    
+    }
 
+  
     
-
+     
     private void toggleConfigPanel(boolean show) {
         if (show) {
-
-            mainContentPanel.setVisible(true); 
             showPanel("config"); 
             animatePanel(sidebarContainerPanel, -SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight());
         } else {
             animatePanel(sidebarContainerPanel, 0, -SIDEBAR_WIDTH, SIDEBAR_WIDTH, getHeight(), () -> {
                 sidebarContainerPanel.setVisible(false); 
-                showPanel("main"); 
+                showPanel("main");
             });
         }
     }
