@@ -13,7 +13,7 @@ public class ChaveReversoraTela extends JPanel {
         "ChaveReversoraNeutro.jpg"
     };
 
-    private int index = 0;
+    private static int index = 0;
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private JButton btnTrocar;

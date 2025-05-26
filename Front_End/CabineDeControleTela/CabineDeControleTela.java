@@ -9,8 +9,10 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
 
+import CabineDeControleTela.*;
+import Carro.PainelExternoAberto;
 import Carro.PainelExternoFechado;
-import Carro.PortasAbertas;
+import Carro.Portas;
 
 public class CabineDeControleTela extends JPanel {
 
@@ -18,7 +20,7 @@ public class CabineDeControleTela extends JPanel {
     private JFrame parentFrame;
 
     // Botões como atributos
-    private JButton botao1, botao2, botao3, botao4, botao5, botao6;
+    private JButton botao1, botao2, botao3, botao4, botao5, botao6, botao7;
 
     public CabineDeControleTela(JFrame frame) {
         this.parentFrame = frame;
@@ -61,6 +63,11 @@ public class CabineDeControleTela extends JPanel {
         botao5.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botao5);
 
+        botao7 = new JButton("<html>P<br>a<br>i<br>n<br>e<br>l<br><br>C<br>h<br>a<br>v<br>e</html>");
+        botao7.addActionListener(e -> substituirPainel(new PainelCBTCeChave(parentFrame)));
+        botao7.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(botao7);
+
         botao6 = criarBotao(() -> substituirPainel(new AlavancaFrenagem(parentFrame)));
         add(botao6);
 
@@ -90,6 +97,7 @@ public class CabineDeControleTela extends JPanel {
         botao4.setBounds((int)(w * 0.75), (int)(h * 0.42), (int)(w * 0.17), (int)(h * 0.15));
         botao5.setBounds((int)(w * 0.005), (int)(h * 0.5), (int)(w * 0.035), (int)(h * 0.25));
         botao6.setBounds((int)(w * 0.535), (int)(h * 0.60), (int)(w * 0.04), (int)(h * 0.17));
+        botao7.setBounds((int)(w * 0.96), (int)(h * 0.5), (int)(w * 0.035), (int)(h * 0.25));
 
         repaint();
     }
@@ -108,8 +116,7 @@ public class CabineDeControleTela extends JPanel {
         // Tela cheia
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setUndecorated(true); // opcional: remove bordas e barra de título
-
-        frame.setContentPane(new Cinturao(frame));
+        frame.setContentPane(new CabineDeControleTela(frame));
         frame.setVisible(true);
     });
 }

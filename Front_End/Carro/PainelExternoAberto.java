@@ -12,7 +12,7 @@ public class PainelExternoAberto extends JPanel {
         "Imagens/PainelExternoAbertoISOL.jpg",
     };
 
-    private int index = 0;
+    public static int index = 0;
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private JButton btnTrocar;
@@ -36,7 +36,6 @@ public class PainelExternoAberto extends JPanel {
         btnTrocar.addActionListener(e -> {
             index = (index + 1) % backgrounds.length;
             carregarImagemFundo();
-            reposicionarComponentes();
             repaint();
         });
         add(btnTrocar);
@@ -58,7 +57,6 @@ public class PainelExternoAberto extends JPanel {
         add(btnVoltar);
 
         adicionarListenerRedimensionamento();
-        reposicionarComponentes();
     }
 
     private void carregarImagemFundo() {

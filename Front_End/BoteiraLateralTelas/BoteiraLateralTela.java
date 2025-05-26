@@ -13,7 +13,7 @@ public class BoteiraLateralTela extends JPanel {
         "Imagens/BarraLateralPortasAbertas.jpg"
     };
 
-    private int index = 0;
+    private static int index = 1;
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private JButton btnTrocar;

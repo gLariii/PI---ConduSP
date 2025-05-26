@@ -36,7 +36,7 @@ public class DispositivosDeEmergência extends JPanel {
 
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> substituirPainel(new PortasAbertas(parentFrame)));
+        btnVoltar.addActionListener(e -> substituirPainel(new Portas(parentFrame)));
         add(btnVoltar);
         reposicionarBotoes();
     }

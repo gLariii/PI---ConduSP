@@ -35,7 +35,7 @@ public class Soleira extends JPanel {
     }
 
     private void adicionarBotoes() {
-        btnVoltar = criarBotao(() -> substituirPainel(new PortasAbertas(parentFrame)));
+        btnVoltar = criarBotao(() -> substituirPainel(new Portas(parentFrame)));
         add(btnVoltar);
         reposicionarBotoes();
     }

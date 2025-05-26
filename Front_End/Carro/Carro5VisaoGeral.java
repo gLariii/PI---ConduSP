@@ -1,7 +1,7 @@
 package Carro;
 import CabineDeControleTela.AreaLateral;
 import CabineDeControleTela.CabineDeControleTela;
-import Carro.PortasAbertas;
+import Carro.Portas;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -42,7 +42,7 @@ public class Carro5VisaoGeral extends JPanel {
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame)));
-        btnPortas = criarBotao(() -> substituirPainel(new PortasAbertas(parentFrame)));
+        btnPortas = criarBotao(() -> substituirPainel(new Portas(parentFrame)));
         btnPainel = criarBotao(() -> substituirPainel(new PainelExternoFechado(parentFrame)));
         add(btnVoltar);
         add(btnPainel);
