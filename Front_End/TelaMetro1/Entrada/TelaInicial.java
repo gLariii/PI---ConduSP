@@ -11,10 +11,14 @@ import java.awt.event.MouseEvent;
 import javax.swing.text.JTextComponent;
 
 public class TelaInicial extends JPanel {
+
     public TelaInicial() {
         setOpaque(false);
         setLayout(null);
         initComponents();
+        passwordField.setText("Senha:");
+        passwordField.setForeground(Color.GRAY);
+        passwordField.setEchoChar((char) 0); // mostra o texto normal
     }
 
     private JTextField rgTextField;
@@ -42,34 +46,34 @@ public class TelaInicial extends JPanel {
                 Image.SCALE_SMOOTH);
         ImageIcon perfilIconRedimensionado = new ImageIcon(imagemPerfilRedimensionada);
         perfilLabel = new JLabel(perfilIconRedimensionado);
-        perfilLabel.setBounds(100, 10, larguraPerfil, alturaPerfil);
+        perfilLabel.setBounds(160, 70, larguraPerfil, alturaPerfil);
         add(perfilLabel);
 
         ImageIcon rgIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/perfil2.png"));
-        int larguraRgIcon = 20;
-        int alturaRgIcon = 20;
+        int larguraRgIcon = 24;
+        int alturaRgIcon = 30;
         Image imagemRgIconRedimensionada = rgIconOriginal.getImage().getScaledInstance(larguraRgIcon, alturaRgIcon,
                 Image.SCALE_SMOOTH);
         rgIcon = new ImageIcon(imagemRgIconRedimensionada);
 
         rgIconLabel = new JLabel(rgIcon);
-        rgIconLabel.setBounds(5, 104, larguraRgIcon, alturaRgIcon);
+        rgIconLabel.setBounds(50, 180, larguraRgIcon, alturaRgIcon);
         add(rgIconLabel);
 
 
         ImageIcon cadeadoIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/cadeado.png"));
-        int larguraCadeadoIcon = 20;
-        int alturaCadeadoIcon = 20;
+        int larguraCadeadoIcon = 24;
+        int alturaCadeadoIcon = 30;
         Image imagemCadeadoIconRedimensionada = cadeadoIconOriginal.getImage().getScaledInstance(larguraCadeadoIcon, alturaCadeadoIcon, Image.SCALE_SMOOTH);
         cadeadoIcon = new ImageIcon(imagemCadeadoIconRedimensionada);
 
         cadeadoLabel = new JLabel(cadeadoIcon);
-        cadeadoLabel.setBounds(5, 144, larguraCadeadoIcon, alturaCadeadoIcon);
+        cadeadoLabel.setBounds(50, 230, larguraCadeadoIcon, alturaCadeadoIcon);
         add(cadeadoLabel);
 
         // Campo de Texto RG - Castilho
         rgTextField = new RoundedTextField("RG:", 15);
-        rgTextField.setBounds(30, 100, 230, 28);
+        rgTextField.setBounds(80, 180, 240, 30);
         rgTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "RG:", 15));
         rgTextField.setForeground(Color.BLACK);
         rgTextField.setCaretColor(getAzulMetro());
@@ -80,7 +84,7 @@ public class TelaInicial extends JPanel {
             public void focusGained(FocusEvent e) {
                 if (rgTextField.getText().equals("RG:")) {
                     rgTextField.setText("");
-                    rgTextField.setForeground(Color.BLACK); // Garante que a cor do texto seja preta ao digitar
+                    rgTextField.setForeground(Color.BLACK); 
                 }
             }
 
@@ -96,32 +100,35 @@ public class TelaInicial extends JPanel {
 
         // Campo de Senha - Castilho
         passwordField = new RoundedPasswordField("Senha:", 15);
-        passwordField.setBounds(30, 140, 200, 28);
+        passwordField.setBounds(80, 230, 210, 30);
         passwordField.setBorder(new PlaceholderBorder(getAzulMetro(), "Senha:", 15));
         passwordField.setCaretColor(getAzulMetro());
         passwordField.setBackground(Color.WHITE);
         passwordField.setFont(helveticaFont);
-        passwordField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (new String(passwordField.getPassword()).equals("Senha:")) {
-                    passwordField.setText("");
-                }
-                passwordField.setForeground(Color.BLACK); // Garante que a cor do texto seja preta ao digitar novamente
+        passwordField.addFocusListener(new FocusListener() { 
+            @Override 
+            public void focusGained(FocusEvent e) { 
+            String senhaAtual = new String(passwordField.getPassword());
+            if (senhaAtual.equals("Senha:")) {
+                passwordField.setText("");
+                passwordField.setForeground(Color.BLACK);
+                passwordField.setEchoChar('\u2022'); // bolinhas
             }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (new String(passwordField.getPassword()).isEmpty()) {
+    }  
+            @Override 
+            public void focusLost(FocusEvent e) { 
+                if (new String(passwordField.getPassword()).isEmpty()) { 
                     passwordField.setText("Senha:");
                     passwordField.setForeground(Color.GRAY);
-                }
-            }
+                    passwordField.setEchoChar((char) 0); // mostra o texto normal
+                } 
+            } 
         });
-        add(passwordField);
-
-        senhaTextField = new RoundedTextField("", 15); // Inicializa sem texto
-        senhaTextField.setBounds(30, 140, 200, 28);
+        
+        add(passwordField); 
+        
+        senhaTextField = new RoundedTextField("", 15); // Inicial sem texto
+        senhaTextField.setBounds(80, 230, 210, 30);
         senhaTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "Senha:", 15));
         senhaTextField.setForeground(Color.BLACK);
         senhaTextField.setCaretColor(getAzulMetro());
@@ -129,13 +136,31 @@ public class TelaInicial extends JPanel {
         senhaTextField.setFont(helveticaFont);
         senhaTextField.setVisible(false);
         senhaTextField.setEditable(false);
+        senhaTextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (senhaTextField.getText().equals("Senha:")) {
+                    senhaTextField.setText("");
+                    senhaTextField.setForeground(Color.BLACK);
+                }
+            }
+        
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (senhaTextField.getText().isEmpty()) {
+                    senhaTextField.setText("Senha:");
+                    senhaTextField.setForeground(Color.GRAY);
+                }
+            }
+        });
+        
         add(senhaTextField);
 
         // Larissa o Olho ta aqui - OLha aqui Larissaaaaaaaaaaaaaaaaaaaaaaaaaaa olhaa o olho
         // Ícones do olho
 
         ImageIcon eyeVisibleIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/olho_visivel.png"));
-        Image eyeVisibleImage = eyeVisibleIconOriginal.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image eyeVisibleImage = eyeVisibleIconOriginal.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         eyeVisibleIcon = new ImageIcon(eyeVisibleImage);
 
         ImageIcon eyeHiddenIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/olho_escondido.png"));
@@ -145,7 +170,7 @@ public class TelaInicial extends JPanel {
 
         // Botão do olho (mostrar/ocultar senha)
         togglePasswordButton = new JButton(eyeVisibleIcon);
-        togglePasswordButton.setBounds(235, 140, 28, 28);
+        togglePasswordButton.setBounds(290, 230, 30, 30);
         togglePasswordButton.setBorderPainted(false);
         togglePasswordButton.setContentAreaFilled(false);
         togglePasswordButton.setFocusPainted(false);
@@ -154,29 +179,42 @@ public class TelaInicial extends JPanel {
         togglePasswordButton.addActionListener(e -> {
             if (isPasswordPressed) {
                 // Ocultar senha
+                passwordField.setText(senhaTextField.getText());
+                if (passwordField.getText().equals("Senha:")) {
+                    passwordField.setText((""));
+                    passwordField.setEchoChar((char) 0);
+                } else {
+                    passwordField.setEchoChar('\u2022');
+                }
                 passwordField.setVisible(true);
                 senhaTextField.setVisible(false);
                 togglePasswordButton.setIcon(eyeVisibleIcon);
                 senhaTextField.setEditable(false);
                 passwordField.requestFocusInWindow();
-                revalidate();
-                repaint();
-                // Verifica se o campo está vazio e remove o placeholder
-                if (new String(passwordField.getPassword()).equals("Senha:")) {
-                    passwordField.setText("");
-                }
             } else {
                 // Mostrar senha
-                senhaTextField.setText(new String(passwordField.getPassword()));
+                String password = new String(passwordField.getPassword());
+                if (password.equals("Senha:")) {
+                    password = "";
+                }
+                if (password.isEmpty()) {
+                    senhaTextField.setText("Senha:");
+                    senhaTextField.setForeground(Color.GRAY);
+                } else {
+                    senhaTextField.setText(password);
+                    senhaTextField.setForeground(Color.BLACK);
+                }
+
+                senhaTextField.setText(password);                
+                senhaTextField.setText(password);
                 senhaTextField.setForeground(Color.BLACK);
-                passwordField.setVisible(false); // Oculta o passwordField
-                senhaTextField.setVisible(true);  // Mostra o textField com a senha
+                passwordField.setVisible(false);
+                senhaTextField.setVisible(true);
                 senhaTextField.setEditable(true);
                 togglePasswordButton.setIcon(eyeHiddenIcon);
                 senhaTextField.requestFocusInWindow();
-                revalidate();
-                repaint();
             }
+            
             isPasswordPressed = !isPasswordPressed;
         });
 
@@ -185,18 +223,18 @@ public class TelaInicial extends JPanel {
 
         // Botão Entrar - Castilho
         entrarButton = new JButton("Entrar");
-        entrarButton.setBounds(65, 180, 150, 40);
+        entrarButton.setBounds(130, 290, 130, 40);
         entrarButton.setOpaque(false);
         entrarButton.setContentAreaFilled(false);
         entrarButton.setBorder(new RoundedBorder(Color.WHITE, 3, 15));
         entrarButton.setForeground(Color.WHITE);
-        entrarButton.setFont(helveticaFont);
+        entrarButton.setFont(helveticaFont.deriveFont(Font.PLAIN, 25f));
         entrarButton.addMouseListener(new MouseAdapter() {
             Color originalBorderColor = Color.WHITE;
             int originalBorderThickness = 3;
             Color originalTextColor = Color.WHITE;
             Color hoverBorderColor = new Color(173, 216, 230);
-            int hoverBorderThickness = 5;
+            int hoverBorderThickness = 4;
             Color hoverTextColor = new Color(173, 216, 230);
 
             @Override
@@ -207,7 +245,7 @@ public class TelaInicial extends JPanel {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                entrarButton.setBorder(new RoundedBorder(originalBorderColor, originalBorderThickness, 3));
+                entrarButton.setBorder(new RoundedBorder(originalBorderColor, originalBorderThickness, 5));
                 entrarButton.setForeground(originalTextColor);
             }
         });

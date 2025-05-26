@@ -25,16 +25,17 @@ public class LoginPainel extends JPanel {
     private void initComponents() {
         tituloLabel = new JLabel("Confirme seus dados");
         tituloLabel.setForeground(Color.WHITE);
-        tituloLabel.setFont(new Font("Helvetica", Font.BOLD, 20));
-        tituloLabel.setBounds(45, 15, 400, 30);
+        tituloLabel.setFont(new Font("Helvetica", Font.BOLD, 30));
+        tituloLabel.setBounds(50, 445, 400, 50);
+        
 
         TelaInicial telaInicial = new TelaInicial();
-        telaInicial.setBounds(10, 50, 280, 230);
+        telaInicial.setBounds(10, 50, 560, 460);
 
         rodapeLabel = new JLabel("Condução SP");
         rodapeLabel.setForeground(Color.WHITE);
-        rodapeLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
-        rodapeLabel.setBounds(95, 290, 400, 20);
+        rodapeLabel.setFont(new Font("Helvetica", Font.BOLD, 30));
+        rodapeLabel.setBounds(100, 20, 200, 40);
 
         add(tituloLabel);
         add(telaInicial);
@@ -47,18 +48,20 @@ public class LoginPainel extends JPanel {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int width = getWidth();
-        int height = getHeight();
-        int arcWidth = 20;
-        int arcHeight = 20;
+        // int width = getWidth();
+        // int height = getHeight();
+        int width = 400;
+        int height = 500;
+        int arcWidth = 30;
+        int arcHeight = 30;
 
         g2d.setColor(Cores.AZUL_METRO_TRANSPARENTE);
         g2d.fill(new RoundRectangle2D.Double(0, 0, width, height, arcWidth, arcHeight));
 
-        int topoAltura = 50;
+        int topoAltura = 70;
         g2d.setColor(Cores.AZUL_METRO);
         g2d.fill(new RoundRectangle2D.Double(0, 0, width, topoAltura, arcWidth, arcHeight));
-        int rodapeAltura = 40;
+        int rodapeAltura = 60;
         int rodapeY = height - rodapeAltura;
         g2d.setColor(Cores.AZUL_METRO);
         g2d.fill(new RoundRectangle2D.Double(0, rodapeY, width, rodapeAltura, arcWidth, arcHeight));

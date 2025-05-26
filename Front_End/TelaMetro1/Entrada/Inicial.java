@@ -7,9 +7,10 @@ public class Inicial {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Condução SP");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+        //frame.setSize(800, 600);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        ImagemPainel backgroundPanel = new ImagemPainel("/Assets/Imagens/Fundo1.png"); // Mudar Imagem de fundo para desenho por aqui
+        ImagemPainel backgroundPanel = new ImagemPainel("/Assets/Imagens/TelaInicial4Corrigida.png"); 
 
         frame.getContentPane().add(backgroundPanel); 
         frame.setVisible(true);
