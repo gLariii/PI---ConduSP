@@ -21,7 +21,7 @@ public class botoes {
         return null;
     }
 
-    private static JButton criarBotaoPadrao(String texto, String iconePath, int iconeWidth, 
+    public static JButton criarBotaoPadrao(String texto, String iconePath, int iconeWidth, 
                                           int iconeHeight, int horizontalTextPosition, 
                                           Dimension preferredSize, int fontSize) {
         JButton button = new JButton(texto) {
