@@ -68,7 +68,7 @@ public class menu extends JPanel {
         JLabel titulo = new JLabel("Sistema de Gerenciamento");
         titulo.setFont(new Font("Arial", Font.BOLD, 32));
         titulo.setForeground(Color.WHITE);
-        titulo.setBorder(BorderFactory.createEmptyBorder(0, 250, 0, 0));
+        titulo.setBorder(BorderFactory.createEmptyBorder(0, 350, 0, 0));
 
         navBar.add(titulo, BorderLayout.CENTER);
 
