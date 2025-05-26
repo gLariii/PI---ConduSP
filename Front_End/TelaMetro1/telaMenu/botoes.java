@@ -5,7 +5,7 @@ import java.awt.*;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import Assets.Cores; 
+import Assets.Cores;
 
 public class botoes {
 
@@ -22,66 +22,84 @@ public class botoes {
     }
 
     private static JButton criarBotaoPadrao(String texto, String iconePath, int iconeWidth, 
-                                          int iconeHeight, Dimension preferredSize, int fontSize) { 
+                                          int iconeHeight, int horizontalTextPosition, 
+                                          Dimension preferredSize, int fontSize) {
         JButton button = new JButton(texto) {
             @Override
             protected void paintComponent(Graphics g) {
-                if (isOpaque()) {
-                    g.setColor(getBackground());
-                    g.fillRect(0, 0, getWidth(), getHeight());
-                }
                 super.paintComponent(g);
             }
         };
         
-        button.setFont(new Font("Arial", Font.BOLD, fontSize)); 
+        button.setFont(new Font("Arial", Font.BOLD, fontSize));
         button.setForeground(Color.WHITE);
-        button.setBackground(Cores.AZUL_METRO); 
+        button.setBackground(Cores.AZUL_METRO);
         button.setOpaque(true);
         button.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(255, 255, 255, 150), 2),
             BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
         button.setFocusPainted(false);
-        button.setPreferredSize(preferredSize); 
-
-        button.setHorizontalAlignment(SwingConstants.LEFT); 
+        button.setPreferredSize(preferredSize);
 
         if (iconePath != null && !iconePath.isEmpty()) {
             ImageIcon icon = carregarIcone(iconePath, iconeWidth, iconeHeight);
             if (icon != null) {
                 button.setIcon(icon);
-                button.setHorizontalTextPosition(SwingConstants.RIGHT); 
+                button.setHorizontalTextPosition(horizontalTextPosition);
                 button.setVerticalTextPosition(SwingConstants.CENTER);
-            
-                button.setIconTextGap(60); 
+                button.setIconTextGap(60);
             }
         }
         return button;
     }
 
     public static JButton criarBotaoMaquinario() {
-        return criarBotaoPadrao("Maquinário", "/Assets/Imagens/metro.png", 80, 80, 
-                               new Dimension(500, 200), 40); 
+        return criarBotaoPadrao("Maquinário", "/Assets/Imagens/metro.png", 80, 80,
+                               SwingConstants.RIGHT, new Dimension(500, 200), 40);
     }
 
     public static JButton criarBotaoFeedBackPessoal() {
         return criarBotaoPadrao("Feedbacks", "/Assets/Imagens/feedback.png", 80, 80,
-                               new Dimension(500, 200), 40); 
+                               SwingConstants.RIGHT, new Dimension(500, 200), 40);
     }
 
     public static JButton criarBotaoSupervisor() {
         return criarBotaoPadrao("Supervisor", "/Assets/Imagens/supervisor.png", 80, 80,
-                               new Dimension(500, 200), 40); 
+                               SwingConstants.RIGHT, new Dimension(500, 200), 40);
     }
     
     public static JButton criarBotaoDesconectar() {
         return criarBotaoPadrao("Desconectar", "/Assets/Imagens/sair.png", 50, 50,
-                               new Dimension(250, 70), 28); 
+                               SwingConstants.LEFT, new Dimension(250, 70), 28);
     }
 
     public static JButton criarBotaoConfiguracoes() {
-        return criarBotaoPadrao("Configurações", "/Assets/Imagens/engrenagem.png", 50, 50,
-                               new Dimension(250, 70), 28); 
+    JButton button = new JButton() {
+        @Override
+        protected void paintComponent(Graphics g) {
+
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            if (getIcon() != null) {
+                int x = (getWidth() - getIcon().getIconWidth()) / 2;
+                int y = (getHeight() - getIcon().getIconHeight()) / 2;
+                getIcon().paintIcon(this, g2d, x, y);
+            }
+            g2d.dispose();
+        }
+    };
+    
+    ImageIcon icon = carregarIcone("/Assets/Imagens/engrenagem.png", 50, 50);
+    if (icon != null) {
+        button.setIcon(icon);
     }
+
+    
+    // Tamanho adequado para o ícone
+    button.setPreferredSize(new Dimension(60, 60));
+    
+    return button;
 }
+    }

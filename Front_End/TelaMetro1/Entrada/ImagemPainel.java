@@ -40,7 +40,6 @@ public class ImagemPainel extends JPanel {
             System.out.println("Erro ao carregar a imagem de fundo");
         }
 
-        // Carregar LogoORG.png
         try (InputStream is = getClass().getResourceAsStream(logoOrgImagePath)) {
             if (is != null) {
                 logoOrgImage = ImageIO.read(is);

@@ -48,8 +48,6 @@ public class LoginPainel extends JPanel {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // int width = getWidth();
-        // int height = getHeight();
         int width = 400;
         int height = 500;
         int arcWidth = 30;
