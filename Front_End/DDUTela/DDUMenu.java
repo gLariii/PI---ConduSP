@@ -16,7 +16,14 @@ public class DDUMenu extends JPanel {
     private JButton botaoMANUT;
     private JButton btnVoltar;
 
-    public DDUMenu(JFrame frame) {
+    private int ordemCliques;
+
+
+
+    public DDUMenu(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+
         this.parentFrame = frame;
         setLayout(null);
         setSize(frame.getSize());
@@ -36,11 +43,11 @@ public class DDUMenu extends JPanel {
     }
 
     private void adicionarBotoes() {
-        botaoFE = criarBotao(e -> trocarTela(new FE(parentFrame)));
-        botaoINFOPASS = criarBotao(e -> trocarTela(new INFOPASS(parentFrame)));
-        botaoMANUT = criarBotao(e -> trocarTela(new MANUT(parentFrame)));
+        botaoFE = criarBotao(e -> trocarTela(new FE(parentFrame, ordemCliques)));
+        botaoINFOPASS = criarBotao(e -> trocarTela(new INFOPASS(parentFrame, ordemCliques)));
+        botaoMANUT = criarBotao(e -> trocarTela(new MANUT(parentFrame, ordemCliques)));
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
 
         add(botaoFE);
         add(botaoINFOPASS);

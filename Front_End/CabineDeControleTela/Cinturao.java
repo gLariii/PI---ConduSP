@@ -19,7 +19,12 @@ public class Cinturao extends JPanel {
     private JButton btnVoltar;
     private JLabel labelItensColetados;
 
-    public Cinturao(JFrame frame) {
+    private int ordemCliques;
+
+    public Cinturao(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+        
         this.parentFrame = frame;
         setLayout(null);
 
@@ -44,7 +49,7 @@ public class Cinturao extends JPanel {
 
     private void adicionarComponentes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(btnVoltar);
 

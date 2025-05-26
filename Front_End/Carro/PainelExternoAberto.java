@@ -19,7 +19,12 @@ public class PainelExternoAberto extends JPanel {
     private JButton btnVoltar;
     private JButton btnFechar;
 
-    public PainelExternoAberto(JFrame frame) {
+    private int ordemCliques;
+
+    public PainelExternoAberto(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        //ordemCliques++;
+
         this.parentFrame = frame;
         setLayout(null);
 
@@ -47,13 +52,13 @@ public class PainelExternoAberto extends JPanel {
         btnFechar.setBorderPainted(true);
         btnFechar.setFocusPainted(false);
         btnFechar.setForeground(new Color(0, 0, 0, 0));
-        btnFechar.addActionListener(e -> substituirPainel(new PainelExternoFechado(parentFrame)));
+        btnFechar.addActionListener(e -> substituirPainel(new PainelExternoFechado(parentFrame, ordemCliques)));
         add(btnFechar);
 
         // Botão Voltar
         btnVoltar = new JButton("Voltar");
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame)));
+        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques)));
         add(btnVoltar);
 
         adicionarListenerRedimensionamento();

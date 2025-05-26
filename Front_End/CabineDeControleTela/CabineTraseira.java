@@ -13,7 +13,12 @@ public class CabineTraseira extends JPanel {
     private JButton botao1;
     private JButton btnVoltar;
 
-    public CabineTraseira(JFrame frame) {
+    private int ordemCliques;
+
+    public CabineTraseira(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+
         this.parentFrame = frame;
         setLayout(null);
         adicionarBotoes();
@@ -37,7 +42,7 @@ public class CabineTraseira extends JPanel {
 
     private void adicionarBotoes() {
         botao1 = new JButton();
-        botao1.addActionListener(e -> trocarTela(new Cinturao(parentFrame)));
+        botao1.addActionListener(e -> trocarTela(new Cinturao(parentFrame, ordemCliques)));
         botao1.setOpaque(false);
         botao1.setContentAreaFilled(false);
         botao1.setBorderPainted(true);
@@ -46,7 +51,7 @@ public class CabineTraseira extends JPanel {
         add(botao1);
 
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(btnVoltar);
 

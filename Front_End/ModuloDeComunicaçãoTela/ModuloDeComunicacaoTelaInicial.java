@@ -15,7 +15,12 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     private CircleButton botao2;
     private JButton btnVoltar;
 
-    public ModuloDeComunicacaoTelaInicial(JFrame frame) {
+    private int ordemCliques;
+
+    public ModuloDeComunicacaoTelaInicial(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+
         this.parentFrame = frame;
         setLayout(null);
 
@@ -28,11 +33,11 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     }
 
     private void criarBotoes() {
-        botao1 = new CircleButton("", e -> substituirPainel(new PATela(parentFrame)));
-        botao2 = new CircleButton("", e -> substituirPainel(new PALista(parentFrame)));
+        botao1 = new CircleButton("", e -> substituirPainel(new PATela(parentFrame, ordemCliques)));
+        botao2 = new CircleButton("", e -> substituirPainel(new PALista(parentFrame, ordemCliques)));
         btnVoltar = new JButton("Voltar");
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame)));
+        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, ordemCliques)));
 
 
         add(botao1);

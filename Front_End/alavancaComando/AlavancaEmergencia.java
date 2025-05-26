@@ -14,8 +14,13 @@ public class AlavancaEmergencia extends JPanel {
     private JButton botaoAceleracao;
     private JButton botaoFrenagem;
     private JButton btnVoltar;
+
+    private int ordemCliques;
     
-    public AlavancaEmergencia(JFrame frame) {
+    public AlavancaEmergencia(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+
         this.parentFrame = frame;
         setLayout(null);
         setSize(frame.getSize());
@@ -35,10 +40,10 @@ public class AlavancaEmergencia extends JPanel {
     }
 
     private void adicionarBotoes() {
-        botaoAceleracao = criarBotao(e -> trocarTela(new AlavancaFrenagem(parentFrame)));
-        botaoFrenagem = criarBotao(e -> trocarTela(new AlavancaAceleracao(parentFrame)));
+        botaoAceleracao = criarBotao(e -> trocarTela(new AlavancaFrenagem(parentFrame, ordemCliques)));
+        botaoFrenagem = criarBotao(e -> trocarTela(new AlavancaAceleracao(parentFrame, ordemCliques)));
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
 
         add(botaoAceleracao);
         add(botaoFrenagem);

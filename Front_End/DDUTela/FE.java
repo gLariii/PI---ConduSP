@@ -16,7 +16,12 @@ public class FE extends JPanel {
     private JButton botaoMANUT;
     private JButton btnVoltar;
 
-    public FE(JFrame frame) {
+    private int ordemCliques;
+
+    public FE(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+
         this.parentFrame = frame;
         setLayout(null);
         setSize(frame.getSize());
@@ -36,11 +41,11 @@ public class FE extends JPanel {
     }
 
     private void adicionarBotoes() {
-        botao1 = criarBotao(e -> trocarTela(new DDUMenu(parentFrame)));
-        botaoINFOPASS = criarBotao(e -> trocarTela(new INFOPASS(parentFrame)));
-        botaoMANUT = criarBotao(e -> trocarTela(new MANUT(parentFrame)));
+        botao1 = criarBotao(e -> trocarTela(new DDUMenu(parentFrame, ordemCliques)));
+        botaoINFOPASS = criarBotao(e -> trocarTela(new INFOPASS(parentFrame, ordemCliques)));
+        botaoMANUT = criarBotao(e -> trocarTela(new MANUT(parentFrame, ordemCliques)));
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
 
         add(botao1);
         add(botaoINFOPASS);

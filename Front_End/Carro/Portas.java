@@ -15,8 +15,13 @@ public class Portas extends JPanel {
     private JFrame parentFrame;
     // Botões como atributos
     private static JButton botao1, botao2, btnVoltar,btnFechar, btnLacrar;
+    
+    private int ordemCliques;
 
-    public Portas(JFrame frame) {
+    public Portas(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+
         this.parentFrame = frame;
         setLayout(null);
         adicionarBotoes();
@@ -45,9 +50,9 @@ public class Portas extends JPanel {
 
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame)));
-        botao1 = criarBotao(() -> substituirPainel(new DispositivosDeEmergência(parentFrame)));
-        botao2 = criarBotao(() -> substituirPainel(new Soleira(parentFrame)));
+        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques)));
+        botao1 = criarBotao(() -> substituirPainel(new DispositivosDeEmergência(parentFrame, ordemCliques)));
+        botao2 = criarBotao(() -> substituirPainel(new Soleira(parentFrame, ordemCliques)));
         btnFechar = new JButton("Fechar");
         btnFechar.addActionListener(e -> {
             if (index == 0){

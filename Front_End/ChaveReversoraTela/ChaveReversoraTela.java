@@ -19,7 +19,14 @@ public class ChaveReversoraTela extends JPanel {
     private JButton btnTrocar;
     private JButton btnVoltar;
 
-    public ChaveReversoraTela(JFrame frame) {
+    private int ordemCliques;
+
+    public ChaveReversoraTela(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+
+        // sei que qual foi esse clique a partir daqui
+
         this.parentFrame = frame;
         setLayout(null);
 
@@ -57,7 +64,7 @@ public class ChaveReversoraTela extends JPanel {
     }
 
     private void voltarParaCabine() {
-        parentFrame.setContentPane(new CabineDeControleTela(parentFrame));
+        parentFrame.setContentPane(new CabineDeControleTela(parentFrame, ordemCliques));
         parentFrame.revalidate();
         parentFrame.repaint();
     }

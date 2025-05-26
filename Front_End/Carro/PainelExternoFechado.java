@@ -11,7 +11,9 @@ public class PainelExternoFechado extends JPanel {
     // Botões como atributos
     private JButton btnAbrir, btnVoltar;
 
-    public PainelExternoFechado(JFrame frame) {
+    private int ordemCliques;
+
+    public PainelExternoFechado(JFrame frame, int ordemCliques) {
         this.parentFrame = frame;
         setLayout(null);
         adicionarBotoes();
@@ -35,11 +37,11 @@ public class PainelExternoFechado extends JPanel {
     }
 
     private void adicionarBotoes() {
-        btnAbrir = criarBotao(() -> substituirPainel(new PainelExternoAberto(parentFrame)));
+        btnAbrir = criarBotao(() -> substituirPainel(new PainelExternoAberto(parentFrame, ordemCliques)));
         add(btnAbrir);
         btnVoltar = new JButton("Voltar");
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame)));
+        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques)));
         add(btnVoltar);
         reposicionarBotoes();
         

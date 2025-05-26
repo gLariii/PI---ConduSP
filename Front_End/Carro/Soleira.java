@@ -11,7 +11,12 @@ public class Soleira extends JPanel {
     // Botões como atributos
     private JButton  btnVoltar;
 
-    public Soleira(JFrame frame) {
+    private int ordemCliques;
+
+    public Soleira(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+
         this.parentFrame = frame;
         setLayout(null);
         adicionarBotoes();
@@ -35,7 +40,7 @@ public class Soleira extends JPanel {
     }
 
     private void adicionarBotoes() {
-        btnVoltar = criarBotao(() -> substituirPainel(new Portas(parentFrame)));
+        btnVoltar = criarBotao(() -> substituirPainel(new Portas(parentFrame, ordemCliques)));
         add(btnVoltar);
         reposicionarBotoes();
     }

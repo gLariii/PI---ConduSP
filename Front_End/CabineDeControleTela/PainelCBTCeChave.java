@@ -14,6 +14,8 @@ public class PainelCBTCeChave extends JPanel {
     private static int indexChave = 0;
     private Image imagemDeFundo;
     private JFrame parentFrame;
+    private int ordemCliques;
+
     private final String[] backgroundsCBTC = {
         "Imagens/ChaveCBTCRM.jpg",
         "Imagens/ChaveCBTCAM.jpg",
@@ -26,8 +28,11 @@ public class PainelCBTCeChave extends JPanel {
     // Botões como atributos
     private JButton btnVoltar, btnCBTC, btnChave;
 
-    public PainelCBTCeChave(JFrame frame) {
+    public PainelCBTCeChave(JFrame frame, int ordemCliques) {
         this.parentFrame = frame;
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+
         setLayout(null);
         adicionarBotoes();
 
@@ -79,7 +84,7 @@ public class PainelCBTCeChave extends JPanel {
         add(btnChave);
 
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame)));
+        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, ordemCliques)));
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(btnVoltar);
 

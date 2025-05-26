@@ -17,7 +17,12 @@ public class INFOPASS extends JPanel {
     private JButton botao5;
     private JButton btnVoltar;
 
-    public INFOPASS(JFrame frame) {
+    private int ordemCliques;
+
+    public INFOPASS(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+        
         this.parentFrame = frame;
         setLayout(null);
         setSize(frame.getSize());
@@ -37,11 +42,11 @@ public class INFOPASS extends JPanel {
     }
 
     private void adicionarBotoes() {
-        botao1 = criarBotao(e -> trocarTela(new DDUMenu(parentFrame)));
-        botao2 = criarBotao(e -> trocarTela(new FE(parentFrame)));
-        botao3 = criarBotao(e -> trocarTela(new INFOPASS(parentFrame)));
-        botao5 = criarBotao(e -> trocarTela(new MANUT(parentFrame)));
-        btnVoltar = criarBotaoVoltar(e -> trocarTela(new CabineDeControleTela(parentFrame)));
+        botao1 = criarBotao(e -> trocarTela(new DDUMenu(parentFrame, ordemCliques)));
+        botao2 = criarBotao(e -> trocarTela(new FE(parentFrame, ordemCliques)));
+        botao3 = criarBotao(e -> trocarTela(new INFOPASS(parentFrame, ordemCliques)));
+        botao5 = criarBotao(e -> trocarTela(new MANUT(parentFrame, ordemCliques)));
+        btnVoltar = criarBotaoVoltar(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
 
         add(botao1);
         add(botao2);

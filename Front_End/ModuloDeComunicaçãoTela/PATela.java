@@ -14,7 +14,12 @@ public class PATela extends JPanel {
     private JButton btnVoltar;
     private JButton botao1;
 
-    public PATela(JFrame frame) {
+    private int ordemCliques;
+
+    public PATela(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+
         this.parentFrame = frame;
         setLayout(null);
 
@@ -29,7 +34,7 @@ public class PATela extends JPanel {
     private void criarBotoes() {
         btnVoltar = new JButton("Voltar");
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame)));
+        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, ordemCliques)));
         add(btnVoltar);
 
         botao1 = new JButton("Módulo de comunicação");
@@ -39,7 +44,7 @@ public class PATela extends JPanel {
         botao1.setFocusPainted(false);
         botao1.setForeground(new Color(0, 0, 0, 0));
         botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        botao1.addActionListener(e -> substituirPainel(new ModuloDeComunicacaoTelaInicial(parentFrame)));
+        botao1.addActionListener(e -> substituirPainel(new ModuloDeComunicacaoTelaInicial(parentFrame, ordemCliques)));
         add(botao1);
     }
 

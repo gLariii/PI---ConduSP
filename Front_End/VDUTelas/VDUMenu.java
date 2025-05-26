@@ -12,7 +12,12 @@ public class VDUMenu extends JPanel {
     private Image imagemDeFundo;
     private JButton btnVoltar;
 
-    public VDUMenu(JFrame frame) {
+    private int ordemCliques;
+
+    public VDUMenu(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        //ordemCliques++;
+
         this.parentFrame = frame;
         setLayout(null);
 
@@ -21,7 +26,7 @@ public class VDUMenu extends JPanel {
 
         btnVoltar = new JButton("Voltar");
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
         add(btnVoltar);
 
         adicionarListenerRedimensionamento();

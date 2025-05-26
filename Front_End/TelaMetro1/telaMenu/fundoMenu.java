@@ -19,7 +19,7 @@ public class fundoMenu {
         frame.setUndecorated(true);  
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
-        menu painelMenu = new menu("/Assets/Imagens/TelaInicial4Corrigida.png");
+        Menu painelMenu = new Menu("/Assets/Imagens/TelaInicial4Corrigida.png");
         frame.setContentPane(painelMenu);
         frame.setVisible(true);
         painelMenu.revalidate();

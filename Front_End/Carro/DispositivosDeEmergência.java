@@ -11,7 +11,10 @@ public class DispositivosDeEmergência extends JPanel {
     // Botões como atributos
     private JButton btnVoltar;
 
-    public DispositivosDeEmergência(JFrame frame) {
+    private int ordemCliques;
+
+    public DispositivosDeEmergência(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques++;
         this.parentFrame = frame;
         setLayout(null);
         adicionarBotoes();
@@ -36,7 +39,7 @@ public class DispositivosDeEmergência extends JPanel {
 
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> substituirPainel(new Portas(parentFrame)));
+        btnVoltar.addActionListener(e -> substituirPainel(new Portas(parentFrame, ordemCliques)));
         add(btnVoltar);
         reposicionarBotoes();
     }

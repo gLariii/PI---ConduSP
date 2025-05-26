@@ -13,10 +13,15 @@ public class Carro5VisaoGeral extends JPanel {
     private Image imagemDeFundo;
     private JFrame parentFrame;
 
+    private int ordemCliques;
+
     // Botões como atributos
     private JButton btnPortas, btnVoltar, btnPainel;
 
-    public Carro5VisaoGeral(JFrame frame) {
+    public Carro5VisaoGeral(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        ordemCliques++;
+
         this.parentFrame = frame;
         setLayout(null);
         adicionarBotoes();
@@ -41,9 +46,9 @@ public class Carro5VisaoGeral extends JPanel {
 
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame)));
-        btnPortas = criarBotao(() -> substituirPainel(new Portas(parentFrame)));
-        btnPainel = criarBotao(() -> substituirPainel(new PainelExternoFechado(parentFrame)));
+        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, ordemCliques)));
+        btnPortas = criarBotao(() -> substituirPainel(new Portas(parentFrame, ordemCliques)));
+        btnPainel = criarBotao(() -> substituirPainel(new PainelExternoFechado(parentFrame, ordemCliques)));
         add(btnVoltar);
         add(btnPainel);
         add(btnPortas);

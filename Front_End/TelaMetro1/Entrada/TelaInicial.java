@@ -2,6 +2,8 @@ package TelaMetro1.Entrada;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.RoundRectangle2D;
@@ -9,6 +11,10 @@ import javax.swing.border.Border;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.text.JTextComponent;
+
+import DAO.UsuarioDAO;
+import Model.Usuario;
+import TelaMetro1.telaMenu.Menu;
 
 public class TelaInicial extends JPanel {
 
@@ -229,6 +235,34 @@ public class TelaInicial extends JPanel {
         entrarButton.setBorder(new RoundedBorder(Color.WHITE, 3, 15));
         entrarButton.setForeground(Color.WHITE);
         entrarButton.setFont(helveticaFont.deriveFont(Font.PLAIN, 25f));
+        entrarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                String rg = rgTextField.getText();
+                String password = new String(passwordField.getPassword());
+
+                Usuario usuario = new Usuario(rg, password);
+                UsuarioDAO dao = new UsuarioDAO();
+                //System.out.println("RG: " + rg + " Pass: " + password);
+
+                if(dao.autenticar(usuario)){ // Usuário encontrado
+                    JOptionPane.showMessageDialog(null, "Usuario encontrado!!");
+                    
+                    // Mudança de tela daqui para baixo
+                    JFrame frame = new JFrame("Menu");
+                    Menu menu = new Menu("/Assets/Imagens/TelaInicial4Corrigida.png"); // seu JLayeredPane
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    frame.setSize(800, 600); // ou qualquer tamanho desejado
+                    frame.setContentPane(menu); // adiciona seu JLayeredPane
+                    frame.setVisible(true);
+                    // Fecha a tela atual, assumindo que estamos dentro de um JFrame
+                    ((JFrame) SwingUtilities.getWindowAncestor(entrarButton)).dispose();
+                }else{
+                    JOptionPane.showMessageDialog(null, "Usuario não encontrado!!");
+                }
+            }
+        });
         entrarButton.addMouseListener(new MouseAdapter() {
             Color originalBorderColor = Color.WHITE;
             int originalBorderThickness = 3;

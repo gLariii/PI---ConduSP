@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import Assets.Cores;
 
-public class menu extends JLayeredPane { 
+public class Menu extends JLayeredPane { 
     private Image ImagemDeFundo, logoOriginal, logoRedimensionada;
     private JButton btnMaquinario, btnFeedbacks, btnSupervisor, btnConfiguracoes;
     private int logoWidth = 40; 
@@ -20,7 +20,7 @@ public class menu extends JLayeredPane {
 
     private final int SIDEBAR_WIDTH = 300; 
 
-    public menu(String imagemPath) {
+    public Menu(String imagemPath) {
         carregarImagens(imagemPath); 
         
         setLayout(null); 

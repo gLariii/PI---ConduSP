@@ -19,7 +19,12 @@ public class AreaLateral extends JPanel {
     private JButton btnPorta;
     private JButton btnVoltar;
 
-    public AreaLateral(JFrame frame) {
+    private int ordemCliques;
+    
+    public AreaLateral(JFrame frame, int ordemCliques) {
+        this. ordemCliques = ordemCliques;
+
+
         this.parentFrame = frame;
         setLayout(null);
         adicionarBotoes();
@@ -44,21 +49,21 @@ public class AreaLateral extends JPanel {
 
     private void adicionarBotoes() { 
         botao1 = new JButton("");
-        botao1.addActionListener(e -> trocarTela(new BoteiraLateralTela(parentFrame)));            
+        botao1.addActionListener(e -> trocarTela(new BoteiraLateralTela(parentFrame, ordemCliques)));            
         botao1.setOpaque(false);
         botao1.setContentAreaFilled(false);
         botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botao1);
 
         botaoTraseira = new JButton("");
-        botaoTraseira.addActionListener(e -> trocarTela(new CabineTraseira(parentFrame)));            
+        botaoTraseira.addActionListener(e -> trocarTela(new CabineTraseira(parentFrame, ordemCliques)));            
         botaoTraseira.setOpaque(false);
         botaoTraseira.setContentAreaFilled(false);
         botaoTraseira.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botaoTraseira);
 
         btnPorta = new JButton("");
-        btnPorta.addActionListener(e -> trocarTela(new Carro5VisaoGeral(parentFrame)));            
+        btnPorta.addActionListener(e -> trocarTela(new Carro5VisaoGeral(parentFrame, ordemCliques)));            
         btnPorta.setOpaque(false);
         btnPorta.setContentAreaFilled(false);
         btnPorta.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -66,7 +71,7 @@ public class AreaLateral extends JPanel {
 
 
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame)));
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(btnVoltar);
 

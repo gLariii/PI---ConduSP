@@ -19,7 +19,11 @@ public class BoteiraLateralTela extends JPanel {
     private JButton btnTrocar;
     private JButton btnVoltar;
 
-    public BoteiraLateralTela(JFrame frame) {
+    private int ordemCliques;
+
+    public BoteiraLateralTela(JFrame frame, int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+        
         this.parentFrame = frame;
         setLayout(null);
 
@@ -57,7 +61,7 @@ public class BoteiraLateralTela extends JPanel {
     }
 
     private void voltarParaLateral() {
-        parentFrame.setContentPane(new AreaLateral(parentFrame));
+        parentFrame.setContentPane(new AreaLateral(parentFrame, ordemCliques));
         parentFrame.revalidate();
         parentFrame.repaint();
     }
