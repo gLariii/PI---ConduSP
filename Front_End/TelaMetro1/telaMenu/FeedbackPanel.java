@@ -2,8 +2,6 @@ package TelaMetro1.telaMenu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
@@ -11,42 +9,51 @@ import Assets.Cores;
 
 public class FeedbackPanel extends JPanel {
 
-    private Image ImagemDeFundo;
+    private Image imagemDeFundo;
     private Image logoOriginal, logoRedimensionada;
     private int logoWidth = 40;
     private int logoHeight = 40;
     private Runnable voltarAcao;
 
-    public FeedbackPanel(String imagemPath, Runnable voltarAcao) {
+    public FeedbackPanel(Runnable voltarAcao) {
         this.voltarAcao = voltarAcao;
 
-        carregarImagens(imagemPath);
+        carregarImagemDeFundo();
+        carregarLogo();
 
         setLayout(new BorderLayout());
         setOpaque(false);
 
         add(criarNavBar(), BorderLayout.NORTH);
         add(criarPainelCentral(), BorderLayout.CENTER);
-
-        configurarRedimensionamentoMouse();
     }
 
-    private void carregarImagens(String imagemPath) {
+    private void carregarImagemDeFundo() {
         try {
-            InputStream isFundo = getClass().getResourceAsStream(imagemPath);
+            InputStream isFundo = getClass().getResourceAsStream("/Assets/Imagens/TelaInicial4Corrigida.png");
             if (isFundo != null) {
-                ImagemDeFundo = ImageIO.read(isFundo);
-            }
-
-            InputStream isLogo = getClass().getResourceAsStream("/Assets/Imagens/logoORG.png");
-            if (isLogo != null) {
-                logoOriginal = ImageIO.read(isLogo);
+                imagemDeFundo = ImageIO.read(isFundo);
+            } else {
+                System.err.println("Imagem de fundo não encontrada.");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-        redimensionarLogo(logoWidth, logoHeight);
+    private void carregarLogo() {
+        try (InputStream isLogo = getClass().getResourceAsStream("/Assets/Imagens/logoORG.png")) {
+            if (isLogo != null) {
+                logoOriginal = ImageIO.read(isLogo);
+                if (logoOriginal != null) {
+                    logoRedimensionada = logoOriginal.getScaledInstance(logoWidth, logoHeight, Image.SCALE_SMOOTH);
+                }
+            } else {
+                System.err.println("Logo não encontrada.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private JPanel criarNavBar() {
@@ -54,7 +61,6 @@ public class FeedbackPanel extends JPanel {
         navBar.setBackground(Cores.AZUL_METRO);
         navBar.setPreferredSize(new Dimension(getWidth(), 60));
 
-        // Botão de Voltar
         JButton btnVoltar = botoes.criarBotaoVoltar();
         btnVoltar.addActionListener(e -> {
             if (voltarAcao != null) {
@@ -62,19 +68,20 @@ public class FeedbackPanel extends JPanel {
             }
         });
 
-        JPanel painelEsquerdo = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
+        JPanel painelEsquerdo = new JPanel(new FlowLayout(FlowLayout.LEFT, 25, 0));
         painelEsquerdo.setOpaque(false);
         painelEsquerdo.add(btnVoltar);
-
         navBar.add(painelEsquerdo, BorderLayout.WEST);
 
-        // Título
-        JLabel titulo = new JLabel("Feedbacks Gerais");
+        JLabel titulo = new JLabel("Feedbacks Gerais", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 32));
         titulo.setForeground(Color.WHITE);
-        titulo.setHorizontalAlignment(SwingConstants.CENTER);
-
         navBar.add(titulo, BorderLayout.CENTER);
+
+        JPanel painelDireito = new JPanel();
+        painelDireito.setOpaque(false);
+        painelDireito.setPreferredSize(new Dimension(btnVoltar.getPreferredSize().width + 30, 60));
+        navBar.add(painelDireito, BorderLayout.EAST);
 
         return navBar;
     }
@@ -92,36 +99,12 @@ public class FeedbackPanel extends JPanel {
         return centro;
     }
 
-    public void redimensionarLogo(int width, int height) {
-        if (logoOriginal != null) {
-            width = Math.max(20, Math.min(width, 100));
-            height = Math.max(20, Math.min(height, 100));
-
-            logoRedimensionada = logoOriginal.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            this.logoWidth = width;
-            this.logoHeight = height;
-            repaint();
-        }
-    }
-
-    private void configurarRedimensionamentoMouse() {
-        addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                int notches = e.getWheelRotation();
-                int incremento = e.isControlDown() ? 10 : 5;
-                int novoSize = Math.max(20, logoWidth - (notches * incremento));
-                redimensionarLogo(novoSize, novoSize);
-            }
-        });
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if (ImagemDeFundo != null) {
-            g.drawImage(ImagemDeFundo, 0, 0, getWidth(), getHeight(), this);
+        if (imagemDeFundo != null) {
+            g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
         }
 
         if (logoRedimensionada != null) {
