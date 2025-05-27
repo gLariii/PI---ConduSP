@@ -247,19 +247,23 @@ public class TelaInicial extends JPanel {
                 //System.out.println("RG: " + rg + " Pass: " + password);
 
                 if(dao.autenticar(usuario)){ // Usuário encontrado
-                    JOptionPane.showMessageDialog(null, "Usuario encontrado!!");
+                    new AlertaBemSucedido(null, "Usuario Encontrado", "").setVisible(true);
+
                     
                     // Mudança de tela daqui para baixo
                     JFrame frame = new JFrame("Menu");
                     Menu menu = new Menu("/Assets/Imagens/TelaInicial4Corrigida.png"); // seu JLayeredPane
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frame.setSize(800, 600); // ou qualquer tamanho desejado
+                    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    frame.setUndecorated(true);
                     frame.setContentPane(menu); // adiciona seu JLayeredPane
                     frame.setVisible(true);
                     // Fecha a tela atual, assumindo que estamos dentro de um JFrame
                     ((JFrame) SwingUtilities.getWindowAncestor(entrarButton)).dispose();
                 }else{
-                    JOptionPane.showMessageDialog(null, "Usuario não encontrado!!");
+                    new Alerta(null, "Erro de Login", "Usuário não encontrado ou senha incorreta.<br>Por favor, tente novamente.").setVisible(true);
+
+
                 }
             }
         });

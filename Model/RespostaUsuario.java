@@ -11,9 +11,10 @@ public class RespostaUsuario {
     private String tipoResposta; // 'correta', 'aceitavel', 'errada'
     private int pontuacaoRecebida;
     private Timestamp dataHora;
+    private int ordemCliques;
 
     // Construtor completo
-    public RespostaUsuario(int idResposta, int idQuestao, int idUsuario, String acaoExecutada, int ordemUsuario, String tipoResposta, int pontuacaoRecebida, Timestamp dataHora) {
+    public RespostaUsuario(int idResposta, int idQuestao, int idUsuario, String acaoExecutada, int ordemUsuario, String tipoResposta, int pontuacaoRecebida, Timestamp dataHora, int ordemCliques) {
         this.idResposta = idResposta;
         this.idQuestao = idQuestao;
         this.idUsuario = idUsuario;
@@ -22,10 +23,11 @@ public class RespostaUsuario {
         this.tipoResposta = tipoResposta;
         this.pontuacaoRecebida = pontuacaoRecebida;
         this.dataHora = dataHora;
+        this.ordemCliques = ordemCliques;
     }
 
     // Construtor para inserção (sem idResposta e dataHora)
-    public RespostaUsuario(int idQuestao, int idUsuario, String acaoExecutada, int ordemUsuario, String tipoResposta, int pontuacaoRecebida) {
+    public RespostaUsuario(int idQuestao, int idUsuario, String acaoExecutada, int ordemUsuario, String tipoResposta, int pontuacaoRecebida, int ordemCliques) {
         this.idQuestao = idQuestao;
         this.idUsuario = idUsuario;
         this.acaoExecutada = acaoExecutada;
@@ -33,6 +35,7 @@ public class RespostaUsuario {
         this.tipoResposta = tipoResposta;
         this.pontuacaoRecebida = pontuacaoRecebida;
         this.dataHora = new Timestamp(System.currentTimeMillis()); // Seta a data/hora atual
+        this.ordemCliques = ordemCliques;
     }
 
     // Getters e Setters
@@ -99,4 +102,12 @@ public class RespostaUsuario {
     public void setDataHora(Timestamp dataHora) {
         this.dataHora = dataHora;
     }
+    public int getOrdemCliques() {
+        return ordemCliques;
+    }
+
+    public void setOrdemCliques(int ordemCliques) {
+        this.ordemCliques = ordemCliques;
+    }
+
 }

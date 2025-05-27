@@ -17,6 +17,7 @@ public class Menu extends JLayeredPane {
     private ConfiguracoesPanel configuracoesPanel; 
     private JPanel sidebarContainerPanel; 
     private SupervisorPanel supervisorPanel; 
+    private FeedbackPanel feedbackPanel; // Adicionado: Instância do FeedbackPanel
 
     private final int SIDEBAR_WIDTH = 300; 
 
@@ -73,9 +74,14 @@ public class Menu extends JLayeredPane {
         supervisorPanel = new SupervisorPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
             showPanel("main"); 
         });
-   
         add(supervisorPanel, JLayeredPane.MODAL_LAYER); 
  
+        // Adicionado: Instancia e adiciona o FeedbackPanel
+        feedbackPanel = new FeedbackPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
+            showPanel("main");
+        });
+        add(feedbackPanel, JLayeredPane.MODAL_LAYER);
+
 
         configurarRedimensionamentoMouse();
 
@@ -89,8 +95,8 @@ public class Menu extends JLayeredPane {
                 } else {
                     sidebarContainerPanel.setBounds(0, 0, 0, getHeight()); 
                 }
-     
                 supervisorPanel.setBounds(0, 0, getWidth(), getHeight()); 
+                feedbackPanel.setBounds(0, 0, getWidth(), getHeight()); // Adicionado: Redimensiona o feedbackPanel
             }
         });
 
@@ -177,6 +183,11 @@ public class Menu extends JLayeredPane {
             showPanel("supervisor"); 
         });
 
+        // Adicionado: ActionListener para o botão de feedbacks
+        btnFeedbacks.addActionListener(e -> {
+            showPanel("feedback");
+        });
+
         painelBotoes.add(btnMaquinario);
         painelBotoes.add(btnFeedbacks);
         painelBotoes.add(btnSupervisor);
@@ -193,10 +204,10 @@ public class Menu extends JLayeredPane {
 
 
     private void showPanel(String panelName) {
-
         mainContentPanel.setVisible(false); 
         sidebarContainerPanel.setVisible(false);
         supervisorPanel.setVisible(false);
+        feedbackPanel.setVisible(false); // Adicionado: Oculta o feedbackPanel por padrão
 
         switch (panelName) {
             case "main":
@@ -209,14 +220,14 @@ public class Menu extends JLayeredPane {
             case "supervisor":
                 supervisorPanel.setVisible(true); 
                 break;
+            case "feedback": // Adicionado: Caso para exibir o feedbackPanel
+                feedbackPanel.setVisible(true);
+                break;
         }
         revalidate(); 
         repaint();    
     }
-
-  
     
-     
     private void toggleConfigPanel(boolean show) {
         if (show) {
             showPanel("config"); 

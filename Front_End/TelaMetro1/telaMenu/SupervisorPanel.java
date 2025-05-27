@@ -49,9 +49,9 @@ public class SupervisorPanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
 
         JButton btnRelatorios = botoes.criarBotaoPadrao(
-                "Acessar relatórios",
+                "Acessar relatórios operários",
                 "/Assets/Imagens/relatorio.png", 
-                80, 80, SwingConstants.RIGHT, new Dimension(600, 150), 32);
+                80, 80, SwingConstants.RIGHT, new Dimension(600, 150), 30);
         btnRelatorios.addActionListener(e -> {
             JOptionPane.showMessageDialog(this, "Funcionalidade de Relatórios será implementada!");
         });
@@ -61,7 +61,7 @@ public class SupervisorPanel extends JPanel {
         JButton btnCadastrarSupervisor = botoes.criarBotaoPadrao(
                 "Cadastrar novos supervisores", 
                 "/Assets/Imagens/cadastro.png", 
-                80, 80, SwingConstants.RIGHT, new Dimension(600, 150), 32);
+                80, 80, SwingConstants.RIGHT, new Dimension(600, 150), 30);
         btnCadastrarSupervisor.addActionListener(e -> {
             cardLayout.show(cardPanel, "buscarSupervisor"); 
         });

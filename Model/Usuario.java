@@ -6,18 +6,20 @@ public class Usuario {
     private String senha;
     private String nome;
     private String tipoUsuario;
+    private int volume; // Novo campo
 
     public Usuario(String rg, String senha) {
         this.rg = rg;
         this.senha = senha;
     }
 
-    public Usuario(int id, String rg, String senha, String nome, String tipoUsuario) {
+    public Usuario(int id, String rg, String senha, String nome, String tipoUsuario, int volume) {
         this.id = id;
         this.rg = rg;
         this.senha = senha;
         this.nome = nome;
         this.tipoUsuario = tipoUsuario;
+        this.volume = volume;
     }
 
     public int getId() {
@@ -40,6 +42,10 @@ public class Usuario {
         return tipoUsuario;
     }
 
+    public int getVolume() {
+        return volume;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -58,5 +64,9 @@ public class Usuario {
 
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
     }
 }
