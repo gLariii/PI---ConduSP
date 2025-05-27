@@ -17,7 +17,7 @@ public class Menu extends JLayeredPane {
     private ConfiguracoesPanel configuracoesPanel; 
     private JPanel sidebarContainerPanel; 
     private SupervisorPanel supervisorPanel; 
-    private FeedbackPanel feedbackPanel; // Adicionado: Instância do FeedbackPanel
+    private FeedbackPanel feedbackPanel; 
 
     private final int SIDEBAR_WIDTH = 300; 
 
@@ -82,9 +82,6 @@ public class Menu extends JLayeredPane {
         });
         add(feedbackPanel, JLayeredPane.MODAL_LAYER);
 
-
-        configurarRedimensionamentoMouse();
-
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
@@ -131,15 +128,6 @@ public class Menu extends JLayeredPane {
                 mainContentPanel.repaint(); 
             }
         }
-    }
-
-    private void configurarRedimensionamentoMouse() {
-        addMouseWheelListener(e -> {
-            int notches = e.getWheelRotation();
-            int incremento = e.isControlDown() ? 10 : 5; 
-            int novoSize = Math.max(20, logoWidth - (notches * incremento));
-            redimensionarLogo(novoSize, novoSize);
-        });
     }
 
     private JPanel criarNavBar() {
