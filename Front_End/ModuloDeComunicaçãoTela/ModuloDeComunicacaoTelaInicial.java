@@ -3,11 +3,17 @@ package ModuloDeComunicaçãoTela;
 import javax.swing.*;
 import CabineDeControleTela.CabineDeControleTela;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 
 public class ModuloDeComunicacaoTelaInicial extends JPanel {
 
+    private final String[] backgrounds = {
+        "Imagens/Modulo de comunicação.jpg",
+        "Imagens/Modulo de comunicação Microfone PA.jpg",
+        "Imagens/Modulo de comunicação radio.jpg"
+    };
+
+    private static int index = 0;
     private Image imagemDeFundo;
     private JFrame parentFrame;
 
@@ -17,6 +23,19 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
 
     private int ordemCliques;
 
+    // Nova funcionalidade
+    private String mensagemCompleta = "<html>"
+        + "Operador: L38 em Rosa 2 ao CCO<br>"
+        + "CCO: CCO em QAP, L38 Rosa 2<br>"
+        + "Operador: CCO, a porta 53 do L38 não fecha, já foi feito Reciclo, PA, reciclo, porém a mesma permanece aberta.<br>"
+        + "CCO: QSL, L38, porta 53 não fecha, saia para verificar seu problema<br>"
+        + "Operador: QSL, saindo para verificar o problema."
+        + "</html>";
+
+    private StringBuilder mensagemParcial = new StringBuilder();
+    private Timer timerEscrita;
+    private JLabel labelMensagem;
+
     public ModuloDeComunicacaoTelaInicial(JFrame frame, int ordemCliques) {
         this.ordemCliques = ordemCliques;
         ordemCliques++;
@@ -24,25 +43,68 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         this.parentFrame = frame;
         setLayout(null);
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/Modulo de comunicação.jpg"));
-        imagemDeFundo = icon.getImage();
+        carregarImagemFundo();
 
         criarBotoes();
+        criarLabelMensagem();
         adicionarListenerRedimensionamento();
         reposicionarBotoes();
     }
 
     private void criarBotoes() {
-        botao1 = new CircleButton("", e -> substituirPainel(new PATela(parentFrame, ordemCliques)));
-        botao2 = new CircleButton("", e -> substituirPainel(new PALista(parentFrame, ordemCliques)));
+        botao1 = new CircleButton("", null);
+        botao1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                index = 1;
+                labelMensagem.setVisible(true);
+                carregarImagemFundo();
+                repaint();
+                iniciarEscrita();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                index = 0;
+                labelMensagem.setVisible(false);
+                carregarImagemFundo();
+                repaint();
+                pararEscrita();
+            }
+        });
+
+        botao2 = new CircleButton("", null);
+        botao2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                index = 2;
+                carregarImagemFundo();
+                repaint();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                index = 0;
+                carregarImagemFundo();
+                repaint();
+            }
+        });
+
         btnVoltar = new JButton("Voltar");
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, ordemCliques)));
 
-
         add(botao1);
         add(botao2);
         add(btnVoltar);
+    }
+
+    private void criarLabelMensagem() {
+        labelMensagem = new JLabel("");
+        labelMensagem.setForeground(Color.WHITE);
+        labelMensagem.setBackground(Color.BLACK); // fundo preto
+        labelMensagem.setOpaque(true);            // necessário para o fundo aparecer
+        labelMensagem.setFont(new Font("Arial", Font.BOLD, 20)); // exemplo de fonte grande
     }
 
     @Override
@@ -51,17 +113,20 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
     }
 
+    private void carregarImagemFundo() {
+        ImageIcon icon = new ImageIcon(getClass().getResource(backgrounds[index]));
+        imagemDeFundo = icon.getImage();
+    }
+
     private void reposicionarBotoes() {
         int w = getWidth();
         int h = getHeight();
 
-        // Tamanho e Posicionamento
-        botao1.setBounds((int)(w * 0.164), (int)(h * 0.257), (int)(w * 0.04), (int)(h * 0.06));
-        botao2.setBounds((int)(w * 0.649), (int)(h * 0.855), (int)(w * 0.04), (int)(h * 0.06));
-        btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
+        botao1.setBounds((int) (w * 0.164), (int) (h * 0.257), (int) (w * 0.04), (int) (h * 0.06));
+        botao2.setBounds((int) (w * 0.159), (int) (h * 0.559), (int) (w * 0.04), (int) (h * 0.06));
+        btnVoltar.setBounds((int) (w * 0.005), (int) (h * 0.009), (int) (w * 0.052), (int) (h * 0.028));
+        labelMensagem.setBounds((int)(w * 0.1), (int)(h * 0.8), (int)(w * 0.8), (int)(h *0.2));
     }
-
-    
 
     private void adicionarListenerRedimensionamento() {
         this.addComponentListener(new ComponentAdapter() {
@@ -78,28 +143,65 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         parentFrame.repaint();
     }
 
+    // Métodos novos
+
+    private void iniciarEscrita() {
+        mensagemParcial.setLength(0);
+        labelMensagem.setText("");
+        add(labelMensagem);
+
+
+        int totalDuration = 5000; // 5 segundos
+        int numCaracteres = mensagemCompleta.length();
+        int delay = totalDuration / numCaracteres;
+
+        timerEscrita = new Timer(delay, new ActionListener() {
+            int pos = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (pos < mensagemCompleta.length()) {
+                    mensagemParcial.append(mensagemCompleta.charAt(pos));
+                    labelMensagem.setText(mensagemParcial.toString());
+                    pos++;
+                } else {
+                    timerEscrita.stop();
+                }
+            }
+        });
+
+        timerEscrita.start();
+    }
+
+    private void pararEscrita() {
+        if (timerEscrita != null && timerEscrita.isRunning()) {
+            timerEscrita.stop();
+        }
+        // Se quiser limpar ao soltar, descomente:
+        labelMensagem.setText("");
+    }
+
     // Classe personalizada para botões circulares
     class CircleButton extends JButton {
         private boolean isHovering = false;
-    
+
         public CircleButton(String texto, java.awt.event.ActionListener acao) {
             super(texto);
-            addActionListener(acao);
+            if (acao != null) addActionListener(acao);
             setOpaque(false);
             setContentAreaFilled(false);
             setCursor(new Cursor(Cursor.HAND_CURSOR));
             setFocusPainted(false);
             setBorderPainted(false);
             setForeground(Color.BLACK);
-    
-            // Mouse listener para detectar hover
+
             addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseEntered(java.awt.event.MouseEvent e) {
                     isHovering = true;
                     repaint();
                 }
-    
+
                 @Override
                 public void mouseExited(java.awt.event.MouseEvent e) {
                     isHovering = false;
@@ -107,14 +209,12 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
                 }
             });
         }
-    
-        
-    
+
         @Override
         protected void paintBorder(Graphics g) {
             Graphics2D g2 = (Graphics2D) g;
             if (isHovering) {
-                g2.setColor(Color.YELLOW); // cor da borda de hover
+                g2.setColor(Color.YELLOW);
                 g2.setStroke(new BasicStroke(2));
             } else {
                 g2.setColor(getForeground());
@@ -122,7 +222,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
             }
             g2.drawOval(0, 0, getWidth() - 1, getHeight() - 1);
         }
-    
+
         @Override
         public boolean contains(int x, int y) {
             int radius = getWidth() / 2;
@@ -130,4 +230,3 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         }
     }
 }
-    
