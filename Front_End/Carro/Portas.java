@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
+import CabineDeControleTela.*;
+import Assets.*;
 
 public class Portas extends JPanel {
     public final String[] backgrounds = {
@@ -17,6 +19,7 @@ public class Portas extends JPanel {
     private static JButton botao1, botao2, btnVoltar,btnFechar, btnLacrar;
     
     private int ordemCliques;
+    
 
     public Portas(JFrame frame, int ordemCliques) {
         this.ordemCliques = ordemCliques;
@@ -46,31 +49,46 @@ public class Portas extends JPanel {
         if (imagemDeFundo != null) {
             g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
         }
+        int w = getWidth();
+        int h = getHeight();
+        if (PainelCBTCeChave.indexChave == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/ChaveIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.9), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
+        if (Cinturao.index == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/CinturaoIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.8), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+            Image imagemExtra2 = new ImageIcon(getClass().getResource("/Assets/Imagens/AdesivoIcone.png")).getImage();
+            g.drawImage(imagemExtra2, (int)(w * 0.7), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
     }
 
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques)));
+        add(btnVoltar);
         botao1 = criarBotao(() -> substituirPainel(new DispositivosDeEmergência(parentFrame, ordemCliques)));
+        add(botao1);
         botao2 = criarBotao(() -> substituirPainel(new Soleira(parentFrame, ordemCliques)));
+        add(botao2);
         btnFechar = new JButton("Fechar");
         btnFechar.addActionListener(e -> {
             if (index == 0){
                 botao1.setVisible(false);
                 botao2.setVisible(false);
-                btnFechar.setText("Abrir");
-                add(btnLacrar);
                 btnLacrar.setVisible(true);
+                btnFechar.setText("Abrir");
             }else if (index == 1){
                 botao1.setVisible(true);
                 botao2.setVisible(true);
-                btnFechar.setText("Fechar");
                 btnLacrar.setVisible(false);
+                btnFechar.setText("Fechar");
             }
             index = (index + 1) % (backgrounds.length - 1);
             carregarImagemFundo();
             repaint();
         });
+        add(btnFechar);
 
         btnLacrar = new JButton("Passar Adesivo");
         btnLacrar.addActionListener(e -> {
@@ -81,18 +99,29 @@ public class Portas extends JPanel {
             revalidate();
             repaint();
         });
-        add(btnVoltar);
-
-        if (Portas.index == 0){
-            add (botao1);
-            add (botao2);
-        }
+        add (btnLacrar);
+        reposicionarBotoes();
 
         if (PainelExternoAberto.index == 1 && index != 2){
-            add(btnFechar);
+            btnFechar.setVisible(true);
+        }
+        if (index == 0){
+            botao1.setVisible(true);
+            botao2.setVisible(true);
+            btnLacrar.setVisible(false);
+            btnFechar.setText("Fechar");
+            if (PainelExternoAberto.index != 1)
+                btnFechar.setVisible(false);
+        }
+        if (index == 1){
+            btnFechar.setText("Abrir");
+            btnLacrar.setVisible(true);
+        }
+        if (index == 2){
+            btnLacrar.setVisible(false);
+            btnFechar.setVisible(false);
         }
 
-        reposicionarBotoes();
     }
 
     private JButton criarBotao(Runnable action) {
@@ -102,10 +131,12 @@ public class Portas extends JPanel {
         botao.setOpaque(false);
         botao.setContentAreaFilled(false);
         botao.setFocusPainted(false);
+        botao.setVisible(false);
         botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botao.setForeground(Color.BLACK); // cor padrão da borda
         return botao;
     }
+    
 
     private void reposicionarBotoes() {
         int w = getWidth();

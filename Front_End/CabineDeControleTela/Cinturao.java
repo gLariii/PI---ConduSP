@@ -6,15 +6,20 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Timer;
 import java.util.TimerTask;
+import CabineDeControleTela.*;
+import Assets.*;
 
 public class Cinturao extends JPanel {
 
     private JFrame parentFrame;
 
-    private Image imagemNormal;
-    private Image imagemColetado;
-    private boolean mostrandoColetado = false;
+    private final String[] backgrounds = {
+        "Imagens/Cinturao.png",
+        "Imagens/ItensColetados.jpg"
+    };
 
+    public static int index = 0;
+    private Image imagemDeFundo;
     private JButton botao1;
     private JButton btnVoltar;
     private JLabel labelItensColetados;
@@ -28,8 +33,7 @@ public class Cinturao extends JPanel {
         this.parentFrame = frame;
         setLayout(null);
 
-        imagemNormal = new ImageIcon(getClass().getResource("Imagens/Cinturao.png")).getImage();
-        imagemColetado = new ImageIcon(getClass().getResource("Imagens/ItensColetados.png")).getImage();
+        carregarImagemFundo();
 
         adicionarComponentes();
 
@@ -43,8 +47,21 @@ public class Cinturao extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Image img = mostrandoColetado ? imagemColetado : imagemNormal;
-        g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+        if (imagemDeFundo != null) {
+            g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
+        }
+        int w = getWidth();
+        int h = getHeight();
+        if (PainelCBTCeChave.indexChave == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/ChaveIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.9), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
+        if (Cinturao.index == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/CinturaoIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.8), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+            Image imagemExtra2 = new ImageIcon(getClass().getResource("/Assets/Imagens/AdesivoIcone.png")).getImage();
+            g.drawImage(imagemExtra2, (int)(w * 0.7), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
     }
 
     private void adicionarComponentes() {
@@ -54,16 +71,25 @@ public class Cinturao extends JPanel {
         add(btnVoltar);
 
         botao1 = new JButton("Coletar Cinturão e Adesivo");
-        botao1.addActionListener(e -> mostrarImagemColetadoTemporariamente());
+        botao1.addActionListener(e -> {
+            index = 1;
+            carregarImagemFundo();
+            repaint();
+            botao1.setVisible(false);
+            labelItensColetados.setVisible(true);
+        });
         botao1.setFont(new Font("Arial", Font.BOLD, 14));
         botao1.setForeground(Color.WHITE);
         botao1.setBackground(Color.BLACK);
         botao1.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         botao1.setFocusPainted(false);
-        botao1.setContentAreaFilled(true);
+        botao1.setContentAreaFilled(false);
         botao1.setOpaque(true);
         botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        add(botao1);
+        if (index == 0){
+            add(botao1);
+        }
+
 
         labelItensColetados = new JLabel("ITENS COLETADOS!");
         labelItensColetados.setFont(new Font("Arial", Font.BOLD, 50));
@@ -75,27 +101,6 @@ public class Cinturao extends JPanel {
         reposicionarComponentes();
     }
 
-    private void mostrarImagemColetadoTemporariamente() {
-        mostrandoColetado = true;
-        botao1.setVisible(false);
-        btnVoltar.setVisible(false);
-        labelItensColetados.setVisible(true);
-        repaint();
-
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                mostrandoColetado = false;
-                SwingUtilities.invokeLater(() -> {
-                    botao1.setVisible(true);
-                    btnVoltar.setVisible(true);
-                    labelItensColetados.setVisible(false);
-                    repaint();
-                });
-            }
-        }, 2000);
-    }
-
     private void reposicionarComponentes() {
         int w = getWidth();
         int h = getHeight();
@@ -105,6 +110,11 @@ public class Cinturao extends JPanel {
         labelItensColetados.setBounds(0, (int)(h * 0.08), w, 100);
 
         repaint();
+    }
+
+    private void carregarImagemFundo() {
+        ImageIcon icon = new ImageIcon(getClass().getResource(backgrounds[index]));
+        imagemDeFundo = icon.getImage();
     }
 
     private void trocarTela(JPanel novaTela) {

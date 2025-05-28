@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
+import CabineDeControleTela.*;
+import Assets.*;
 
 public class PainelExternoFechado extends JPanel {
     private Image imagemDeFundo;
@@ -34,6 +36,18 @@ public class PainelExternoFechado extends JPanel {
             imagemDeFundo = icon.getImage();
         }
         g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
+        int w = getWidth();
+        int h = getHeight();
+        if (PainelCBTCeChave.indexChave == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/ChaveIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.9), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
+        if (Cinturao.index == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/CinturaoIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.8), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+            Image imagemExtra2 = new ImageIcon(getClass().getResource("/Assets/Imagens/AdesivoIcone.png")).getImage();
+            g.drawImage(imagemExtra2, (int)(w * 0.7), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
     }
 
     private void adicionarBotoes() {
@@ -52,7 +66,7 @@ public class PainelExternoFechado extends JPanel {
         botao.addActionListener(e -> action.run());
         botao.setOpaque(false);
         botao.setContentAreaFilled(false);
-        botao.setBorderPainted(true);
+        botao.setBorderPainted(false);
         botao.setFocusPainted(false);
         botao.setForeground(new Color(0, 0, 0, 0));
         botao.setCursor(new Cursor(Cursor.HAND_CURSOR));

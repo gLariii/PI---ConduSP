@@ -2,6 +2,7 @@ package DDUTela;
 
 import javax.swing.*;
 import java.awt.*;
+import Assets.*;
 
 public class AUTO extends JFrame {
     public AUTO() {

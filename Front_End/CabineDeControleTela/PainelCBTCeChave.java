@@ -3,15 +3,16 @@ import ChaveReversoraTela.ChaveReversoraTela;
 import DDUTela.DDUMenu;
 import ModuloDeComunicaçãoTela.ModuloDeComunicacaoTelaInicial;
 import VDUTelas.VDUMenu;
-import alavancaComando.AlavancaFrenagem;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
+import CabineDeControleTela.*;
+import Assets.*;
 
 public class PainelCBTCeChave extends JPanel {
-    private static int indexCBCT = 0;
-    private static int indexChave = 0;
+    public static int indexCBCT = 0;
+    public static int indexChave = 0;
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private int ordemCliques;
@@ -52,6 +53,18 @@ public class PainelCBTCeChave extends JPanel {
             imagemDeFundo = icon.getImage();
         }
         g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
+        int w = getWidth();
+        int h = getHeight();
+        if (PainelCBTCeChave.indexChave == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/ChaveIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.9), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
+        if (Cinturao.index == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/CinturaoIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.8), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+            Image imagemExtra2 = new ImageIcon(getClass().getResource("/Assets/Imagens/AdesivoIcone.png")).getImage();
+            g.drawImage(imagemExtra2, (int)(w * 0.7), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
     }
 
     private void adicionarBotoes() {
@@ -79,6 +92,7 @@ public class PainelCBTCeChave extends JPanel {
         btnChave.addActionListener(e -> {
             indexChave = (indexChave + 1) % backgroundsChave.length;
             atualizarIconeChave();
+            repaint();
         });
         atualizarIconeChave(); // <- Aqui! Para carregar inicialmente
         add(btnChave);

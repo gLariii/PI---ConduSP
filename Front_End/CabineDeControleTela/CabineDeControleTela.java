@@ -3,16 +3,17 @@ import ChaveReversoraTela.ChaveReversoraTela;
 import DDUTela.DDUMenu;
 import ModuloDeComunicaçãoTela.ModuloDeComunicacaoTelaInicial;
 import VDUTelas.VDUMenu;
-import alavancaComando.AlavancaFrenagem;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
 
-import CabineDeControleTela.*;
+import Carro.Carro5VisaoGeral;
 import Carro.PainelExternoAberto;
 import Carro.PainelExternoFechado;
 import Carro.Portas;
+import CabineDeControleTela.*;
+import Assets.*;
 
 public class CabineDeControleTela extends JPanel {
 
@@ -22,7 +23,7 @@ public class CabineDeControleTela extends JPanel {
     private static int ordemCliques = 0;
     
         // Botões como atributos
-        private JButton botao1, botao2, botao3, botao4, botao5, botao6, botao7;
+        private JButton botao1, botao2, botao3, botao4, botao5, botao7;
     
         public CabineDeControleTela(JFrame frame, int ordemCliques) {
             this.ordemCliques = ordemCliques;
@@ -47,6 +48,18 @@ public class CabineDeControleTela extends JPanel {
                 imagemDeFundo = icon.getImage();
             }
             g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
+            int w = getWidth();
+            int h = getHeight();
+            if (PainelCBTCeChave.indexChave == 1) {
+                Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/ChaveIcone.png")).getImage();
+                g.drawImage(imagemExtra, (int)(w * 0.9), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+            }
+            if (Cinturao.index == 1) {
+                Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/CinturaoIcone.png")).getImage();
+                g.drawImage(imagemExtra, (int)(w * 0.8), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+                Image imagemExtra2 = new ImageIcon(getClass().getResource("/Assets/Imagens/AdesivoIcone.png")).getImage();
+                g.drawImage(imagemExtra2, (int)(w * 0.7), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+            }
         }
     
         private void adicionarBotoes() {
@@ -72,8 +85,6 @@ public class CabineDeControleTela extends JPanel {
             botao7.setCursor(new Cursor(Cursor.HAND_CURSOR));
             add(botao7);
     
-            botao6 = criarBotao(() -> substituirPainel(new AlavancaFrenagem(parentFrame, ordemCliques)));
-            add(botao6);
     
             reposicionarBotoes();
         }
@@ -84,7 +95,7 @@ public class CabineDeControleTela extends JPanel {
             botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
             botao.setOpaque(false);
             botao.setContentAreaFilled(false);
-            botao.setBorderPainted(true);
+            botao.setBorderPainted(false);
             botao.setFocusPainted(false);
             botao.setForeground(new Color(0, 0, 0, 0));
             return botao;
@@ -100,7 +111,6 @@ public class CabineDeControleTela extends JPanel {
             botao3.setBounds((int)(w * 0.06), (int)(h * 0.43), (int)(w * 0.16), (int)(h * 0.14));
             botao4.setBounds((int)(w * 0.75), (int)(h * 0.42), (int)(w * 0.17), (int)(h * 0.15));
             botao5.setBounds((int)(w * 0.005), (int)(h * 0.5), (int)(w * 0.035), (int)(h * 0.25));
-            botao6.setBounds((int)(w * 0.535), (int)(h * 0.60), (int)(w * 0.04), (int)(h * 0.17));
             botao7.setBounds((int)(w * 0.96), (int)(h * 0.5), (int)(w * 0.035), (int)(h * 0.25));
     
             repaint();
@@ -120,7 +130,7 @@ public class CabineDeControleTela extends JPanel {
             // Tela cheia
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setUndecorated(true); // opcional: remove bordas e barra de título
-            frame.setContentPane(new CabineDeControleTela(frame, ordemCliques));
+            frame.setContentPane(new Carro5VisaoGeral(frame, ordemCliques));
         frame.setVisible(true);
     });
 }

@@ -4,10 +4,11 @@ import javax.swing.*;
 
 import BoteiraLateralTelas.BoteiraLateralTela;
 import Carro.Carro5VisaoGeral;
-
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import CabineDeControleTela.*;
+import Assets.*;
 
 public class AreaLateral extends JPanel {
 
@@ -41,10 +42,22 @@ public class AreaLateral extends JPanel {
     protected void paintComponent(Graphics g) { 
         super.paintComponent(g); 
         if (imagemDeFundoLateral == null) { 
-            ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/AreaLateral.png")); 
+            ImageIcon icon = new ImageIcon(getClass().getResource("Imagens/AreaLateral.jpg")); 
             imagemDeFundoLateral = icon.getImage(); 
         } 
         g.drawImage(imagemDeFundoLateral, 0, 0, getWidth(), getHeight(), this); 
+        int w = getWidth();
+        int h = getHeight();
+        if (PainelCBTCeChave.indexChave == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/ChaveIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.9), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
+        if (Cinturao.index == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/CinturaoIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.8), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+            Image imagemExtra2 = new ImageIcon(getClass().getResource("/Assets/Imagens/AdesivoIcone.png")).getImage();
+            g.drawImage(imagemExtra2, (int)(w * 0.7), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
     } 
 
     private void adicionarBotoes() { 
@@ -52,13 +65,15 @@ public class AreaLateral extends JPanel {
         botao1.addActionListener(e -> trocarTela(new BoteiraLateralTela(parentFrame, ordemCliques)));            
         botao1.setOpaque(false);
         botao1.setContentAreaFilled(false);
+        botao1.setBorderPainted(false);
         botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botao1);
 
         botaoTraseira = new JButton("");
-        botaoTraseira.addActionListener(e -> trocarTela(new CabineTraseira(parentFrame, ordemCliques)));            
+        botaoTraseira.addActionListener(e -> trocarTela(new Cinturao(parentFrame, ordemCliques)));            
         botaoTraseira.setOpaque(false);
         botaoTraseira.setContentAreaFilled(false);
+        botaoTraseira.setBorderPainted(false);
         botaoTraseira.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(botaoTraseira);
 
@@ -66,6 +81,7 @@ public class AreaLateral extends JPanel {
         btnPorta.addActionListener(e -> trocarTela(new Carro5VisaoGeral(parentFrame, ordemCliques)));            
         btnPorta.setOpaque(false);
         btnPorta.setContentAreaFilled(false);
+        btnPorta.setBorderPainted(false);
         btnPorta.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(btnPorta);
 
@@ -85,11 +101,11 @@ public class AreaLateral extends JPanel {
         // Ajuste proporcional aos valores que você tinha:
         // Original: botao1.setBounds(275, 528, 143, 294);
         // Proporção aproximada:
-        botao1.setBounds((int)(w * 0.14), (int)(h * 0.49), (int)(w * 0.07), (int)(h * 0.27));
+        botao1.setBounds((int)(w * 0.35), (int)(h * 0.55), (int)(w * 0.07), (int)(h * 0.30));
 
-        botaoTraseira.setBounds((int)(w * 0.02), (int)(h * 0.49), (int)(w * 0.02), (int)(h * 0.15));
+        botaoTraseira.setBounds((int)(w * 0), (int)(h * 0.035), (int)(w * 0.08), (int)(h * 0.48));
 
-        btnPorta.setBounds((int)(w * 0.252), (int)(h * 0.083), (int)(w * 0.34), (int)(h * 0.9));
+        btnPorta.setBounds((int)(w * 0.45), (int)(h * 0), (int)(w * 0.20) ,(int)(h * 1));
 
         // Original: btnVoltar.setBounds(10, 10, 100, 30);
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
