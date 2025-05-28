@@ -9,11 +9,6 @@ import java.awt.event.ComponentEvent;
 import javax.swing.*;
 
 import Carro.Carro5VisaoGeral;
-import Carro.PainelExternoAberto;
-import Carro.PainelExternoFechado;
-import Carro.Portas;
-import CabineDeControleTela.*;
-import Assets.*;
 
 public class CabineDeControleTela extends JPanel {
 

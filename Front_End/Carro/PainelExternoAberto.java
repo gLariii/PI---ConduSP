@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import CabineDeControleTela.*;
-import Assets.*;
 
 public class PainelExternoAberto extends JPanel {
 

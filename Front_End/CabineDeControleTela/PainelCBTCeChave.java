@@ -1,14 +1,8 @@
 package CabineDeControleTela;
-import ChaveReversoraTela.ChaveReversoraTela;
-import DDUTela.DDUMenu;
-import ModuloDeComunicaçãoTela.ModuloDeComunicacaoTelaInicial;
-import VDUTelas.VDUMenu;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
-import CabineDeControleTela.*;
-import Assets.*;
 
 public class PainelCBTCeChave extends JPanel {
     public static int indexCBCT = 0;

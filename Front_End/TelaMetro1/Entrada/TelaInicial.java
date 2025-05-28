@@ -238,7 +238,7 @@ public class TelaInicial extends JPanel {
         entrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
                 String rg = rgTextField.getText();
                 String password = new String(passwordField.getPassword());
 
@@ -246,24 +246,29 @@ public class TelaInicial extends JPanel {
                 UsuarioDAO dao = new UsuarioDAO();
                 //System.out.println("RG: " + rg + " Pass: " + password);
 
-                if(dao.autenticar(usuario)){ // Usuário encontrado
+                if (dao.autenticar(usuario)) { // Usuário encontrado
                     new AlertaBemSucedido(null, "Usuario Encontrado", "").setVisible(true);
 
-                    
-                    // Mudança de tela daqui para baixo
-                    JFrame frame = new JFrame("Menu");
-                    Menu menu = new Menu("/Assets/Imagens/TelaInicial4Corrigida.png"); // seu JLayeredPane
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    frame.setUndecorated(true);
-                    frame.setContentPane(menu); // adiciona seu JLayeredPane
-                    frame.setVisible(true);
-                    // Fecha a tela atual, assumindo que estamos dentro de um JFrame
-                    ((JFrame) SwingUtilities.getWindowAncestor(entrarButton)).dispose();
-                }else{
+                    // Mudança de tela aqui
+                    // 1. Obter o JFrame atual que contém esta TelaInicial
+                    JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(entrarButton);
+
+                    // 2. Criar um NOVO JFrame para exibir o Menu
+                    JFrame newFrame = new JFrame("Menu");
+                    // 3. Instanciar o Menu, passando o novo JFrame e o caminho da imagem
+                    Menu menu = new Menu(newFrame, "/Assets/Imagens/TelaInicial4Corrigida.png"); // <--- Linha corrigida
+                    newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    newFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    newFrame.setUndecorated(true);
+                    newFrame.setContentPane(menu); // Adiciona o JLayeredPane do Menu ao novo JFrame
+                    newFrame.setVisible(true);
+
+                    // 4. Fechar o JFrame atual (o da TelaInicial)
+                    if (currentFrame != null) {
+                        currentFrame.dispose();
+                    }
+                } else {
                     new Alerta(null, "Erro de Login", "Usuário não encontrado ou senha incorreta.<br>Por favor, tente novamente.").setVisible(true);
-
-
                 }
             }
         });

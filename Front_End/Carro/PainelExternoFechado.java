@@ -4,7 +4,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
 import CabineDeControleTela.*;
-import Assets.*;
 
 public class PainelExternoFechado extends JPanel {
     private Image imagemDeFundo;

@@ -5,6 +5,12 @@ import java.awt.event.ComponentEvent;
 import javax.swing.*;
 
 public class Sinalizacao extends JPanel {
+    private final String[] backgrounds = {
+        "Imagens/SinalizacaoExternaAcessa.jpg",
+        "Imagens/SinalizacaoExternaApagada.jpg",
+    };
+
+    public static int index = 0;
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private int ordemCliques;
@@ -16,9 +22,12 @@ public class Sinalizacao extends JPanel {
         this.ordemCliques = ordemCliques;
         ordemCliques++;
         this.parentFrame = frame;
+        if (PainelExternoAberto.index == 1){
+            index = 1;
+        }
         setLayout(null);
         adicionarBotoes();
-
+        carregarImagemFundo();
         // Listener para redimensionar os botões conforme a tela
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
@@ -45,16 +54,9 @@ public class Sinalizacao extends JPanel {
         reposicionarBotoes();
     }
 
-    private JButton criarBotao(Runnable action) {
-        JButton botao = new JButton("");
-        botao.addActionListener(e -> action.run());
-        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        botao.setOpaque(false);
-        botao.setContentAreaFilled(false);
-        botao.setBorderPainted(false);
-        botao.setFocusPainted(false);
-        botao.setForeground(new Color(0, 0, 0, 0));
-        return botao;
+    private void carregarImagemFundo() {
+        ImageIcon icon = new ImageIcon(getClass().getResource(backgrounds[index]));
+        imagemDeFundo = icon.getImage();
     }
 
     private void reposicionarBotoes() {

@@ -4,7 +4,6 @@ import javax.swing.*;
 import CabineDeControleTela.*;
 import java.awt.*;
 import java.awt.event.*;
-import Assets.*;
 
 public class ModuloDeComunicacaoTelaInicial extends JPanel {
 
@@ -53,11 +52,11 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     }
 
     private void criarBotoes() {
-        botao1 = new CircleButton("", null);
-        botao1.addMouseListener(new MouseAdapter() {
+        botao2 = new CircleButton("", null);
+        botao2.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                index = 1;
+                index = 2;
                 labelMensagem.setVisible(true);
                 carregarImagemFundo();
                 repaint();
@@ -74,11 +73,11 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
             }
         });
 
-        botao2 = new CircleButton("", null);
-        botao2.addMouseListener(new MouseAdapter() {
+        botao1 = new CircleButton("", null);
+        botao1.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                index = 2;
+                index = 1;
                 carregarImagemFundo();
                 repaint();
             }

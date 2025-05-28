@@ -4,7 +4,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
 import CabineDeControleTela.*;
-import Assets.*;
 
 public class Portas extends JPanel {
     public final String[] backgrounds = {

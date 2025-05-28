@@ -7,9 +7,6 @@ import Carro.Carro5VisaoGeral;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import CabineDeControleTela.*;
-import Assets.*;
-
 public class AreaLateral extends JPanel {
 
     private JFrame parentFrame;

@@ -1,11 +1,9 @@
 package Carro;
-import Carro.Portas;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
 import CabineDeControleTela.*;
-import Assets.*;
 
 public class Carro5VisaoGeral extends JPanel {
     public final String[] backgrounds = {

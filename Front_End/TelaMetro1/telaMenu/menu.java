@@ -6,25 +6,30 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
 import Assets.Cores;
+import CabineDeControleTela.CabineDeControleTela; // Importar CabineDeControleTela
 
-public class Menu extends JLayeredPane { 
+public class Menu extends JLayeredPane {
     private Image ImagemDeFundo, logoOriginal, logoRedimensionada;
     private JButton btnMaquinario, btnFeedbacks, btnSupervisor, btnConfiguracoes;
-    private int logoWidth = 40; 
-    private int logoHeight = 40; 
+    private int logoWidth = 40;
+    private int logoHeight = 40;
 
-    private JPanel mainContentPanel; 
-    private ConfiguracoesPanel configuracoesPanel; 
-    private JPanel sidebarContainerPanel; 
-    private SupervisorPanel supervisorPanel; 
-    private FeedbackPanel feedbackPanel; 
+    private JPanel mainContentPanel;
+    private ConfiguracoesPanel configuracoesPanel;
+    private JPanel sidebarContainerPanel;
+    private SupervisorPanel supervisorPanel;
+    private FeedbackPanel feedbackPanel;
 
-    private final int SIDEBAR_WIDTH = 300; 
+    private JFrame parentFrame; // Adicionado: Referência ao JFrame principal
 
-    public Menu(String imagemPath) {
-        carregarImagens(imagemPath); 
-        
-        setLayout(null); 
+    private final int SIDEBAR_WIDTH = 300;
+
+    // Modificado: Construtor agora recebe o JFrame
+    public Menu(JFrame frame, String imagemPath) {
+        this.parentFrame = frame; // Atribuir o JFrame
+        carregarImagens(imagemPath);
+
+        setLayout(null);
 
         mainContentPanel = new JPanel(new BorderLayout()) {
             @Override
@@ -40,11 +45,11 @@ public class Menu extends JLayeredPane {
                     Graphics2D g2d = (Graphics2D) g.create();
                     g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
                     g2d.setColor(Color.WHITE);
-                    g2d.setFont(new Font("Arial", Font.PLAIN, 10)); 
+                    g2d.setFont(new Font("Arial", Font.PLAIN, 10));
 
                     String texto = "Condução SP";
-                    int textoX = 15; 
-                    int textoY = getHeight() - 15; 
+                    int textoX = 15;
+                    int textoY = getHeight() - 15;
 
                     g2d.drawString(texto, textoX, textoY);
                     g2d.dispose();
@@ -54,28 +59,28 @@ public class Menu extends JLayeredPane {
         mainContentPanel.setOpaque(false);
         mainContentPanel.add(criarNavBar(), BorderLayout.NORTH);
         mainContentPanel.add(criarPainelCentral(), BorderLayout.CENTER);
-        
+
         add(mainContentPanel, JLayeredPane.DEFAULT_LAYER);
 
-        redimensionarLogo(logoWidth, logoHeight); 
+        redimensionarLogo(logoWidth, logoHeight);
 
         sidebarContainerPanel = new JPanel(new BorderLayout());
-        sidebarContainerPanel.setOpaque(true); 
-        sidebarContainerPanel.setBackground(Cores.AZUL_METRO); 
+        sidebarContainerPanel.setOpaque(true);
+        sidebarContainerPanel.setBackground(Cores.AZUL_METRO);
 
         configuracoesPanel = new ConfiguracoesPanel(() -> {
-            toggleConfigPanel(false); 
+            toggleConfigPanel(false);
         });
         sidebarContainerPanel.add(configuracoesPanel, BorderLayout.CENTER);
-  
-        add(sidebarContainerPanel, JLayeredPane.PALETTE_LAYER); 
+
+        add(sidebarContainerPanel, JLayeredPane.PALETTE_LAYER);
 
 
         supervisorPanel = new SupervisorPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
-            showPanel("main"); 
+            showPanel("main");
         });
-        add(supervisorPanel, JLayeredPane.MODAL_LAYER); 
- 
+        add(supervisorPanel, JLayeredPane.MODAL_LAYER);
+
         // Adicionado: Instancia e adiciona o FeedbackPanel
         feedbackPanel = new FeedbackPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
             showPanel("main");
@@ -90,15 +95,15 @@ public class Menu extends JLayeredPane {
                 if (sidebarContainerPanel.isVisible()) {
                     sidebarContainerPanel.setBounds(0, 0, SIDEBAR_WIDTH, getHeight());
                 } else {
-                    sidebarContainerPanel.setBounds(0, 0, 0, getHeight()); 
+                    sidebarContainerPanel.setBounds(0, 0, 0, getHeight());
                 }
-                supervisorPanel.setBounds(0, 0, getWidth(), getHeight()); 
+                supervisorPanel.setBounds(0, 0, getWidth(), getHeight());
                 feedbackPanel.setBounds(0, 0, getWidth(), getHeight()); // Adicionado: Redimensiona o feedbackPanel
             }
         });
 
-        toggleConfigPanel(false); 
-        showPanel("main"); 
+        toggleConfigPanel(false);
+        showPanel("main");
     }
 
     private void carregarImagens(String imagemPath) {
@@ -124,8 +129,8 @@ public class Menu extends JLayeredPane {
             logoRedimensionada = logoOriginal.getScaledInstance(width, height, Image.SCALE_SMOOTH);
             this.logoWidth = width;
             this.logoHeight = height;
-            if (mainContentPanel != null) { 
-                mainContentPanel.repaint(); 
+            if (mainContentPanel != null) {
+                mainContentPanel.repaint();
             }
         }
     }
@@ -133,7 +138,7 @@ public class Menu extends JLayeredPane {
     private JPanel criarNavBar() {
         JPanel navBar = new JPanel(new BorderLayout());
         navBar.setBackground(Cores.AZUL_METRO);
-        navBar.setPreferredSize(new Dimension(getWidth(), 60)); 
+        navBar.setPreferredSize(new Dimension(getWidth(), 60));
 
         JLabel titulo = new JLabel("Sistema de Gerenciamento");
         titulo.setFont(new Font("Arial", Font.BOLD, 32));
@@ -144,9 +149,9 @@ public class Menu extends JLayeredPane {
 
         btnConfiguracoes = botoes.criarBotaoConfiguracoes();
         btnConfiguracoes.addActionListener(e -> {
-            toggleConfigPanel(true); 
+            toggleConfigPanel(true);
         });
-        
+
         JPanel painelConfig = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
         painelConfig.setOpaque(false);
         painelConfig.add(btnConfiguracoes);
@@ -157,7 +162,7 @@ public class Menu extends JLayeredPane {
 
     private JPanel criarPainelCentral() {
         JPanel centro = new JPanel(new GridBagLayout());
-        centro.setOpaque(false); 
+        centro.setOpaque(false);
 
         JPanel painelBotoes = new JPanel(new GridLayout(3, 1, 0, 40));
         painelBotoes.setOpaque(false);
@@ -167,8 +172,13 @@ public class Menu extends JLayeredPane {
         btnFeedbacks = botoes.criarBotaoFeedBackPessoal();
         btnSupervisor = botoes.criarBotaoSupervisor();
 
+        // Adicionado: ActionListener para o btnMaquinario
+        btnMaquinario.addActionListener(e -> {
+            substituirPainel(new CabineDeControleTela(parentFrame, 0)); // Supondo ordemCliques inicial 0
+        });
+
         btnSupervisor.addActionListener(e -> {
-            showPanel("supervisor"); 
+            showPanel("supervisor");
         });
 
         // Adicionado: ActionListener para o botão de feedbacks
@@ -192,45 +202,45 @@ public class Menu extends JLayeredPane {
 
 
     private void showPanel(String panelName) {
-        mainContentPanel.setVisible(false); 
+        mainContentPanel.setVisible(false);
         sidebarContainerPanel.setVisible(false);
         supervisorPanel.setVisible(false);
         feedbackPanel.setVisible(false); // Adicionado: Oculta o feedbackPanel por padrão
 
         switch (panelName) {
             case "main":
-                mainContentPanel.setVisible(true); 
+                mainContentPanel.setVisible(true);
                 break;
             case "config":
-                mainContentPanel.setVisible(true); 
-                sidebarContainerPanel.setVisible(true); 
+                mainContentPanel.setVisible(true);
+                sidebarContainerPanel.setVisible(true);
                 break;
             case "supervisor":
-                supervisorPanel.setVisible(true); 
+                supervisorPanel.setVisible(true);
                 break;
             case "feedback": // Adicionado: Caso para exibir o feedbackPanel
                 feedbackPanel.setVisible(true);
                 break;
         }
-        revalidate(); 
-        repaint();    
+        revalidate();
+        repaint();
     }
-    
+
     private void toggleConfigPanel(boolean show) {
         if (show) {
-            showPanel("config"); 
+            showPanel("config");
             animatePanel(sidebarContainerPanel, -SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight());
         } else {
             animatePanel(sidebarContainerPanel, 0, -SIDEBAR_WIDTH, SIDEBAR_WIDTH, getHeight(), () -> {
-                sidebarContainerPanel.setVisible(false); 
+                sidebarContainerPanel.setVisible(false);
                 showPanel("main");
             });
         }
     }
 
     private void animatePanel(JPanel panel, int startX, int endX, int width, int height, Runnable onComplete) {
-        final int frames = 20; 
-        final int delay = 10; 
+        final int frames = 20;
+        final int delay = 10;
         Timer timer = new Timer(delay, new AbstractAction() {
             int currentX = startX;
             int step = (endX - startX) / frames;
@@ -239,7 +249,7 @@ public class Menu extends JLayeredPane {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 currentX += step;
                 if ((step > 0 && currentX >= endX) || (step < 0 && currentX <= endX)) {
-                    currentX = endX; 
+                    currentX = endX;
                     ((Timer) e.getSource()).stop();
                     if (onComplete != null) {
                         onComplete.run();
@@ -255,5 +265,14 @@ public class Menu extends JLayeredPane {
 
     private void animatePanel(JPanel panel, int startX, int endX, int width, int height) {
         animatePanel(panel, startX, endX, width, height, null);
+    }
+
+    // Adicionado: Método para substituir o painel principal do JFrame
+    private void substituirPainel(JPanel novoPainel) {
+        if (parentFrame != null) {
+            parentFrame.setContentPane(novoPainel);
+            parentFrame.revalidate();
+            parentFrame.repaint();
+        }
     }
 }

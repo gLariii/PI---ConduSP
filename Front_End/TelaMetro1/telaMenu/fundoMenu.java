@@ -8,18 +8,19 @@ public class fundoMenu {
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (ClassNotFoundException | InstantiationException | 
+        } catch (ClassNotFoundException | InstantiationException |
                  IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
 
         JFrame frame = new JFrame("Condução SP");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        frame.setUndecorated(true);  
+
+        frame.setUndecorated(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
-        Menu painelMenu = new Menu("/Assets/Imagens/TelaInicial4Corrigida.png");
+
+        // LINHA MODIFICADA: Passe 'frame' como o primeiro argumento
+        Menu painelMenu = new Menu(frame, "/Assets/Imagens/TelaInicial4Corrigida.png");
         frame.setContentPane(painelMenu);
         frame.setVisible(true);
         painelMenu.revalidate();
