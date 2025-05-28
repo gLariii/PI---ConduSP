@@ -15,6 +15,7 @@ import javax.swing.text.JTextComponent;
 import DAO.UsuarioDAO;
 import Model.Usuario;
 import TelaMetro1.telaMenu.Menu;
+import Assets.Cores; // Adicione esta importação se 'Cores' estiver em outro pacote
 
 public class TelaInicial extends JPanel {
 
@@ -66,15 +67,15 @@ public class TelaInicial extends JPanel {
         rgIconLabel.setBounds(50, 180, larguraRgIcon, alturaRgIcon);
         add(rgIconLabel);
 
-
         ImageIcon cadeadoIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/cadeado.png"));
-        int larguraCadeadoIcon = 24;
-        int alturaCadeadoIcon = 30;
-        Image imagemCadeadoIconRedimensionada = cadeadoIconOriginal.getImage().getScaledInstance(larguraCadeadoIcon, alturaCadeadoIcon, Image.SCALE_SMOOTH);
+        // Remova ou ajuste esta linha, pois 'alturaCadeadoIcon' não é mais usada para o ID
+        // int larguraCadeadoIcon = 24;
+        // int alturaCadeadoIcon = 30; // Esta variável não será o ID do usuário
+        Image imagemCadeadoIconRedimensionada = cadeadoIconOriginal.getImage().getScaledInstance(24, 30, Image.SCALE_SMOOTH);
         cadeadoIcon = new ImageIcon(imagemCadeadoIconRedimensionada);
 
         cadeadoLabel = new JLabel(cadeadoIcon);
-        cadeadoLabel.setBounds(50, 230, larguraCadeadoIcon, alturaCadeadoIcon);
+        cadeadoLabel.setBounds(50, 230, 24, 30); // Use os valores fixos ou declare-os antes
         add(cadeadoLabel);
 
         // Campo de Texto RG - Castilho
@@ -90,7 +91,7 @@ public class TelaInicial extends JPanel {
             public void focusGained(FocusEvent e) {
                 if (rgTextField.getText().equals("RG:")) {
                     rgTextField.setText("");
-                    rgTextField.setForeground(Color.BLACK); 
+                    rgTextField.setForeground(Color.BLACK);
                 }
             }
 
@@ -111,28 +112,29 @@ public class TelaInicial extends JPanel {
         passwordField.setCaretColor(getAzulMetro());
         passwordField.setBackground(Color.WHITE);
         passwordField.setFont(helveticaFont);
-        passwordField.addFocusListener(new FocusListener() { 
-            @Override 
-            public void focusGained(FocusEvent e) { 
-            String senhaAtual = new String(passwordField.getPassword());
-            if (senhaAtual.equals("Senha:")) {
-                passwordField.setText("");
-                passwordField.setForeground(Color.BLACK);
-                passwordField.setEchoChar('\u2022'); // bolinhas
+        passwordField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                String senhaAtual = new String(passwordField.getPassword());
+                if (senhaAtual.equals("Senha:")) {
+                    passwordField.setText("");
+                    passwordField.setForeground(Color.BLACK);
+                    passwordField.setEchoChar('\u2022'); // bolinhas
+                }
             }
-    }  
-            @Override 
-            public void focusLost(FocusEvent e) { 
-                if (new String(passwordField.getPassword()).isEmpty()) { 
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (new String(passwordField.getPassword()).isEmpty()) {
                     passwordField.setText("Senha:");
                     passwordField.setForeground(Color.GRAY);
                     passwordField.setEchoChar((char) 0); // mostra o texto normal
-                } 
-            } 
+                }
+            }
         });
-        
-        add(passwordField); 
-        
+
+        add(passwordField);
+
         senhaTextField = new RoundedTextField("", 15); // Inicial sem texto
         senhaTextField.setBounds(80, 230, 210, 30);
         senhaTextField.setBorder(new PlaceholderBorder(getAzulMetro(), "Senha:", 15));
@@ -150,7 +152,7 @@ public class TelaInicial extends JPanel {
                     senhaTextField.setForeground(Color.BLACK);
                 }
             }
-        
+
             @Override
             public void focusLost(FocusEvent e) {
                 if (senhaTextField.getText().isEmpty()) {
@@ -159,7 +161,7 @@ public class TelaInicial extends JPanel {
                 }
             }
         });
-        
+
         add(senhaTextField);
 
         // Larissa o Olho ta aqui - OLha aqui Larissaaaaaaaaaaaaaaaaaaaaaaaaaaa olhaa o olho
@@ -172,7 +174,6 @@ public class TelaInicial extends JPanel {
         ImageIcon eyeHiddenIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/olho_escondido.png"));
         Image eyeHiddenImage = eyeHiddenIconOriginal.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         eyeHiddenIcon = new ImageIcon(eyeHiddenImage);
-
 
         // Botão do olho (mostrar/ocultar senha)
         togglePasswordButton = new JButton(eyeVisibleIcon);
@@ -211,8 +212,8 @@ public class TelaInicial extends JPanel {
                     senhaTextField.setForeground(Color.BLACK);
                 }
 
-                senhaTextField.setText(password);                
                 senhaTextField.setText(password);
+                senhaTextField.setText(password); // Redundante, pode remover um
                 senhaTextField.setForeground(Color.BLACK);
                 passwordField.setVisible(false);
                 senhaTextField.setVisible(true);
@@ -220,12 +221,11 @@ public class TelaInicial extends JPanel {
                 togglePasswordButton.setIcon(eyeHiddenIcon);
                 senhaTextField.requestFocusInWindow();
             }
-            
+
             isPasswordPressed = !isPasswordPressed;
         });
 
         add(togglePasswordButton);
-
 
         // Botão Entrar - Castilho
         entrarButton = new JButton("Entrar");
@@ -238,40 +238,50 @@ public class TelaInicial extends JPanel {
         entrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 String rg = rgTextField.getText();
-                String password = new String(passwordField.getPassword());
+            
+                String password;
+                if (passwordField.isVisible()) {
+                    password = new String(passwordField.getPassword());
+                } else {
+                    password = senhaTextField.getText();
+                }
 
-                Usuario usuario = new Usuario(rg, password);
+
+                if (rg.equals("RG:") || password.equals("Senha:") || rg.isEmpty() || password.isEmpty()) {
+                    new Alerta(null, "Erro de Login", "Por favor, preencha todos os campos.").setVisible(true);
+                    return; 
+                }
+
+
                 UsuarioDAO dao = new UsuarioDAO();
-                //System.out.println("RG: " + rg + " Pass: " + password);
+               
+                Usuario usuarioAutenticado = dao.getUsuarioByRg(rg); 
+                
+                if (usuarioAutenticado != null && usuarioAutenticado.getSenha().equals(password)) { 
+                    new AlertaBemSucedido(null, "Login Bem-Sucedido", "Bem-vindo, " + usuarioAutenticado.getNome() + "!").setVisible(true);
 
-                if (dao.autenticar(usuario)) { // Usuário encontrado
-                    new AlertaBemSucedido(null, "Usuario Encontrado", "").setVisible(true);
-
-                    // Mudança de tela aqui
-                    // 1. Obter o JFrame atual que contém esta TelaInicial
                     JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(entrarButton);
 
-                    // 2. Criar um NOVO JFrame para exibir o Menu
                     JFrame newFrame = new JFrame("Menu");
-                    // 3. Instanciar o Menu, passando o novo JFrame e o caminho da imagem
-                    Menu menu = new Menu(newFrame, "/Assets/Imagens/TelaInicial4Corrigida.png"); // <--- Linha corrigida
-                    newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    newFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    newFrame.setUndecorated(true);
-                    newFrame.setContentPane(menu); // Adiciona o JLayeredPane do Menu ao novo JFrame
-                    newFrame.setVisible(true);
 
-                    // 4. Fechar o JFrame atual (o da TelaInicial)
+                    System.out.println("DEBUG: Criando Menu com ID do usuário: " + usuarioAutenticado.getId() + ", Tipo: " + usuarioAutenticado.getTipoUsuario());
+                    Menu menu = new Menu(newFrame, "/Assets/Imagens/TelaInicial4Corrigida.png", usuarioAutenticado.getTipoUsuario(), usuarioAutenticado.getId());
+                    newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    newFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+                    newFrame.setUndecorated(true); 
+                    newFrame.setContentPane(menu); 
+                    newFrame.setVisible(true);
                     if (currentFrame != null) {
                         currentFrame.dispose();
                     }
                 } else {
                     new Alerta(null, "Erro de Login", "Usuário não encontrado ou senha incorreta.<br>Por favor, tente novamente.").setVisible(true);
+                    System.out.println("DEBUG: Falha no login para RG: " + rg);
                 }
             }
         });
+
         entrarButton.addMouseListener(new MouseAdapter() {
             Color originalBorderColor = Color.WHITE;
             int originalBorderThickness = 3;
@@ -301,7 +311,7 @@ public class TelaInicial extends JPanel {
     }
 
     private Color getAzulMetro() {
-        return Assets.Cores.AZUL_METRO;
+        return Cores.AZUL_METRO; 
     }
 
     class PlaceholderBorder implements Border {
@@ -324,19 +334,24 @@ public class TelaInicial extends JPanel {
             g2d.setColor(focusColor);
             g2d.draw(new RoundRectangle2D.Double(x, y, width - 1, height - 1, radius, radius));
 
-
             JTextComponent textField = (JTextComponent) c;
             String textToDraw = "";
-            if (textField == passwordField && !isPasswordPressed) { // Mostra placeholder no passwordField se não estiver mostrando a senha
+
+            if (textField == passwordField) {
+                if (!isPasswordPressed && new String(passwordField.getPassword()).isEmpty()) {
+                    textToDraw = placeholder;
+                }
+            } else if (textField == senhaTextField) {
+                if (isPasswordPressed && senhaTextField.getText().isEmpty()) { 
+                    textToDraw = placeholder;
+                } else if (isPasswordPressed) {
+                     textToDraw = senhaTextField.getText();
+                }
+            } else if (textField == rgTextField && rgTextField.getText().isEmpty() || rgTextField.getText().equals("RG:")) {
                 textToDraw = placeholder;
-            } else if (textField == senhaTextField && !textField.getText().isEmpty()) { // Mostra o texto da senha no textField
-                textToDraw = textField.getText();
-            } else if (textField == passwordField && new String(passwordField.getPassword()).isEmpty() && !isPasswordPressed) {
-                textToDraw = placeholder;
-            } else {
-                textToDraw = ""; // Não mostrar nada no textField inicialmente
             }
-            g2d.setColor((textField == passwordField && new String(passwordField.getPassword()).isEmpty() && !isPasswordPressed) ? Color.GRAY : textField.getForeground());
+
+            g2d.setColor((textToDraw.equals(placeholder) && textField.getForeground() != Color.GRAY) ? Color.GRAY : textField.getForeground());
             g2d.setFont(helveticaFont);
             FontMetrics fm = g.getFontMetrics();
             int textX = x + 5;
@@ -345,6 +360,7 @@ public class TelaInicial extends JPanel {
 
             g2d.dispose();
         }
+
 
         @Override
         public Insets getBorderInsets(Component c) {

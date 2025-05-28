@@ -1,83 +1,84 @@
 package TelaMetro1.telaMenu;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+
 import javax.imageio.ImageIO;
-import Assets.Cores; // Importe a classe Cores
+
+import Assets.Cores; 
+import Controller.FeedbackUsuarioController; 
+import Model.FeedbackUsuario;
 
 public class FeedbackPanel extends JPanel {
 
-    private Image ImagemDeFundo;
+    private Image imagemDeFundo;
     private Image logoOriginal, logoRedimensionada;
-    private int logoWidth = 60; // Aumentei o tamanho da logo para 60x60 para melhor visibilidade
+    private int logoWidth = 60;
     private int logoHeight = 60;
     private Runnable voltarAcao;
 
-    // Adicione esta referência ao painel de estatísticas
-    private EstatisticasInternoPanel estatisticasPanel;
+    private JTable tabelaFeedbacks;
+    private DefaultTableModel modeloTabela;
+    private int idUsuarioLogado; // ID do usuário logado
 
-    public FeedbackPanel(String imagemPath, Runnable voltarAcao) {
+    public FeedbackPanel(String imagemPath, Runnable voltarAcao, int idUsuario) {
         this.voltarAcao = voltarAcao;
+        this.idUsuarioLogado = idUsuario; 
 
         carregarImagens(imagemPath);
 
-        setLayout(new BorderLayout()); // Usar BorderLayout para organização geral
-        setOpaque(false); // Para que o background desenhado no paintComponent seja visível
+        setLayout(new BorderLayout());
+        setBackground(Cores.AZUL_METRO); 
+        setOpaque(true);
 
         add(criarNavBar(), BorderLayout.NORTH);
+        add(criarPainelCentral(), BorderLayout.CENTER);
 
-        // Chame criarPainelCentral para adicionar o painel de estatísticas
-        add(criarPainelCentral(), BorderLayout.CENTER); // <-- AGORA CHAMARÁ O MÉTODO CORRETO
+        redimensionarLogo(logoWidth, logoHeight);
 
-        redimensionarLogo(logoWidth, logoHeight); // Garante que a logo seja redimensionada na inicialização
+        carregarFeedbacksDoUsuario(idUsuarioLogado);
     }
 
     private void carregarImagens(String imagemPath) {
         try {
             InputStream isFundo = getClass().getResourceAsStream(imagemPath);
             if (isFundo != null) {
-                ImagemDeFundo = ImageIO.read(isFundo);
-            } else {
-                System.err.println("Erro: Imagem de fundo não encontrada! Caminho: " + imagemPath);
+                imagemDeFundo = ImageIO.read(isFundo);
             }
 
-            // MUDANÇA AQUI: Use a LogoCorrigida4.png ou mantenha logoORG.png.
-            // Certifique-se que o caminho da imagem está correto.
-            InputStream isLogo = getClass().getResourceAsStream("/Assets/Imagens/LogoCorrigida4.png"); // Ou /Assets/Imagens/logoORG.png
+            InputStream isLogo = getClass().getResourceAsStream("/Assets/Imagens/LogoCorrigida4.png");
             if (isLogo != null) {
                 logoOriginal = ImageIO.read(isLogo);
-            } else {
-                System.err.println("Erro: Logo não encontrada! Verifique o caminho: /Assets/Imagens/LogoCorrigida4.png");
             }
+
         } catch (IOException e) {
+            System.err.println("Erro ao carregar imagens: " + e.getMessage()); 
             e.printStackTrace();
-            System.err.println("Erro ao carregar imagens no FeedbackPanel: " + e.getMessage());
         }
     }
 
     private JPanel criarNavBar() {
         JPanel navBar = new JPanel(new BorderLayout());
-        navBar.setBackground(Cores.AZUL_METRO); // Cor da barra de navegação
-        navBar.setPreferredSize(new Dimension(getWidth(), 60)); // Altura da barra de navegação
+        navBar.setBackground(Cores.AZUL_METRO);
+        navBar.setPreferredSize(new Dimension(getWidth(), 60));
 
-        // Use a classe 'botoes' para criar o botão Voltar
-        // Certifique-se que 'botoes.java' está compilando e acessível
         JButton btnVoltar = botoes.criarBotaoVoltar(); 
         btnVoltar.addActionListener(e -> {
-            if (voltarAcao != null) {
-                voltarAcao.run(); // Executa a ação de voltar definida no construtor
-            }
+            if (voltarAcao != null) voltarAcao.run();
         });
 
         JPanel painelEsquerdo = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
         painelEsquerdo.setOpaque(false);
         painelEsquerdo.add(btnVoltar);
-
         navBar.add(painelEsquerdo, BorderLayout.WEST);
 
-        JLabel titulo = new JLabel("Histórico de Partidas", SwingConstants.CENTER); // Título para a tela de estatísticas
+        JLabel titulo = new JLabel("Histórico de Partidas", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 32));
         titulo.setForeground(Color.WHITE);
         navBar.add(titulo, BorderLayout.CENTER);
@@ -86,34 +87,73 @@ public class FeedbackPanel extends JPanel {
     }
 
     private JPanel criarPainelCentral() {
-        JPanel centro = new JPanel(new GridBagLayout()); // Usando GridBagLayout para centralizar o painel de estatísticas
-        centro.setOpaque(false); // Para que o background desenhado no paintComponent seja visível
+        JPanel painel = new JPanel(new BorderLayout());
+        painel.setOpaque(false);
+        painel.setBorder(BorderFactory.createEmptyBorder(40, 80, 40, 80));
+        painel.setBackground(Cores.AZUL_METRO);
 
-        // INSTANCIA E ADICIONA O PAINEL DE ESTATÍSTICAS AQUI
-        estatisticasPanel = new EstatisticasInternoPanel(); // <-- INSTANCIANDO O PAINEL CORRETO!
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.NONE; // Não preenche todo o espaço, respeita o preferredSize do painel interno
-        gbc.insets = new Insets(20, 20, 20, 20); // Margens para o painel de estatísticas dentro do centro
+        modeloTabela = new DefaultTableModel(new Object[]{"Data", "Pontuação", "Observações"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
 
-        centro.add(estatisticasPanel, gbc); // <-- ADICIONANDO O PAINEL CORRETO!
+        tabelaFeedbacks = new JTable(modeloTabela);
+        tabelaFeedbacks.setFont(new Font("Arial", Font.PLAIN, 16));
+        tabelaFeedbacks.setRowHeight(25);
+        tabelaFeedbacks.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
+        tabelaFeedbacks.getTableHeader().setBackground(Cores.AZUL_METRO);
+        tabelaFeedbacks.getTableHeader().setForeground(Color.WHITE);
 
-        return centro;
+        tabelaFeedbacks.setBackground(Cores.AZUL_METRO_TRANSPARENTE);
+        tabelaFeedbacks.setForeground(Color.white);
+        tabelaFeedbacks.setGridColor(Color.WHITE);
+        tabelaFeedbacks.setShowGrid(true);
+
+        JScrollPane scroll = new JScrollPane(tabelaFeedbacks);
+        scroll.getViewport().setBackground(Cores.AZUL_METRO);
+
+        painel.add(scroll, BorderLayout.CENTER);
+
+        return painel;
+    }
+
+    void carregarFeedbacksDoUsuario(int idUsuario) {
+        System.out.println("Carregando feedbacks para o ID de usuário: " + idUsuarioLogado); // Para depuração
+
+        FeedbackUsuarioController controller = new FeedbackUsuarioController();
+        List<FeedbackUsuario> feedbacks = controller.obterFeedbacksDoUsuario(idUsuario);
+
+        modeloTabela.setRowCount(0);
+
+        if (feedbacks.isEmpty()) {
+            System.out.println("Nenhum feedback encontrado para o usuário ID: " + idUsuarioLogado); // Para depuração
+
+            modeloTabela.addRow(new Object[]{"", "Nenhum feedback encontrado", ""});
+        } else {
+            for (FeedbackUsuario f : feedbacks) {
+                modeloTabela.addRow(new Object[]{
+                    f.getData(),
+                    f.getPontuacao(),
+                    f.getObservacoes()
+                });
+                System.out.println("Adicionado feedback à tabela: " + f.toString());
+           }
+        }
     }
 
     public void redimensionarLogo(int width, int height) {
         if (logoOriginal != null) {
-            width = Math.max(20, Math.min(width, 150));
-            height = Math.max(20, Math.min(height, 150));
-
-            logoRedimensionada = logoOriginal.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            logoRedimensionada = logoOriginal.getScaledInstance(
+                    Math.max(20, Math.min(width, 150)),
+                    Math.max(20, Math.min(height, 150)),
+                    Image.SCALE_SMOOTH
+            );
             this.logoWidth = width;
             this.logoHeight = height;
-            repaint(); // Redesenha o painel para mostrar a logo redimensionada
+            repaint();
         }
     }
 
@@ -121,29 +161,21 @@ public class FeedbackPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Desenha a imagem de fundo
-        if (ImagemDeFundo != null) {
-            g.drawImage(ImagemDeFundo, 0, 0, getWidth(), getHeight(), this);
+        if (imagemDeFundo != null) {
+            g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
         }
 
-        // Desenha a logo no canto inferior direito
         if (logoRedimensionada != null) {
-            int x = getWidth() - logoWidth - 15; // 15 pixels de margem da direita
-            int y = getHeight() - logoHeight - 15; // 15 pixels de margem de baixo
+            int x = getWidth() - logoWidth - 15;
+            int y = getHeight() - logoHeight - 15;
             g.drawImage(logoRedimensionada, x, y, this);
 
-            // Adiciona o texto "Condução SP" no canto inferior esquerdo
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             g2d.setColor(Color.WHITE);
-            g2d.setFont(new Font("Arial", Font.PLAIN, 10)); // Fonte menor para o texto
-
-            String texto = "Condução SP";
-            int textoX = 15; // 15 pixels de margem da esquerda
-            int textoY = getHeight() - 15; // 15 pixels de margem de baixo
-
-            g2d.drawString(texto, textoX, textoY);
-            g2d.dispose(); // Libera os recursos gráficos
+            g2d.setFont(new Font("Arial", Font.PLAIN, 10));
+            g2d.drawString("Condução SP", 15, getHeight() - 15);
+            g2d.dispose();
         }
     }
 }

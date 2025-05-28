@@ -1,13 +1,13 @@
 package Model;
 
-import java.sql.Timestamp;
+import java.sql.Timestamp; 
 
 public class FeedbackUsuario {
     private int idFeedback;
     private int idUsuario;
     private int pontuacao;
     private String observacoes;
-    private Timestamp data;
+    private Timestamp data; 
 
     public int getIdFeedback() {
         return idFeedback;
@@ -58,5 +58,6 @@ public class FeedbackUsuario {
                 ", observacoes='" + observacoes + '\'' +
                 ", data=" + data +
                 '}';
-}
+    }
+
 }

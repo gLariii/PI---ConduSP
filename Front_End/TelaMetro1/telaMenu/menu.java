@@ -6,7 +6,11 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
 import Assets.Cores;
-import CabineDeControleTela.CabineDeControleTela; // Importar CabineDeControleTela
+import CabineDeControleTela.CabineDeControleTela;
+
+// Importar SupervisorPanel e ConfiguracoesPanel se não estiverem no mesmo pacote
+// import TelaMetro1.telaMenu.SupervisorPanel;
+// import TelaMetro1.telaMenu.ConfiguracoesPanel;
 
 public class Menu extends JLayeredPane {
     private Image ImagemDeFundo, logoOriginal, logoRedimensionada;
@@ -20,13 +24,17 @@ public class Menu extends JLayeredPane {
     private SupervisorPanel supervisorPanel;
     private FeedbackPanel feedbackPanel;
 
-    private JFrame parentFrame; // Adicionado: Referência ao JFrame principal
+    private JFrame parentFrame;
+    private String tipoUsuarioLogado;
+    private int idUsuarioLogado; 
 
     private final int SIDEBAR_WIDTH = 300;
 
-    // Modificado: Construtor agora recebe o JFrame
-    public Menu(JFrame frame, String imagemPath) {
-        this.parentFrame = frame; // Atribuir o JFrame
+    public Menu(JFrame frame, String imagemPath, String tipoUsuario, int idUsuario) {
+        this.parentFrame = frame;
+        this.tipoUsuarioLogado = tipoUsuario;
+        this.idUsuarioLogado = idUsuario; // SALVA O ID DO USUÁRIO AQUI
+
         carregarImagens(imagemPath);
 
         setLayout(null);
@@ -75,16 +83,16 @@ public class Menu extends JLayeredPane {
 
         add(sidebarContainerPanel, JLayeredPane.PALETTE_LAYER);
 
-
         supervisorPanel = new SupervisorPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
             showPanel("main");
         });
         add(supervisorPanel, JLayeredPane.MODAL_LAYER);
 
-        // Adicionado: Instancia e adiciona o FeedbackPanel
+        // AQUI ESTÁ A MUDANÇA: Passando idUsuarioLogado para o FeedbackPanel
+        System.out.println("DEBUG: ID do usuário autenticado passado para FeedbackPanel: " + idUsuarioLogado);
         feedbackPanel = new FeedbackPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
             showPanel("main");
-        });
+        }, idUsuarioLogado); // CORRIGIDO: Passando idUsuarioLogado
         add(feedbackPanel, JLayeredPane.MODAL_LAYER);
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -98,7 +106,7 @@ public class Menu extends JLayeredPane {
                     sidebarContainerPanel.setBounds(0, 0, 0, getHeight());
                 }
                 supervisorPanel.setBounds(0, 0, getWidth(), getHeight());
-                feedbackPanel.setBounds(0, 0, getWidth(), getHeight()); // Adicionado: Redimensiona o feedbackPanel
+                feedbackPanel.setBounds(0, 0, getWidth(), getHeight());
             }
         });
 
@@ -147,7 +155,7 @@ public class Menu extends JLayeredPane {
 
         navBar.add(titulo, BorderLayout.CENTER);
 
-        btnConfiguracoes = botoes.criarBotaoConfiguracoes();
+        JButton btnConfiguracoes = botoes.criarBotaoConfiguracoes();
         btnConfiguracoes.addActionListener(e -> {
             toggleConfigPanel(true);
         });
@@ -172,23 +180,32 @@ public class Menu extends JLayeredPane {
         btnFeedbacks = botoes.criarBotaoFeedBackPessoal();
         btnSupervisor = botoes.criarBotaoSupervisor();
 
-        // Adicionado: ActionListener para o btnMaquinario
         btnMaquinario.addActionListener(e -> {
-            substituirPainel(new CabineDeControleTela(parentFrame, 0)); // Supondo ordemCliques inicial 0
+
+            substituirPainel(new CabineDeControleTela(parentFrame, idUsuarioLogado)); 
         });
 
         btnSupervisor.addActionListener(e -> {
+            supervisorPanel.setVisible(true); 
             showPanel("supervisor");
         });
 
-        // Adicionado: ActionListener para o botão de feedbacks
         btnFeedbacks.addActionListener(e -> {
+
+            if (feedbackPanel != null) {
+                ((FeedbackPanel)feedbackPanel).carregarFeedbacksDoUsuario(idUsuarioLogado); 
+            }
             showPanel("feedback");
         });
 
         painelBotoes.add(btnMaquinario);
         painelBotoes.add(btnFeedbacks);
-        painelBotoes.add(btnSupervisor);
+
+        if ("supervisor".equalsIgnoreCase(tipoUsuarioLogado)) {
+            painelBotoes.add(btnSupervisor);
+        } else {
+            btnSupervisor.setVisible(false);
+        }
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -200,12 +217,19 @@ public class Menu extends JLayeredPane {
         return centro;
     }
 
+    private void substituirPainel(JPanel newPanel) {
+        if (parentFrame != null) {
+            parentFrame.setContentPane(newPanel);
+            parentFrame.revalidate();
+            parentFrame.repaint();
+        }
+    }
 
     private void showPanel(String panelName) {
         mainContentPanel.setVisible(false);
         sidebarContainerPanel.setVisible(false);
         supervisorPanel.setVisible(false);
-        feedbackPanel.setVisible(false); // Adicionado: Oculta o feedbackPanel por padrão
+        feedbackPanel.setVisible(false);
 
         switch (panelName) {
             case "main":
@@ -218,7 +242,7 @@ public class Menu extends JLayeredPane {
             case "supervisor":
                 supervisorPanel.setVisible(true);
                 break;
-            case "feedback": // Adicionado: Caso para exibir o feedbackPanel
+            case "feedback":
                 feedbackPanel.setVisible(true);
                 break;
         }
@@ -229,7 +253,7 @@ public class Menu extends JLayeredPane {
     private void toggleConfigPanel(boolean show) {
         if (show) {
             showPanel("config");
-            animatePanel(sidebarContainerPanel, -SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight());
+            animatePanel(sidebarContainerPanel, -SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight(), null);
         } else {
             animatePanel(sidebarContainerPanel, 0, -SIDEBAR_WIDTH, SIDEBAR_WIDTH, getHeight(), () -> {
                 sidebarContainerPanel.setVisible(false);
@@ -248,31 +272,16 @@ public class Menu extends JLayeredPane {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 currentX += step;
+                panel.setBounds(currentX, 0, width, height);
                 if ((step > 0 && currentX >= endX) || (step < 0 && currentX <= endX)) {
-                    currentX = endX;
+                    panel.setBounds(endX, 0, width, height);
                     ((Timer) e.getSource()).stop();
                     if (onComplete != null) {
                         onComplete.run();
                     }
                 }
-                panel.setBounds(currentX, 0, width, height);
-                revalidate();
-                repaint();
             }
         });
         timer.start();
-    }
-
-    private void animatePanel(JPanel panel, int startX, int endX, int width, int height) {
-        animatePanel(panel, startX, endX, width, height, null);
-    }
-
-    // Adicionado: Método para substituir o painel principal do JFrame
-    private void substituirPainel(JPanel novoPainel) {
-        if (parentFrame != null) {
-            parentFrame.setContentPane(novoPainel);
-            parentFrame.revalidate();
-            parentFrame.repaint();
-        }
     }
 }

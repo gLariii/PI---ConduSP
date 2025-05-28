@@ -11,22 +11,24 @@ public class UsuarioController {
         return rg != null && rg.matches("^\\d{2}\\.\\d{3}\\.\\d{3}-\\d{1}$");
     }
 
-    public boolean cadastrarUsuario(String rg, String senha, String nome, String tipoUsuario, int volume) {
+    public Usuario buscarUsuario(String rg) {
         if (!RGValido(rg)) {
-            System.out.println("RG inválido. Deve estar no formato (XX.XXX.XXX-X)");
+            System.out.println("RG inválido para busca. Deve estar no formato (XX.XXX.XXX-X)");
+            return null;
+        }
+        return usuarioDAO.buscarUsuarioPorRg(rg);
+    }
+
+    public boolean atualizarTipoUsuario(String rg, String novoTipoUsuario) {
+        if (!RGValido(rg)) {
+            System.out.println("RG inválido para atualização. Deve estar no formato (XX.XXX.XXX-X)");
             return false;
         }
-
-        if (usuarioDAO.existeRg(rg)) {
-            System.out.println("RG já cadastrado.");
+        if (novoTipoUsuario == null || novoTipoUsuario.trim().isEmpty()) {
+            System.out.println("Tipo de usuário não pode ser vazio.");
             return false;
         }
-
-        // Garante que o volume está entre 0 e 100
-        if (volume < 0) volume = 0;
-        if (volume > 100) volume = 100;
-
-        Usuario novoUsuario = new Usuario(0, rg, senha, nome, tipoUsuario, volume);
-        return usuarioDAO.cadastrar(novoUsuario);
+        
+        return usuarioDAO.atualizarTipoUsuario(rg, novoTipoUsuario);
     }
 }

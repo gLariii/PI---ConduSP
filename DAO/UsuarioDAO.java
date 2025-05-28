@@ -1,3 +1,4 @@
+
 package DAO;
 
 import Model.Usuario;
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 
 public class UsuarioDAO {
 
+    
     // Autenticação do usuário pelo RG e senha
     public boolean autenticar(Usuario usuario) {
         String sql = "SELECT * FROM tb_usuario WHERE rg = ? AND senha = ?";
@@ -29,47 +31,61 @@ public class UsuarioDAO {
         }
     }
 
-    // Cadastro de novo usuário
-    public boolean cadastrar(Usuario usuario) {
-        String sql = "INSERT INTO tb_usuario (rg, senha, nome, tipo_usuario, volume) VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection conn = Conexao.getConexao();
+    public boolean existeRg(String rg) {
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE rg = ?";
+         try (Connection conn = Conexao.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, usuario.getRg());
-            stmt.setString(2, usuario.getSenha());
-            stmt.setString(3, usuario.getNome());
-            stmt.setString(4, usuario.getTipoUsuario());
-            stmt.setInt(5, usuario.getVolume()); // Novo campo volume
-
-            int linhasAfetadas = stmt.executeUpdate();
-            return linhasAfetadas > 0;
-
+            stmt.setString(1, rg);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+
         }
+        return false;
     }
 
-    // Verifica se um RG já existe
-    public boolean existeRg(String rg) {
-        String sql = "SELECT 1 FROM tb_usuario WHERE rg = ?";
-
-        try (Connection conn = Conexao.getConexao();
+    public Usuario buscarUsuarioPorRg(String rg) {
+        String sql = "SELECT id, rg, senha, nome, tipoUsuario, volume FROM usuarios WHERE rg = ?";
+         try (Connection conn = Conexao.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, rg);
             ResultSet rs = stmt.executeQuery();
-
-            return rs.next();
-
+            
+            if (rs.next()) {
+                return new Usuario(
+                    rs.getInt("id"),
+                    rs.getString("rg"),
+                    rs.getString("senha"),
+                    rs.getString("nome"),
+                    rs.getString("tipoUsuario"),
+                    rs.getInt("volume")
+                );
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return null;
     }
 
-    // Recupera um usuário pelo RG
+    public boolean atualizarTipoUsuario(String rg, String novoTipoUsuario) {
+        String sql = "UPDATE usuarios SET tipoUsuario = ? WHERE rg = ?";
+         try (Connection conn = Conexao.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, novoTipoUsuario);
+            stmt.setString(2, rg);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+        // Recupera um usuário pelo RG
     public Usuario getUsuarioByRg(String rg) {
         String sql = "SELECT id, rg, senha, nome, tipo_usuario, volume FROM tb_usuario WHERE rg = ?";
 
@@ -86,7 +102,7 @@ public class UsuarioDAO {
                     rs.getString("senha"),
                     rs.getString("nome"),
                     rs.getString("tipo_usuario"),
-                    rs.getInt("volume") // Campo volume incluído
+                    rs.getInt("volume") 
                 );
             }
 
