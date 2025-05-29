@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
 import Assets.Cores; 
+import TelaMetro1.telaMenu.FeedbackGeralPanel;
 
 public class SupervisorPanel extends JPanel {
     private Image ImagemDeFundo;
@@ -16,6 +17,7 @@ public class SupervisorPanel extends JPanel {
 
     private JPanel mainContentPanel; 
     private BuscarSupervisorPanel buscarSupervisorPanel; 
+    private FeedbackGeralPanel feedbackGeralPanel;
     private CardLayout cardLayout; 
     private JPanel cardPanel; 
 
@@ -28,18 +30,15 @@ public class SupervisorPanel extends JPanel {
 
         setOpaque(true);
 
-
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         cardPanel.setOpaque(false); 
-       
+        
         mainContentPanel = new JPanel(new BorderLayout()); 
         mainContentPanel.setOpaque(false); 
 
-     
         mainContentPanel.add(criarNavBarSupervisor(), BorderLayout.NORTH);
 
-       
         JPanel botoesPanel = new JPanel(new GridBagLayout());
         botoesPanel.setOpaque(false); 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -53,7 +52,7 @@ public class SupervisorPanel extends JPanel {
                 "/Assets/Imagens/relatorio.png", 
                 80, 80, SwingConstants.RIGHT, new Dimension(600, 150), 30);
         btnRelatorios.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Funcionalidade de Relatórios será implementada!");
+            cardLayout.show(cardPanel, "feedbackGeral"); 
         });
         botoesPanel.add(btnRelatorios, gbc);
 
@@ -69,11 +68,12 @@ public class SupervisorPanel extends JPanel {
         
         mainContentPanel.add(botoesPanel, BorderLayout.CENTER);
 
-      
-        buscarSupervisorPanel = new BuscarSupervisorPanel(imagemPath, () -> cardLayout.show(cardPanel, "main")); // Ação de voltar para o mainContentPanel
+        buscarSupervisorPanel = new BuscarSupervisorPanel(imagemPath, () -> cardLayout.show(cardPanel, "main"));
+        feedbackGeralPanel = new FeedbackGeralPanel(imagemPath, () -> cardLayout.show(cardPanel, "main")); 
 
         cardPanel.add(mainContentPanel, "main"); 
         cardPanel.add(buscarSupervisorPanel, "buscarSupervisor"); 
+        cardPanel.add(feedbackGeralPanel, "feedbackGeral");
 
         add(cardPanel, BorderLayout.CENTER);
 
@@ -123,9 +123,12 @@ public class SupervisorPanel extends JPanel {
 
         JButton btnVoltar = botoes.criarBotaoVoltar();
         btnVoltar.addActionListener(e -> {
-            
-            if (voltarAcao != null) {
-                voltarAcao.run();
+            if (cardPanel.getComponent(0).isVisible()) {
+                if (voltarAcao != null) {
+                    voltarAcao.run();
+                }
+            } else {
+                cardLayout.show(cardPanel, "main");
             }
         });
 
@@ -150,7 +153,7 @@ public class SupervisorPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-     
+      
         if (ImagemDeFundo != null) {
             g.drawImage(ImagemDeFundo, 0, 0, getWidth(), getHeight(), this);
         }
