@@ -8,10 +8,6 @@ import java.io.InputStream;
 import Assets.Cores;
 import CabineDeControleTela.CabineDeControleTela;
 
-// Importar SupervisorPanel e ConfiguracoesPanel se não estiverem no mesmo pacote
-// import TelaMetro1.telaMenu.SupervisorPanel;
-// import TelaMetro1.telaMenu.ConfiguracoesPanel;
-
 public class Menu extends JLayeredPane {
     private Image ImagemDeFundo, logoOriginal, logoRedimensionada;
     private JButton btnMaquinario, btnFeedbacks, btnSupervisor, btnConfiguracoes;
