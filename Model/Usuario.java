@@ -13,6 +13,12 @@ public class Usuario {
         this.senha = senha;
     }
 
+    public Usuario(String rg, String nome, String tipoUsuario) {
+        this.rg = rg;
+        this.nome = nome;
+        this.tipoUsuario = tipoUsuario;
+    }
+
     public Usuario(int id, String rg, String senha, String nome, String tipoUsuario, int volume) {
         this.id = id;
         this.rg = rg;

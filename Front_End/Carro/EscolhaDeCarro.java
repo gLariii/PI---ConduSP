@@ -63,7 +63,7 @@ public class EscolhaDeCarro extends JPanel {
         JButton btn = new JButton("");
         btn.setOpaque(false);
         btn.setContentAreaFilled(false);
-        btn.setBorderPainted(true);
+        btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btn.setForeground(new Color(0, 0, 0, 0));
@@ -116,13 +116,13 @@ public class EscolhaDeCarro extends JPanel {
         int h = getHeight();
 
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
-
-        btnPorta1.setBounds((int)(w * 0.29), (int)(h * 0.29), (int)(w * 0.08), (int)(h * 0.12));
-        btnPorta2.setBounds((int)(w * 0.42), (int)(h * 0.29), (int)(w * 0.08), (int)(h * 0.12));
-        btnPorta3.setBounds((int)(w * 0.55), (int)(h * 0.29), (int)(w * 0.08), (int)(h * 0.12));
-        btnPorta4.setBounds((int)(w * 0.69), (int)(h * 0.29), (int)(w * 0.08), (int)(h * 0.12));
-        btnPorta5.setBounds((int)(w * 0.29), (int)(h * 0.565), (int)(w * 0.08), (int)(h * 0.12));
-        btnPorta6.setBounds((int)(w * 0.42), (int)(h * 0.565), (int)(w * 0.08), (int)(h * 0.12));
+        
+        btnPorta1.setBounds((int)(w * 0.24), (int)(h * 0.426), (int)(w * 0.12), (int)(h * 0.11)); 
+        btnPorta2.setBounds((int)(w * 0.44), (int)(h * 0.426), (int)(w * 0.12), (int)(h * 0.11)); 
+        btnPorta3.setBounds((int)(w * 0.64), (int)(h * 0.428), (int)(w * 0.12), (int)(h * 0.11)); 
+        btnPorta4.setBounds((int)(w * 0.24), (int)(h * 0.575), (int)(w * 0.12), (int)(h * 0.11)); 
+        btnPorta5.setBounds((int)(w * 0.44), (int)(h * 0.575), (int)(w * 0.12), (int)(h * 0.11)); 
+        btnPorta6.setBounds((int)(w * 0.64), (int)(h * 0.579), (int)(w * 0.12), (int)(h * 0.11)); 
     }
 
     private void adicionarListenerRedimensionamento() {

@@ -32,7 +32,7 @@ public class UsuarioDAO {
     }
 
     public boolean existeRg(String rg) {
-        String sql = "SELECT COUNT(*) FROM usuarios WHERE rg = ?";
+        String sql = "SELECT COUNT(*) FROM tb_usuarios WHERE rg = ?";
          try (Connection conn = Conexao.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, rg);
@@ -48,7 +48,7 @@ public class UsuarioDAO {
     }
 
     public Usuario buscarUsuarioPorRg(String rg) {
-        String sql = "SELECT id, rg, senha, nome, tipoUsuario, volume FROM usuarios WHERE rg = ?";
+        String sql = "SELECT rg, nome, tipo_usuario FROM tb_usuario WHERE rg = ?";
          try (Connection conn = Conexao.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -57,12 +57,9 @@ public class UsuarioDAO {
             
             if (rs.next()) {
                 return new Usuario(
-                    rs.getInt("id"),
                     rs.getString("rg"),
-                    rs.getString("senha"),
                     rs.getString("nome"),
-                    rs.getString("tipoUsuario"),
-                    rs.getInt("volume")
+                    rs.getString("tipo_Usuario")
                 );
             }
         } catch (SQLException e) {
@@ -72,7 +69,7 @@ public class UsuarioDAO {
     }
 
     public boolean atualizarTipoUsuario(String rg, String novoTipoUsuario) {
-        String sql = "UPDATE usuarios SET tipoUsuario = ? WHERE rg = ?";
+        String sql = "UPDATE tb_usuario SET tipo_Usuario = ? WHERE rg = ?";
          try (Connection conn = Conexao.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, novoTipoUsuario);

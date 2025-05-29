@@ -71,6 +71,7 @@ public class Portas extends JPanel {
         btnVoltar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
+        btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVoltar.setOpaque(true);
         add(btnVoltar);
         botao1 = criarBotao(() -> substituirPainel(new DispositivosDeEmergência(parentFrame, ordemCliques)));
@@ -96,6 +97,7 @@ public class Portas extends JPanel {
         btnFechar.setFocusPainted(false);
         btnFechar.setContentAreaFilled(false);
         btnFechar.setOpaque(true);
+        btnFechar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnFechar.addActionListener(e -> {
             if (index == 0){
                 botao1.setVisible(false);
@@ -125,6 +127,7 @@ public class Portas extends JPanel {
         btnLacrar.setFocusPainted(false);
         btnLacrar.setContentAreaFilled(false);
         btnLacrar.setOpaque(true);
+        btnLacrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnLacrar.addActionListener(e -> {
             index = 2;
             btnFechar.setVisible(false);
@@ -144,6 +147,7 @@ public class Portas extends JPanel {
         btnVerificar.setFocusPainted(false);
         btnVerificar.setContentAreaFilled(false);
         btnVerificar.setOpaque(true);
+        btnVerificar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVerificar.addActionListener(e -> {
             JOptionPane.showMessageDialog(this, "A porta foi fechada corretamente", "Correto", JOptionPane.INFORMATION_MESSAGE);
             btnVerificar.setVisible(false);
@@ -194,7 +198,7 @@ public class Portas extends JPanel {
     private void reposicionarBotoes() {
         int w = getWidth();
         int h = getHeight();
-        int largura = (int)(w * 0.55);
+        int largura = (int)(w * 0.2); 
         int altura = (int)(h * 0.07);
 
         //Tamanho e Posicionamento

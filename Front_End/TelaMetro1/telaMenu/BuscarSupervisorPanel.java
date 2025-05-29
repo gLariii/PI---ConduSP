@@ -3,7 +3,7 @@ package TelaMetro1.telaMenu;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener; 
+import java.awt.event.ActionListener;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,10 +16,11 @@ import java.awt.event.MouseEvent;
 import javax.swing.text.JTextComponent;
 
 import Assets.Cores;
-import TelaMetro1.*; 
+import TelaMetro1.*;
 import DAO.UsuarioDAO;
 import Model.Usuario;
 import TelaMetro1.Entrada.Alerta;
+import TelaMetro1.Entrada.AlertaAtualizado;
 import TelaMetro1.Entrada.AlertaBemSucedido;
 
 public class BuscarSupervisorPanel extends JPanel {
@@ -36,6 +37,7 @@ public class BuscarSupervisorPanel extends JPanel {
 
     private JButton btnBuscar;
     private JButton btnAtualizarTipo;
+    private JButton btnAtualizarTipoOperario; // New button for Operário
 
     private Usuario usuarioEncontrado;
 
@@ -151,11 +153,25 @@ public class BuscarSupervisorPanel extends JPanel {
         btnAtualizarTipo.setEnabled(false);
         formPanel.add(btnAtualizarTipo, formGbc);
 
+        // New button for Operário
+        formGbc.gridy = 7; // Next row
+        formGbc.insets = new Insets(10, 0, 0, 0); // Smaller top inset for spacing
+        btnAtualizarTipoOperario = botoes.criarBotaoPadrao("Atualizar Tipo para Operário", null, 0, 0, SwingConstants.CENTER, new Dimension(300, 50), 20);
+        btnAtualizarTipoOperario.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                atualizarTipoUsuarioParaOperario();
+            }
+        });
+        btnAtualizarTipoOperario.setEnabled(false);
+        formPanel.add(btnAtualizarTipoOperario, formGbc);
+
         painelCentralBuscar.add(formPanel);
         add(painelCentralBuscar, BorderLayout.CENTER);
 
         addHoverEffect(btnBuscar);
         addHoverEffect(btnAtualizarTipo);
+        addHoverEffect(btnAtualizarTipoOperario); // Add hover effect to the new button
     }
 
     private JLabel criarLabel(String texto) {
@@ -218,8 +234,9 @@ public class BuscarSupervisorPanel extends JPanel {
             txtNomeEncontrado.setText(usuarioEncontrado.getNome());
             txtRGEncontrado.setText(usuarioEncontrado.getRg());
             txtTipoUsuario.setText(usuarioEncontrado.getTipoUsuario());
-            txtTipoUsuario.setEditable(true);
-            btnAtualizarTipo.setEnabled(true);
+            txtTipoUsuario.setEditable(true); // Allow editing of type, if needed, though buttons will change it
+            btnAtualizarTipo.setEnabled(!usuarioEncontrado.getTipoUsuario().equalsIgnoreCase("supervisor"));
+            btnAtualizarTipoOperario.setEnabled(!usuarioEncontrado.getTipoUsuario().equalsIgnoreCase("operario"));
             new AlertaBemSucedido(null, "Usuário Encontrado", "Dados do usuário carregados com sucesso.").setVisible(true);
         } else {
             new Alerta(null, "Usuário Não Encontrado", "Nenhum usuário encontrado com o RG informado.").setVisible(true);
@@ -233,10 +250,10 @@ public class BuscarSupervisorPanel extends JPanel {
             return;
         }
 
-        String novoTipo = "supervisor"; 
+        String novoTipo = "supervisor";
 
         if (usuarioEncontrado.getTipoUsuario().equalsIgnoreCase(novoTipo)) {
-            new Alerta(null, "Informação", "O usuário já é um supervisor.").setVisible(true);
+            new AlertaAtualizado(null, "Informação", "O usuário já é um supervisor.").setVisible(true);
             return;
         }
 
@@ -244,9 +261,38 @@ public class BuscarSupervisorPanel extends JPanel {
         boolean sucesso = dao.atualizarTipoUsuario(usuarioEncontrado.getRg(), novoTipo);
 
         if (sucesso) {
-            usuarioEncontrado.setTipoUsuario(novoTipo); 
+            usuarioEncontrado.setTipoUsuario(novoTipo);
             txtTipoUsuario.setText(novoTipo);
-            new AlertaBemSucedido(null, "Atualização Concluída", "Tipo de usuário atualizado para 'supervisor' com sucesso!").setVisible(true);
+            btnAtualizarTipo.setEnabled(false); // Disable after update
+            btnAtualizarTipoOperario.setEnabled(true); // Enable other option
+            new AlertaAtualizado(null, "Atualização Concluída", "Tipo de usuário atualizado para 'supervisor' com sucesso!").setVisible(true);
+        } else {
+            new AlertaAtualizado(null, "Erro na Atualização", "Não foi possível atualizar o tipo de usuário.").setVisible(true);
+        }
+    }
+
+    private void atualizarTipoUsuarioParaOperario() {
+        if (usuarioEncontrado == null) {
+            new AlertaAtualizado(null, "Erro", "Nenhum usuário selecionado para atualização.").setVisible(true);
+            return;
+        }
+
+        String novoTipo = "operario";
+
+        if (usuarioEncontrado.getTipoUsuario().equalsIgnoreCase(novoTipo)) {
+            new AlertaAtualizado(null, "Informação", "O usuário já é um operário.").setVisible(true);
+            return;
+        }
+
+        UsuarioDAO dao = new UsuarioDAO();
+        boolean sucesso = dao.atualizarTipoUsuario(usuarioEncontrado.getRg(), novoTipo);
+
+        if (sucesso) {
+            usuarioEncontrado.setTipoUsuario(novoTipo);
+            txtTipoUsuario.setText(novoTipo);
+            btnAtualizarTipoOperario.setEnabled(false); // Disable after update
+            btnAtualizarTipo.setEnabled(true); // Enable other option
+            new AlertaAtualizado(null, "Atualização Concluída", "Tipo de usuário atualizado para 'operario' com sucesso!").setVisible(true);
         } else {
             new Alerta(null, "Erro na Atualização", "Não foi possível atualizar o tipo de usuário.").setVisible(true);
         }
@@ -258,6 +304,7 @@ public class BuscarSupervisorPanel extends JPanel {
         txtTipoUsuario.setText("");
         txtTipoUsuario.setEditable(false);
         btnAtualizarTipo.setEnabled(false);
+        btnAtualizarTipoOperario.setEnabled(false); // Disable new button as well
         usuarioEncontrado = null;
     }
 
@@ -336,7 +383,7 @@ public class BuscarSupervisorPanel extends JPanel {
         Color originalBorderColor = Color.WHITE;
         int originalBorderThickness = 3;
         Color originalTextColor = Color.WHITE;
-        Color clickedBorderColor = Color.DARK_GRAY; 
+        Color clickedBorderColor = Color.DARK_GRAY;
 
         button.addMouseListener(new MouseAdapter() {
             @Override
@@ -396,7 +443,7 @@ public class BuscarSupervisorPanel extends JPanel {
         private Color focusColor;
         private String placeholder;
         private int radius;
-        private JTextField textField; 
+        private JTextField textField;
         public PlaceholderBorder(Color focusColor, String placeholder, int radius, JTextField textField) {
             this.focusColor = focusColor;
             this.placeholder = placeholder;
@@ -428,8 +475,8 @@ public class BuscarSupervisorPanel extends JPanel {
                 ImageIcon icon = (ImageIcon) iconLabel.getIcon();
                 Image img = icon.getImage();
 
-                int iconX = x + width - icon.getIconWidth() - 10; 
-                int iconY = y + (height - icon.getIconHeight()) / 2; 
+                int iconX = x + width - icon.getIconWidth() - 10;
+                int iconY = y + (height - icon.getIconHeight()) / 2;
                 g2d.drawImage(img, iconX, iconY, c);
             }
             g2d.dispose();
@@ -475,7 +522,7 @@ public class BuscarSupervisorPanel extends JPanel {
         @Override
         public Insets getBorderInsets(Component c) {
 
-            int pad = Math.max(radius, thickness); 
+            int pad = Math.max(radius, thickness);
             return new Insets(pad, pad, pad, pad);
         }
 

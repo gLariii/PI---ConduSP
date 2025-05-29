@@ -8,7 +8,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
 import javax.swing.border.Border;
-
 import ADUTela.ADUMenu;
 import Carro.*;
 
