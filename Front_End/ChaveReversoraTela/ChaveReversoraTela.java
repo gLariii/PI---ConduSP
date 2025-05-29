@@ -52,6 +52,7 @@ public class ChaveReversoraTela extends JPanel {
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
         btnVoltar.setOpaque(true);
+        
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVoltar.addActionListener(e -> voltarParaCabine());
         add(btnVoltar);
