@@ -4,6 +4,8 @@ import javax.swing.*;
 
 import BoteiraLateralTelas.BoteiraLateralTela;
 import Carro.Carro5VisaoGeral;
+import Carro.EscolhaDeCarro;
+
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -76,7 +78,7 @@ public class AreaLateral extends JPanel {
         add(botaoTraseira);
 
         btnPorta = new JButton("");
-        btnPorta.addActionListener(e -> trocarTela(new Carro5VisaoGeral(parentFrame, ordemCliques)));            
+        btnPorta.addActionListener(e -> trocarTela(new EscolhaDeCarro(parentFrame, ordemCliques)));            
         btnPorta.setOpaque(false);
         btnPorta.setContentAreaFilled(false);
         btnPorta.setBorderPainted(false);
@@ -86,6 +88,13 @@ public class AreaLateral extends JPanel {
 
         btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
+        btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnVoltar.setForeground(Color.WHITE);
+        btnVoltar.setBackground(new Color(30, 60, 90));
+        btnVoltar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.setContentAreaFilled(false);
+        btnVoltar.setOpaque(true);
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(btnVoltar);
 

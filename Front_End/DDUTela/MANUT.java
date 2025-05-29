@@ -57,6 +57,13 @@ public class MANUT extends JPanel {
         botao3 = criarBotao(e -> trocarTela(new INFOPASS(parentFrame, ordemCliques)));
         botao5 = criarBotao(e -> trocarTela(new MANUT(parentFrame, ordemCliques)));
         btnVoltar = criarBotaoVoltar(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
+        btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnVoltar.setForeground(Color.WHITE);
+        btnVoltar.setBackground(new Color(30, 60, 90));
+        btnVoltar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.setContentAreaFilled(false);
+        btnVoltar.setOpaque(true);
 
         add(botao1);
         add(botao2);

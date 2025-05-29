@@ -15,7 +15,7 @@ public class Portas extends JPanel {
     private Image imagemDeFundo;
     private JFrame parentFrame;
     // Botões como atributos
-    private static JButton botao1, botao2, btnVoltar,btnFechar, btnLacrar;
+    private static JButton botao1, botao2, btnVoltar,btnFechar, btnLacrar, btnVerificar;
     
     private int ordemCliques;
     
@@ -65,6 +65,13 @@ public class Portas extends JPanel {
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques)));
+        btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnVoltar.setForeground(Color.WHITE);
+        btnVoltar.setBackground(new Color(30, 60, 90));
+        btnVoltar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.setContentAreaFilled(false);
+        btnVoltar.setOpaque(true);
         add(btnVoltar);
         botao1 = criarBotao(() -> substituirPainel(new DispositivosDeEmergência(parentFrame, ordemCliques)));
         botao1.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 3, true));
@@ -82,35 +89,68 @@ public class Portas extends JPanel {
         add(botao2);
 
         btnFechar = new JButton("Fechar");
+        btnFechar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnFechar.setForeground(Color.WHITE);
+        btnFechar.setBackground(new Color(30, 60, 90));
+        btnFechar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        btnFechar.setFocusPainted(false);
+        btnFechar.setContentAreaFilled(false);
+        btnFechar.setOpaque(true);
         btnFechar.addActionListener(e -> {
             if (index == 0){
                 botao1.setVisible(false);
                 botao2.setVisible(false);
                 btnLacrar.setVisible(true);
                 btnFechar.setText("Abrir");
+                btnVerificar.setVisible(true);
             }else if (index == 1){
                 botao1.setVisible(true);
                 botao2.setVisible(true);
                 btnLacrar.setVisible(false);
+                btnVerificar.setVisible(false);
                 btnFechar.setText("Fechar");
             }
             index = (index + 1) % (backgrounds.length - 1);
             carregarImagemFundo();
+            revalidate();
             repaint();
         });
         add(btnFechar);
 
         btnLacrar = new JButton("Passar Adesivo");
+        btnLacrar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnLacrar.setForeground(Color.WHITE);
+        btnLacrar.setBackground(new Color(30, 60, 90));
+        btnLacrar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        btnLacrar.setFocusPainted(false);
+        btnLacrar.setContentAreaFilled(false);
+        btnLacrar.setOpaque(true);
         btnLacrar.addActionListener(e -> {
             index = 2;
             btnFechar.setVisible(false);
             btnLacrar.setVisible(false);
+            btnVerificar.setVisible(false);
             carregarImagemFundo();
             revalidate();
             repaint();
         });
         add (btnLacrar);
-        reposicionarBotoes();
+
+        btnVerificar = new JButton("Verificar Porta");
+        btnVerificar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnVerificar.setForeground(Color.WHITE);
+        btnVerificar.setBackground(new Color(30, 60, 90));
+        btnVerificar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        btnVerificar.setFocusPainted(false);
+        btnVerificar.setContentAreaFilled(false);
+        btnVerificar.setOpaque(true);
+        btnVerificar.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "A porta foi fechada corretamente", "Correto", JOptionPane.INFORMATION_MESSAGE);
+            btnVerificar.setVisible(false);
+            revalidate();
+            repaint();
+        });
+        add (btnVerificar);
 
         if (PainelExternoAberto.index == 1 && index != 2){
             btnFechar.setVisible(true);
@@ -120,6 +160,7 @@ public class Portas extends JPanel {
             botao2.setVisible(true);
             btnLacrar.setVisible(false);
             btnFechar.setText("Fechar");
+            btnVerificar.setVisible(false);
             if (PainelExternoAberto.index != 1)
                 btnFechar.setVisible(false);
         }
@@ -130,7 +171,9 @@ public class Portas extends JPanel {
         if (index == 2){
             btnLacrar.setVisible(false);
             btnFechar.setVisible(false);
+            btnVerificar.setVisible(false);
         }
+        reposicionarBotoes();
 
     }
 
@@ -151,15 +194,16 @@ public class Portas extends JPanel {
     private void reposicionarBotoes() {
         int w = getWidth();
         int h = getHeight();
-        int largura = (int)(w * 0.052);
-        int altura = (int)(h * 0.028);
+        int largura = (int)(w * 0.55);
+        int altura = (int)(h * 0.07);
 
         //Tamanho e Posicionamento
         botao1.setBounds((int)(w * 0.66), (int)(h * 0.42), (int)(w * 0.08), (int)(h * 0.14));
         botao2.setBounds((int)(w * 0.37), (int)(h * 0.92), (int)(w * 0.28), (int)(h * 0.06));
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
-        btnFechar.setBounds((int)(w -largura) / 2, (int) (h - altura) / 2, (int)(w * 0.052), (int)(h * 0.028));
-        btnLacrar.setBounds((int)(w -largura) / 2, (int) ((h - altura) / 2) + (int)(h * 0.2), (int)(w * 0.052), (int)(h * 0.028));
+        btnFechar.setBounds((int)(w -largura) / 2, (int) (h - altura) / 2, (largura), (int)(altura));
+        btnLacrar.setBounds((int)(w -largura) / 2, (int) ((h - altura) / 2) + (int)(h * 0.2), (largura), (int)(altura));
+        btnVerificar.setBounds((int)(w -largura) / 2, (int) ((h - altura) / 2) + (int)(h * 0.4), (largura), (int)(altura));
         repaint();
     }
 

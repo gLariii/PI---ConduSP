@@ -37,6 +37,13 @@ public class ADUMenu extends JPanel {
     private void adicionarComponentes() {
         btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, 0)));
+        btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnVoltar.setForeground(Color.WHITE);
+        btnVoltar.setBackground(new Color(30, 60, 90));
+        btnVoltar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.setContentAreaFilled(false);
+        btnVoltar.setOpaque(true);
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(btnVoltar);
 

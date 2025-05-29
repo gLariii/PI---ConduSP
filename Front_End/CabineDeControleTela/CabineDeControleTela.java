@@ -10,7 +10,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import ADUTela.ADUMenu;
-import Carro.Carro5VisaoGeral;
+import Carro.*;
 
 public class CabineDeControleTela extends JPanel {
 
@@ -143,7 +143,7 @@ public class CabineDeControleTela extends JPanel {
             // Tela cheia
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setUndecorated(true); // opcional: remove bordas e barra de título
-            frame.setContentPane(new CabineDeControleTela(frame, ordemCliques));
+            frame.setContentPane(new PainelExternoAberto(frame, ordemCliques));
         frame.setVisible(true);
     });
 }

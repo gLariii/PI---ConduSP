@@ -26,6 +26,13 @@ public class VDUMenu extends JPanel {
 
         btnVoltar = new JButton("Voltar");
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnVoltar.setForeground(Color.WHITE);
+        btnVoltar.setBackground(new Color(30, 60, 90));
+        btnVoltar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.setContentAreaFilled(false);
+        btnVoltar.setOpaque(true);
         btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
         add(btnVoltar);
 

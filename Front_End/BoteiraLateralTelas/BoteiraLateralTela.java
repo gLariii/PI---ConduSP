@@ -10,8 +10,8 @@ import Assets.*;
 public class BoteiraLateralTela extends JPanel {
 
     private final String[] backgrounds = {
-        "Imagens/BarraLateralPortasFechadas.jpg",
-        "Imagens/BarraLateralPortasAbertas.jpg"
+        "Imagens/BoteiraLateral.png",
+        "Imagens/BoteiraLateralAcesa.png"
     };
 
     private static int index = 1;
@@ -34,7 +34,7 @@ public class BoteiraLateralTela extends JPanel {
         btnTrocar = new JButton("");
         btnTrocar.setOpaque(false);
         btnTrocar.setContentAreaFilled(false);
-        btnTrocar.setBorderPainted(false);
+        btnTrocar.setBorderPainted(true);
         btnTrocar.setFocusPainted(false);
         btnTrocar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnTrocar.setForeground(new Color(0, 0, 0, 0));
@@ -49,6 +49,13 @@ public class BoteiraLateralTela extends JPanel {
         // Botão Voltar
         btnVoltar = new JButton("Voltar");
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnVoltar.setForeground(Color.WHITE);
+        btnVoltar.setBackground(new Color(30, 60, 90));
+        btnVoltar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.setContentAreaFilled(false);
+        btnVoltar.setOpaque(true);
         btnVoltar.addActionListener(e -> voltarParaLateral());
         add(btnVoltar);
 
@@ -95,9 +102,9 @@ public class BoteiraLateralTela extends JPanel {
 
         // Troca posição do botão de acordo com a imagem de fundo
         if (index == 0) {
-            btnTrocar.setBounds((int)(w * 0.479), (int)(h * 0.481), (int)(w * 0.042), (int)(h * 0.074));
+            btnTrocar.setBounds((int)(w * 0.472), (int)(h * 0.47), (int)(w * 0.06), (int)(h * 0.09));
         } else {
-            btnTrocar.setBounds((int)(w * 0.479), (int)(h * 0.657), (int)(w * 0.042), (int)(h * 0.074));
+            btnTrocar.setBounds((int)(w * 0.47), (int)(h * 0.715), (int)(w * 0.06), (int)(h * 0.09));
         }
     }
 

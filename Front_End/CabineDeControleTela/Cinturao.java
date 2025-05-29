@@ -63,6 +63,14 @@ public class Cinturao extends JPanel {
     private void adicionarComponentes() {
         btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
+        btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnVoltar.setForeground(Color.WHITE);
+        btnVoltar.setBackground(new Color(30, 60, 90));
+        btnVoltar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.setContentAreaFilled(false);
+        btnVoltar.setOpaque(true);
+        btnVoltar.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2, true));
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(btnVoltar);
 
@@ -76,7 +84,7 @@ public class Cinturao extends JPanel {
         });
         botao1.setFont(new Font("Arial", Font.BOLD, 14));
         botao1.setForeground(Color.WHITE);
-        botao1.setBackground(Color.BLACK);
+        botao1.setBackground(new Color(30, 60, 90));
         botao1.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         botao1.setFocusPainted(false);
         botao1.setContentAreaFilled(false);
@@ -101,7 +109,7 @@ public class Cinturao extends JPanel {
         int w = getWidth();
         int h = getHeight();
 
-        botao1.setBounds((int)(w * 0.40), (int)(h * 0.10), (int)(w * 0.20), (int)(h * 0.05));
+        botao1.setBounds((int)(w * 0.40), (int)(h * 0.10), (int)(w * 0.25), (int)(h * 0.05));
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
         labelItensColetados.setBounds(0, (int)(h * 0.08), w, 100);
 

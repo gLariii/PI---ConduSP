@@ -4,6 +4,7 @@ import javax.swing.*;
 import CabineDeControleTela.*;
 import java.awt.*;
 import java.awt.event.*;
+import Carro.*;
 
 public class ModuloDeComunicacaoTelaInicial extends JPanel {
 
@@ -26,8 +27,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     private JLabel labelMensagem;
     private Timer timerEscrita;
     private StringBuilder mensagemParcial = new StringBuilder();
-
-    private int contadorBotao1 = 0;
+    private int CCOEmitido = 0;
 
     // Mensagens para PA
     private final String[] mensagensPA = {
@@ -36,13 +36,22 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     };
 
     // Mensagem única para CCO
-    private final String mensagemCCO = "<html>"
+    private final String mensagemProblemaPorta = "<html>"
+        + "Operador: L38 em Rosa 2 ao CCO<br>"
+        + "CCO: CCO em QAP, L38 Rosa 2<br>"
+        + "Operador: CCO, a porta 53 do L38 não fecha, já foi feito Reciclo, PA, reciclo, porém a mesma permanece aberta.<br>"
+        + "CCO: QSL, L38, porta 53 não fecha, saia para verificar seu problema<br>"
+        + "Operador: QSL, saindo para verificar o problema."
+        + "</html>";
+
+    private final String mensagemPortaIsolada = "<html>"
             + "Operador: L38 em Rosa 2 ao CCO<br>"
             + "CCO: CCO em QAP, L38 Rosa 2<br>"
-            + "Operador: CCO, a porta 53 do L38 não fecha, já foi feito Reciclo, PA, reciclo, porém a mesma permanece aberta.<br>"
-            + "CCO: QSL, L38, porta 53 não fecha, saia para verificar seu problema<br>"
-            + "Operador: QSL, saindo para verificar o problema."
+            + "Operador: Porta 53 devidamente isolada<br>"
+            + "CCO: Permissão para partir<br>"
+            + "Operador: QSL, partindo."
             + "</html>";
+
 
     public ModuloDeComunicacaoTelaInicial(JFrame frame, int ordemCliques) {
         this.ordemCliques = ordemCliques;
@@ -67,7 +76,14 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
                 carregarImagemFundo();
                 repaint();
                 labelMensagem.setVisible(true);
-                iniciarEscrita(mensagemCCO);
+                if (Portas.index == 0){
+                    iniciarEscrita(mensagemProblemaPorta);
+                    CCOEmitido = 1;
+                }
+                else{
+                    iniciarEscrita(mensagemPortaIsolada);
+                }
+
             }
 
             @Override
@@ -88,10 +104,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
                 carregarImagemFundo();
                 repaint();
                 labelMensagem.setVisible(true);
-
-                String mensagem = mensagensPA[contadorBotao1 % mensagensPA.length];
-                iniciarEscrita(mensagem);
-                contadorBotao1++;
+                iniciarEscrita(mensagensPA[CCOEmitido]);
             }
 
             @Override
@@ -106,6 +119,13 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
 
         btnVoltar = new JButton("Voltar");
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnVoltar.setForeground(Color.WHITE);
+        btnVoltar.setBackground(new Color(30, 60, 90));
+        btnVoltar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.setContentAreaFilled(false);
+        btnVoltar.setOpaque(true);
         btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, ordemCliques)));
 
         add(botao1);
