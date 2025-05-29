@@ -2,6 +2,8 @@ package TelaMetro1.telaMenu;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.border.AbstractBorder;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,8 +13,8 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import Assets.Cores; 
-import Controller.FeedbackUsuarioController; 
+import Assets.Cores;
+import Controller.FeedbackUsuarioController;
 import Model.FeedbackUsuario;
 
 public class FeedbackPanel extends JPanel {
@@ -25,16 +27,17 @@ public class FeedbackPanel extends JPanel {
 
     private JTable tabelaFeedbacks;
     private DefaultTableModel modeloTabela;
-    private int idUsuarioLogado; // ID do usuário logado
+    private int idUsuarioLogado;
+
+    private static final int NUM_LINHAS_VISIVEIS_MINIMO = 22;
 
     public FeedbackPanel(String imagemPath, Runnable voltarAcao, int idUsuario) {
         this.voltarAcao = voltarAcao;
-        this.idUsuarioLogado = idUsuario; 
+        this.idUsuarioLogado = idUsuario;
 
         carregarImagens(imagemPath);
 
         setLayout(new BorderLayout());
-        setBackground(Cores.AZUL_METRO); 
         setOpaque(true);
 
         add(criarNavBar(), BorderLayout.NORTH);
@@ -58,7 +61,7 @@ public class FeedbackPanel extends JPanel {
             }
 
         } catch (IOException e) {
-            System.err.println("Erro ao carregar imagens: " + e.getMessage()); 
+            System.err.println("Erro ao carregar imagens: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -68,7 +71,7 @@ public class FeedbackPanel extends JPanel {
         navBar.setBackground(Cores.AZUL_METRO);
         navBar.setPreferredSize(new Dimension(getWidth(), 60));
 
-        JButton btnVoltar = botoes.criarBotaoVoltar(); 
+        JButton btnVoltar = botoes.criarBotaoVoltar();
         btnVoltar.addActionListener(e -> {
             if (voltarAcao != null) voltarAcao.run();
         });
@@ -83,6 +86,11 @@ public class FeedbackPanel extends JPanel {
         titulo.setForeground(Color.WHITE);
         navBar.add(titulo, BorderLayout.CENTER);
 
+        JPanel painelDireitoVazio = new JPanel();
+        painelDireitoVazio.setOpaque(false); 
+        painelDireitoVazio.setPreferredSize(new Dimension(btnVoltar.getPreferredSize().width + 30, 1)); // Largura aproximada do botão voltar + um pouco de espaço
+        navBar.add(painelDireitoVazio, BorderLayout.EAST);
+
         return navBar;
     }
 
@@ -90,30 +98,79 @@ public class FeedbackPanel extends JPanel {
         JPanel painel = new JPanel(new BorderLayout());
         painel.setOpaque(false);
         painel.setBorder(BorderFactory.createEmptyBorder(40, 80, 40, 80));
-        painel.setBackground(Cores.AZUL_METRO);
 
 
         modeloTabela = new DefaultTableModel(new Object[]{"Data", "Pontuação", "Observações"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; 
+                return false;
             }
         };
 
         tabelaFeedbacks = new JTable(modeloTabela);
         tabelaFeedbacks.setFont(new Font("Arial", Font.PLAIN, 16));
         tabelaFeedbacks.setRowHeight(25);
-        tabelaFeedbacks.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
-        tabelaFeedbacks.getTableHeader().setBackground(Cores.AZUL_METRO);
-        tabelaFeedbacks.getTableHeader().setForeground(Color.WHITE);
+        tabelaFeedbacks.setFillsViewportHeight(true);
 
-        tabelaFeedbacks.setBackground(Cores.AZUL_METRO_TRANSPARENTE);
-        tabelaFeedbacks.setForeground(Color.white);
+        // Renderizador para o CABEÇALHO da tabela
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus,
+                                                           int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                label.setBackground(Cores.AZUL_METRO);
+                label.setForeground(Color.WHITE);
+                label.setFont(new Font("Arial", Font.BOLD, 16));
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.WHITE));
+                label.setOpaque(true);
+                return label;
+            }
+        };
+
+        
+        for (int i = 0; i < tabelaFeedbacks.getColumnModel().getColumnCount(); i++) {
+            tabelaFeedbacks.getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
+        }
+
+        tabelaFeedbacks.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                
+                if (!isSelected) {
+                    c.setBackground(Cores.AZUL_METRO);
+                } else {
+                    c.setBackground(new Color(0, 80, 200));
+                }
+                c.setForeground(Color.WHITE);
+                ((JLabel) c).setHorizontalAlignment(SwingConstants.CENTER);
+
+                ((JComponent) c).setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+                
+                if (c instanceof JComponent) {
+                    ((JComponent) c).setOpaque(true);
+                }
+
+                return c;
+            }
+        });
+
         tabelaFeedbacks.setGridColor(Color.WHITE);
         tabelaFeedbacks.setShowGrid(true);
+        tabelaFeedbacks.setOpaque(false);
 
         JScrollPane scroll = new JScrollPane(tabelaFeedbacks);
-        scroll.getViewport().setBackground(Cores.AZUL_METRO);
+        scroll.getViewport().setOpaque(false);
+        scroll.setOpaque(false);
+        
+        int radius = 20;
+        Color borderColor = Color.WHITE;
+        scroll.setBorder(new RoundBorder(radius, borderColor));
+        
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
 
         painel.add(scroll, BorderLayout.CENTER);
 
@@ -121,18 +178,14 @@ public class FeedbackPanel extends JPanel {
     }
 
     void carregarFeedbacksDoUsuario(int idUsuario) {
-        System.out.println("Carregando feedbacks para o ID de usuário: " + idUsuarioLogado); // Para depuração
+        System.out.println("Carregando feedbacks para o ID de usuário: " + idUsuarioLogado);
 
         FeedbackUsuarioController controller = new FeedbackUsuarioController();
         List<FeedbackUsuario> feedbacks = controller.obterFeedbacksDoUsuario(idUsuario);
 
         modeloTabela.setRowCount(0);
 
-        if (feedbacks.isEmpty()) {
-            System.out.println("Nenhum feedback encontrado para o usuário ID: " + idUsuarioLogado); // Para depuração
-
-            modeloTabela.addRow(new Object[]{"", "Nenhum feedback encontrado", ""});
-        } else {
+        if (!feedbacks.isEmpty()) {
             for (FeedbackUsuario f : feedbacks) {
                 modeloTabela.addRow(new Object[]{
                     f.getData(),
@@ -141,6 +194,15 @@ public class FeedbackPanel extends JPanel {
                 });
                 System.out.println("Adicionado feedback à tabela: " + f.toString());
            }
+        }
+
+        int linhasAtuais = modeloTabela.getRowCount();
+        int linhasParaAdicionar = NUM_LINHAS_VISIVEIS_MINIMO - linhasAtuais;
+        
+        if (linhasParaAdicionar > 0) {
+            for (int i = 0; i < linhasParaAdicionar; i++) {
+                modeloTabela.addRow(new Object[]{"", "", ""});
+            }
         }
     }
 
@@ -176,6 +238,39 @@ public class FeedbackPanel extends JPanel {
             g2d.setFont(new Font("Arial", Font.PLAIN, 10));
             g2d.drawString("Condução SP", 15, getHeight() - 15);
             g2d.dispose();
+        }
+    }
+
+    private static class RoundBorder extends AbstractBorder {
+        private int radius;
+        private Color color;
+
+        RoundBorder(int radius, Color color) {
+            this.radius = radius;
+            this.color = color;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(color);
+            g2.setStroke(new BasicStroke(2));
+            g2.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+            g2.dispose();
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            int inset = radius / 2 + 2;
+            return new Insets(inset, inset, inset, inset);
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c, Insets insets) {
+            int inset = radius / 2 + 2;
+            insets.left = insets.top = insets.right = insets.bottom = inset;
+            return insets;
         }
     }
 }
