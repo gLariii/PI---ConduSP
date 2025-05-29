@@ -23,18 +23,26 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
 
     private int ordemCliques;
 
-    // Nova funcionalidade
-    private String mensagemCompleta = "<html>"
-        + "Operador: L38 em Rosa 2 ao CCO<br>"
-        + "CCO: CCO em QAP, L38 Rosa 2<br>"
-        + "Operador: CCO, a porta 53 do L38 não fecha, já foi feito Reciclo, PA, reciclo, porém a mesma permanece aberta.<br>"
-        + "CCO: QSL, L38, porta 53 não fecha, saia para verificar seu problema<br>"
-        + "Operador: QSL, saindo para verificar o problema."
-        + "</html>";
-
-    private StringBuilder mensagemParcial = new StringBuilder();
-    private Timer timerEscrita;
     private JLabel labelMensagem;
+    private Timer timerEscrita;
+    private StringBuilder mensagemParcial = new StringBuilder();
+
+    private int contadorBotao1 = 0;
+
+    // Mensagens para PA
+    private final String[] mensagensPA = {
+        "<html>Não segurem as portas do trem, isso causa atrasos em todo o sistema</html>",
+        "<html>Paramos devido a uma falha neste trem, estamos trabalhando para a normalização,<br>agradecemos a compreensão</html>"
+    };
+
+    // Mensagem única para CCO
+    private final String mensagemCCO = "<html>"
+            + "Operador: L38 em Rosa 2 ao CCO<br>"
+            + "CCO: CCO em QAP, L38 Rosa 2<br>"
+            + "Operador: CCO, a porta 53 do L38 não fecha, já foi feito Reciclo, PA, reciclo, porém a mesma permanece aberta.<br>"
+            + "CCO: QSL, L38, porta 53 não fecha, saia para verificar seu problema<br>"
+            + "Operador: QSL, saindo para verificar o problema."
+            + "</html>";
 
     public ModuloDeComunicacaoTelaInicial(JFrame frame, int ordemCliques) {
         this.ordemCliques = ordemCliques;
@@ -44,7 +52,6 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         setLayout(null);
 
         carregarImagemFundo();
-
         criarBotoes();
         criarLabelMensagem();
         adicionarListenerRedimensionamento();
@@ -57,19 +64,19 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 index = 2;
-                labelMensagem.setVisible(true);
                 carregarImagemFundo();
                 repaint();
-                iniciarEscrita();
+                labelMensagem.setVisible(true);
+                iniciarEscrita(mensagemCCO);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 index = 0;
-                labelMensagem.setVisible(false);
                 carregarImagemFundo();
                 repaint();
                 pararEscrita();
+                labelMensagem.setVisible(false);
             }
         });
 
@@ -80,6 +87,11 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
                 index = 1;
                 carregarImagemFundo();
                 repaint();
+                labelMensagem.setVisible(true);
+
+                String mensagem = mensagensPA[contadorBotao1 % mensagensPA.length];
+                iniciarEscrita(mensagem);
+                contadorBotao1++;
             }
 
             @Override
@@ -87,6 +99,8 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
                 index = 0;
                 carregarImagemFundo();
                 repaint();
+                pararEscrita();
+                labelMensagem.setVisible(false);
             }
         });
 
@@ -102,9 +116,9 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     private void criarLabelMensagem() {
         labelMensagem = new JLabel("");
         labelMensagem.setForeground(Color.WHITE);
-        labelMensagem.setBackground(Color.BLACK); // fundo preto
-        labelMensagem.setOpaque(true);            // necessário para o fundo aparecer
-        labelMensagem.setFont(new Font("Arial", Font.BOLD, 20)); // exemplo de fonte grande
+        labelMensagem.setBackground(Color.BLACK);
+        labelMensagem.setOpaque(true);
+        labelMensagem.setFont(new Font("Arial", Font.BOLD, 20));
     }
 
     @Override
@@ -155,15 +169,12 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         parentFrame.repaint();
     }
 
-    // Métodos novos
-
-    private void iniciarEscrita() {
+    private void iniciarEscrita(String mensagemCompleta) {
         mensagemParcial.setLength(0);
         labelMensagem.setText("");
         add(labelMensagem);
 
-
-        int totalDuration = 5000; // 5 segundos
+        int totalDuration = 5000;
         int numCaracteres = mensagemCompleta.length();
         int delay = totalDuration / numCaracteres;
 
@@ -189,11 +200,9 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         if (timerEscrita != null && timerEscrita.isRunning()) {
             timerEscrita.stop();
         }
-        // Se quiser limpar ao soltar, descomente:
         labelMensagem.setText("");
     }
 
-    // Classe personalizada para botões circulares
     class CircleButton extends JButton {
         private boolean isHovering = false;
 
