@@ -67,9 +67,20 @@ public class Portas extends JPanel {
         btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques)));
         add(btnVoltar);
         botao1 = criarBotao(() -> substituirPainel(new DispositivosDeEmergência(parentFrame, ordemCliques)));
+        botao1.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 3, true));
         add(botao1);
+
         botao2 = criarBotao(() -> substituirPainel(new Soleira(parentFrame, ordemCliques)));
+        botao2.setText("Conferir soleira");
+        botao2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        botao2.setBackground(new Color(30, 60, 90));
+        botao2.setForeground(Color.WHITE);
+        botao2.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        botao2.setFocusPainted(false);
+        botao2.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 5, true));
+        botao2.setOpaque(true);
         add(botao2);
+
         btnFechar = new JButton("Fechar");
         btnFechar.addActionListener(e -> {
             if (index == 0){

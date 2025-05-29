@@ -7,7 +7,9 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
+import javax.swing.border.Border;
 
+import ADUTela.ADUMenu;
 import Carro.Carro5VisaoGeral;
 
 public class CabineDeControleTela extends JPanel {
@@ -18,7 +20,7 @@ public class CabineDeControleTela extends JPanel {
     private static int ordemCliques = 0;
     
         // Botões como atributos
-        private JButton botao1, botao2, botao3, botao4, botao5, botao7;
+        private JButton botao1, botao2, botao3, botao4, botao5, botao6, botao7;
     
         public CabineDeControleTela(JFrame frame, int ordemCliques) {
             this.ordemCliques = ordemCliques;
@@ -69,18 +71,32 @@ public class CabineDeControleTela extends JPanel {
     
             botao4 = criarBotao(() -> substituirPainel(new VDUMenu(parentFrame, ordemCliques)));
             add(botao4);
-    
-            botao5 = new JButton("<html>B<br>a<br>r<br>r<br>a<br><br>L<br>a<br>t<br>e<br>r<br>a<br>l</html>");
-            botao5.addActionListener(e -> substituirPainel(new AreaLateral(parentFrame, ordemCliques)));
-            botao5.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+            botao5 = criarBotao(() -> substituirPainel(new ADUMenu(parentFrame)));
             add(botao5);
     
-            botao7 = new JButton("<html>P<br>a<br>i<br>n<br>e<br>l<br><br>C<br>h<br>a<br>v<br>e</html>");
+            botao6 = new JButton("<html><center>Barra<br>Lateral</center></html>");
+            botao6.addActionListener(e -> substituirPainel(new AreaLateral(parentFrame, ordemCliques)));
+            botao6.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            botao6.setBackground(new Color(30, 60, 90));
+            botao6.setForeground(Color.WHITE);
+            botao6.setFont(new Font("Segoe UI", Font.BOLD, 13));
+            botao6.setFocusPainted(false);
+            botao6.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2, true));
+            botao6.setOpaque(true);
+            add(botao6);
+
+            botao7 = new JButton("<html><center>Painel<br>Chave</center></html>");
             botao7.addActionListener(e -> substituirPainel(new PainelCBTCeChave(parentFrame, ordemCliques)));
             botao7.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            botao7.setBackground(new Color(30, 60, 90));
+            botao7.setForeground(Color.WHITE);
+            botao7.setFont(new Font("Segoe UI", Font.BOLD, 13));
+            botao7.setFocusPainted(false);
+            botao7.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2, true));
+            botao7.setOpaque(true);
             add(botao7);
-    
-    
+
             reposicionarBotoes();
         }
     
@@ -105,8 +121,10 @@ public class CabineDeControleTela extends JPanel {
             botao2.setBounds((int)(w * 0.25), (int)(h * 0.38), (int)(w * 0.08), (int)(h * 0.08));
             botao3.setBounds((int)(w * 0.06), (int)(h * 0.43), (int)(w * 0.16), (int)(h * 0.14));
             botao4.setBounds((int)(w * 0.75), (int)(h * 0.42), (int)(w * 0.17), (int)(h * 0.15));
-            botao5.setBounds((int)(w * 0.005), (int)(h * 0.5), (int)(w * 0.035), (int)(h * 0.25));
+            botao5.setBounds((int)(w * 0.375), (int)(h * 0.35), (int)(w * 0.20), (int)(h * 0.20));
+            botao6.setBounds((int)(w * 0.005), (int)(h * 0.5), (int)(w * 0.035), (int)(h * 0.25));
             botao7.setBounds((int)(w * 0.96), (int)(h * 0.5), (int)(w * 0.035), (int)(h * 0.25));
+            
     
             repaint();
         }
@@ -125,7 +143,7 @@ public class CabineDeControleTela extends JPanel {
             // Tela cheia
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setUndecorated(true); // opcional: remove bordas e barra de título
-            frame.setContentPane(new Carro5VisaoGeral(frame, ordemCliques));
+            frame.setContentPane(new CabineDeControleTela(frame, ordemCliques));
         frame.setVisible(true);
     });
 }

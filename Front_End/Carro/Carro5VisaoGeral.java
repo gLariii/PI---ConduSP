@@ -15,6 +15,8 @@ public class Carro5VisaoGeral extends JPanel {
     public static int index = 0;
     private Image imagemDeFundo;
     private JFrame parentFrame;
+    private JComponent lblSinalizacaoTexto;
+
 
     private int ordemCliques;
 
@@ -80,6 +82,39 @@ public class Carro5VisaoGeral extends JPanel {
         btnPortas = criarBotao(() -> substituirPainel(new Portas(parentFrame, ordemCliques)));
         btnPainel = criarBotao(() -> substituirPainel(new PainelExternoFechado(parentFrame, ordemCliques)));
         btnSinalização = criarBotao (() -> substituirPainel(new Sinalizacao(parentFrame)));
+        
+        lblSinalizacaoTexto = new JComponent() {
+        @Override
+        protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+
+        String texto = "Conferir sinalização ↓";
+        Font fonte = new Font("Segoe UI", Font.BOLD, 14);
+        g2.setFont(fonte);
+
+        // Antialiasing para suavizar
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+        int x = 0;
+        int y = getHeight() - 5;
+
+        // Borda branca
+        g2.setColor(Color.WHITE);
+        g2.drawString(texto, x - 1, y);
+        g2.drawString(texto, x + 1, y);
+        g2.drawString(texto, x, y - 1);
+        g2.drawString(texto, x, y + 1);
+
+        // Texto azul escuro (r30 g60 b90)
+        g2.setColor(new Color(30, 60, 90));
+        g2.drawString(texto, x, y);
+        }
+
+        };
+        lblSinalizacaoTexto.setOpaque(false);
+        add(lblSinalizacaoTexto);
+
         add(btnVoltar);
         add(btnPainel);
         add(btnPortas);
@@ -95,7 +130,7 @@ public class Carro5VisaoGeral extends JPanel {
         botao.setContentAreaFilled(false);
         botao.setFocusPainted(false);
         botao.setBorderPainted(false);
-        botao.setForeground(Color.BLACK); // cor padrão da borda
+        botao.setForeground(Color.BLACK);
         return botao;
     }
 
@@ -108,6 +143,8 @@ public class Carro5VisaoGeral extends JPanel {
         btnPainel.setBounds((int)(w * 0.765), (int)(h * 0.69), (int)(w * 0.18), (int)(h * 0.13));
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
         btnSinalização.setBounds((int)(w * 0.835), (int)(h * 0.305), (int)(w * 0.032), (int)(h * 0.045));
+        lblSinalizacaoTexto.setBounds((int)(w * 0.80), (int)(h * 0.26), 220, 30); // Ajuste conforme necessário
+
         
         repaint();
     }

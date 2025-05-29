@@ -11,11 +11,14 @@ public class ADUMenu extends JPanel {
 
     private JFrame parentFrame;
     private Image imagemDeFundo;
+    private JButton btnVoltar;
 
     public ADUMenu(JFrame frame) {
         this.parentFrame = frame;
         setLayout(null);
         setSize(frame.getSize());
+
+        adicionarComponentes();
 
         adicionarListenerDeRedimensionamento();
     }
@@ -28,26 +31,39 @@ public class ADUMenu extends JPanel {
             imagemDeFundo = icon.getImage();
         }
         g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
+        
+    }
+
+    private void adicionarComponentes() {
+        btnVoltar = new JButton("Voltar");
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, 0)));
+        btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        add(btnVoltar);
+
+        reposicionarComponentes();
+    }
+
+    private void reposicionarComponentes() {
         int w = getWidth();
         int h = getHeight();
-        if (PainelCBTCeChave.indexChave == 1) {
-            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/ChaveIcone.png")).getImage();
-            g.drawImage(imagemExtra, (int)(w * 0.9), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
-        }
-        if (Cinturao.index == 1) {
-            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/CinturaoIcone.png")).getImage();
-            g.drawImage(imagemExtra, (int)(w * 0.8), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
-            Image imagemExtra2 = new ImageIcon(getClass().getResource("/Assets/Imagens/AdesivoIcone.png")).getImage();
-            g.drawImage(imagemExtra2, (int)(w * 0.7), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
-        }
+
+        btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
+        
+        repaint();
     }
 
     private void adicionarListenerDeRedimensionamento() {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                repaint();
+                reposicionarComponentes();
             }
         });
+    }
+
+    private void trocarTela(JPanel novaTela) {
+        parentFrame.setContentPane(novaTela);
+        parentFrame.revalidate();
+        parentFrame.repaint();
     }
 }
