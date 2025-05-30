@@ -15,7 +15,10 @@ import javax.swing.text.JTextComponent;
 import DAO.UsuarioDAO;
 import Model.Usuario;
 import TelaMetro1.telaMenu.Menu;
-import Assets.Cores; // Adicione esta importação se 'Cores' estiver em outro pacote
+import Assets.Cores; 
+
+import java.security.MessageDigest; // Adicionado para SHA-256
+import java.security.NoSuchAlgorithmException; // Adicionado para SHA-256
 
 public class TelaInicial extends JPanel {
 
@@ -68,14 +71,11 @@ public class TelaInicial extends JPanel {
         add(rgIconLabel);
 
         ImageIcon cadeadoIconOriginal = new ImageIcon(getClass().getResource("/Assets/Imagens/cadeado.png"));
-        // Remova ou ajuste esta linha, pois 'alturaCadeadoIcon' não é mais usada para o ID
-        // int larguraCadeadoIcon = 24;
-        // int alturaCadeadoIcon = 30; // Esta variável não será o ID do usuário
         Image imagemCadeadoIconRedimensionada = cadeadoIconOriginal.getImage().getScaledInstance(24, 30, Image.SCALE_SMOOTH);
         cadeadoIcon = new ImageIcon(imagemCadeadoIconRedimensionada);
 
         cadeadoLabel = new JLabel(cadeadoIcon);
-        cadeadoLabel.setBounds(50, 230, 24, 30); // Use os valores fixos ou declare-os antes
+        cadeadoLabel.setBounds(50, 230, 24, 30); 
         add(cadeadoLabel);
 
         // Campo de Texto RG - Castilho
@@ -239,34 +239,44 @@ public class TelaInicial extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String rg = rgTextField.getText();
-            
                 String password;
+
                 if (passwordField.isVisible()) {
                     password = new String(passwordField.getPassword());
                 } else {
                     password = senhaTextField.getText();
                 }
 
-
+                // Verifica se os campos estão vazios ou com texto de placeholder
                 if (rg.equals("RG:") || password.equals("Senha:") || rg.isEmpty() || password.isEmpty()) {
                     new Alerta(null, "Erro de Login", "Por favor, preencha todos os campos.").setVisible(true);
                     return; 
                 }
 
+                String hashedPassword = null;
+                try {
+                    // Gera o hash SHA-256 da senha digitada
+                    hashedPassword = hashSHA256(password);
+                } catch (NoSuchAlgorithmException ex) {
+                    System.err.println("Erro ao gerar hash SHA-256: " + ex.getMessage());
+                    new Alerta(null, "Erro", "Ocorreu um erro interno. Tente novamente.").setVisible(true);
+                    return;
+                }
 
                 UsuarioDAO dao = new UsuarioDAO();
-               
+                
                 Usuario usuarioAutenticado = dao.getUsuarioByRg(rg); 
                 
-                if (usuarioAutenticado != null && usuarioAutenticado.getSenha().equals(password)) { 
+                // Compara o hash da senha digitada com o hash armazenado no banco de dados
+                if (usuarioAutenticado != null && usuarioAutenticado.getSenha().equals(hashedPassword)) { 
                     new AlertaBemSucedido(null, "Login Bem-Sucedido", "Bem-vindo, " + usuarioAutenticado.getNome() + "!").setVisible(true);
 
                     JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(entrarButton);
 
                     JFrame newFrame = new JFrame("Menu");
 
-                    System.out.println("DEBUG: Criando Menu com ID do usuário: " + usuarioAutenticado.getId() + ", Tipo: " + usuarioAutenticado.getTipoUsuario());
-                    Menu menu = new Menu(newFrame, "/Assets/Imagens/TelaInicial4Corrigida.png", usuarioAutenticado.getTipoUsuario(), usuarioAutenticado.getId());
+                    System.out.println("DEBUG: Criando Menu com ID do usuário: " + usuarioAutenticado.getId() + ", Tipo: " + usuarioAutenticado.gettipo_usuario());
+                    Menu menu = new Menu(newFrame, "/Assets/Imagens/TelaInicial4Corrigida.png", usuarioAutenticado.gettipo_usuario(), usuarioAutenticado.getId());
                     newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     newFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
                     newFrame.setUndecorated(true); 
@@ -314,6 +324,23 @@ public class TelaInicial extends JPanel {
         return Cores.AZUL_METRO; 
     }
 
+    /**
+     * Gera o hash SHA-256 de uma String.
+     * @param password A String a ser hashada.
+     * @return O hash SHA-256 da String em formato hexadecimal.
+     * @throws NoSuchAlgorithmException Se o algoritmo SHA-256 não for encontrado.
+     */
+    private static String hashSHA256(String password) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hashInBytes = md.digest(password.getBytes());
+
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hashInBytes) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
+
     class PlaceholderBorder implements Border {
         private Color focusColor;
         private String placeholder;
@@ -347,7 +374,7 @@ public class TelaInicial extends JPanel {
                 } else if (isPasswordPressed) {
                      textToDraw = senhaTextField.getText();
                 }
-            } else if (textField == rgTextField && rgTextField.getText().isEmpty() || rgTextField.getText().equals("RG:")) {
+            } else if (textField == rgTextField && (rgTextField.getText().isEmpty() || rgTextField.getText().equals("RG:"))) {
                 textToDraw = placeholder;
             }
 
@@ -360,7 +387,6 @@ public class TelaInicial extends JPanel {
 
             g2d.dispose();
         }
-
 
         @Override
         public Insets getBorderInsets(Component c) {

@@ -5,26 +5,26 @@ public class Usuario {
     private String rg;
     private String senha;
     private String nome;
-    private String tipoUsuario;
-    private int volume; // Novo campo
+    private String tipo_usuario;
+    private int volume;
 
     public Usuario(String rg, String senha) {
         this.rg = rg;
         this.senha = senha;
     }
 
-    public Usuario(String rg, String nome, String tipoUsuario) {
+    public Usuario(String rg, String nome, String tipo_usuario) {
         this.rg = rg;
         this.nome = nome;
-        this.tipoUsuario = tipoUsuario;
+        this.tipo_usuario = tipo_usuario;
     }
 
-    public Usuario(int id, String rg, String senha, String nome, String tipoUsuario, int volume) {
+    public Usuario(int id, String rg, String senha, String nome, String tipo_usuario, int volume) {
         this.id = id;
         this.rg = rg;
         this.senha = senha;
         this.nome = nome;
-        this.tipoUsuario = tipoUsuario;
+        this.tipo_usuario = tipo_usuario;
         this.volume = volume;
     }
 
@@ -44,8 +44,8 @@ public class Usuario {
         return nome;
     }
 
-    public String getTipoUsuario() {
-        return tipoUsuario;
+    public String gettipo_usuario() {
+        return tipo_usuario;
     }
 
     public int getVolume() {
@@ -68,8 +68,8 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
+    public void settipo_usuario(String tipo_usuario) {
+        this.tipo_usuario = tipo_usuario;
     }
 
     public void setVolume(int volume) {
