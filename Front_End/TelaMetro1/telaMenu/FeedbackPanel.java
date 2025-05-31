@@ -7,15 +7,15 @@ import javax.swing.border.AbstractBorder;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
+import java.text.SimpleDateFormat;
 
 import javax.imageio.ImageIO;
 
 import Assets.Cores;
-import Controller.FeedbackUsuarioController;
-import Model.FeedbackUsuario;
+import Controller.RespostaUsuarioController;
+import Model.RespostaUsuario;
+import Assets.*;
 
 public class FeedbackPanel extends JPanel {
 
@@ -30,6 +30,7 @@ public class FeedbackPanel extends JPanel {
     private int idUsuarioLogado;
 
     private static final int NUM_LINHAS_VISIVEIS_MINIMO = 22;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     public FeedbackPanel(String imagemPath, Runnable voltarAcao, int idUsuario) {
         this.voltarAcao = voltarAcao;
@@ -45,7 +46,7 @@ public class FeedbackPanel extends JPanel {
 
         redimensionarLogo(logoWidth, logoHeight);
 
-        carregarFeedbacksDoUsuario(idUsuarioLogado);
+        carregarDadosRespostaUsuario(idUsuarioLogado);
     }
 
     private void carregarImagens(String imagemPath) {
@@ -53,11 +54,15 @@ public class FeedbackPanel extends JPanel {
             InputStream isFundo = getClass().getResourceAsStream(imagemPath);
             if (isFundo != null) {
                 imagemDeFundo = ImageIO.read(isFundo);
+            } else {
+                System.err.println("Imagem de fundo não encontrada: " + imagemPath);
             }
 
             InputStream isLogo = getClass().getResourceAsStream("/Assets/Imagens/LogoCorrigida4.png");
             if (isLogo != null) {
                 logoOriginal = ImageIO.read(isLogo);
+            } else {
+                System.err.println("Logo não encontrada: /Assets/Imagens/LogoCorrigida4.png");
             }
 
         } catch (IOException e) {
@@ -87,8 +92,8 @@ public class FeedbackPanel extends JPanel {
         navBar.add(titulo, BorderLayout.CENTER);
 
         JPanel painelDireitoVazio = new JPanel();
-        painelDireitoVazio.setOpaque(false); 
-        painelDireitoVazio.setPreferredSize(new Dimension(btnVoltar.getPreferredSize().width + 30, 1)); // Largura aproximada do botão voltar + um pouco de espaço
+        painelDireitoVazio.setOpaque(false);
+        painelDireitoVazio.setPreferredSize(new Dimension(btnVoltar.getPreferredSize().width + 30, 1));
         navBar.add(painelDireitoVazio, BorderLayout.EAST);
 
         return navBar;
@@ -99,8 +104,7 @@ public class FeedbackPanel extends JPanel {
         painel.setOpaque(false);
         painel.setBorder(BorderFactory.createEmptyBorder(40, 80, 40, 80));
 
-
-        modeloTabela = new DefaultTableModel(new Object[]{"Data", "Pontuação", "Observações"}, 0) {
+        modeloTabela = new DefaultTableModel(new Object[]{"ID Resposta", "Data", "Pontuação Atual", "ID Feedback"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -111,8 +115,8 @@ public class FeedbackPanel extends JPanel {
         tabelaFeedbacks.setFont(new Font("Arial", Font.PLAIN, 16));
         tabelaFeedbacks.setRowHeight(25);
         tabelaFeedbacks.setFillsViewportHeight(true);
+        tabelaFeedbacks.getTableHeader().setReorderingAllowed(false);
 
-        // Renderizador para o CABEÇALHO da tabela
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
@@ -129,7 +133,6 @@ public class FeedbackPanel extends JPanel {
             }
         };
 
-        
         for (int i = 0; i < tabelaFeedbacks.getColumnModel().getColumnCount(); i++) {
             tabelaFeedbacks.getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
         }
@@ -138,7 +141,7 @@ public class FeedbackPanel extends JPanel {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                
+
                 if (!isSelected) {
                     c.setBackground(Cores.AZUL_METRO);
                 } else {
@@ -146,13 +149,11 @@ public class FeedbackPanel extends JPanel {
                 }
                 c.setForeground(Color.WHITE);
                 ((JLabel) c).setHorizontalAlignment(SwingConstants.CENTER);
-
                 ((JComponent) c).setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-                
+
                 if (c instanceof JComponent) {
                     ((JComponent) c).setOpaque(true);
                 }
-
                 return c;
             }
         });
@@ -164,44 +165,47 @@ public class FeedbackPanel extends JPanel {
         JScrollPane scroll = new JScrollPane(tabelaFeedbacks);
         scroll.getViewport().setOpaque(false);
         scroll.setOpaque(false);
-        
+
         int radius = 20;
         Color borderColor = Color.WHITE;
         scroll.setBorder(new RoundBorder(radius, borderColor));
-        
-        scroll.setOpaque(false);
-        scroll.getViewport().setOpaque(false);
 
         painel.add(scroll, BorderLayout.CENTER);
 
         return painel;
     }
 
-    void carregarFeedbacksDoUsuario(int idUsuario) {
-        System.out.println("Carregando feedbacks para o ID de usuário: " + idUsuarioLogado);
+    void carregarDadosRespostaUsuario(int idUsuario) {
+        System.out.println("Carregando registros de RespostaUsuario para o ID: " + idUsuarioLogado);
 
-        FeedbackUsuarioController controller = new FeedbackUsuarioController();
-        List<FeedbackUsuario> feedbacks = controller.obterFeedbacksDoUsuario(idUsuario);
+        RespostaUsuarioController controller = new RespostaUsuarioController();
+        List<RespostaUsuario> listaRespostas = controller.obterFeedbacksDoUsuario(idUsuario);
 
         modeloTabela.setRowCount(0);
 
-        if (!feedbacks.isEmpty()) {
-            for (FeedbackUsuario f : feedbacks) {
+        if (!listaRespostas.isEmpty()) {
+            for (RespostaUsuario resposta : listaRespostas) {
                 modeloTabela.addRow(new Object[]{
-                    f.getData(),
-                    f.getPontuacao(),
-                    f.getObservacoes()
+                    resposta.getIdResposta(),
+                    dateFormat.format(resposta.getData()),
+                    resposta.getPontuacaoAtual(),
+                    resposta.getIdFeedback()
                 });
-                System.out.println("Adicionado feedback à tabela: " + f.toString());
-           }
+                System.out.println("Adicionado registro à tabela: ID Resposta: " + resposta.getIdResposta() +
+                                   ", Data: " + dateFormat.format(resposta.getData()) +
+                                   ", Pontuação: " + resposta.getPontuacaoAtual() +
+                                   ", ID Feedback: " + resposta.getIdFeedback());
+            }
+        } else {
+            System.out.println("Nenhum registro de RespostaUsuario encontrado para o usuário ID: " + idUsuario);
         }
 
         int linhasAtuais = modeloTabela.getRowCount();
         int linhasParaAdicionar = NUM_LINHAS_VISIVEIS_MINIMO - linhasAtuais;
-        
+
         if (linhasParaAdicionar > 0) {
             for (int i = 0; i < linhasParaAdicionar; i++) {
-                modeloTabela.addRow(new Object[]{"", "", ""});
+                modeloTabela.addRow(new Object[]{"", "", "", ""});
             }
         }
     }

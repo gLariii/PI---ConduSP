@@ -196,7 +196,7 @@ public class Menu extends JLayeredPane {
 
         btnFeedbacks.addActionListener(e -> {
             if (feedbackPanel != null) {
-                ((FeedbackPanel)feedbackPanel).carregarFeedbacksDoUsuario(idUsuarioLogado); 
+                ((FeedbackPanel)feedbackPanel).carregarDadosRespostaUsuario(idUsuarioLogado);
             }
             showPanel("feedback");
         });
