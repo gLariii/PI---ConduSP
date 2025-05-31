@@ -195,11 +195,12 @@ public class Menu extends JLayeredPane {
         });
 
         btnFeedbacks.addActionListener(e -> {
-            if (feedbackPanel != null) {
-                ((FeedbackPanel)feedbackPanel).carregarDadosRespostaUsuario(idUsuarioLogado);
+            if (feedbackPanel instanceof FeedbackPanel) {
+                ((FeedbackPanel)feedbackPanel).carregarDadosFeedbackGeral(idUsuarioLogado); 
             }
             showPanel("feedback");
         });
+
 
         painelBotoes.add(btnMaquinario);
         painelBotoes.add(btnFeedbacks);

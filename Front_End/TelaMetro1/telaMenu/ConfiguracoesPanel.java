@@ -425,7 +425,7 @@ public class ConfiguracoesPanel extends JPanel {
 
         @Override
         public void paintLabels(Graphics g) {
-            Graphics2D g2d = (Graphics2D) g; // Corrigido de Graphics2d para Graphics2D
+            Graphics2D g2d = (Graphics2D) g;
             g2d.setColor(Color.WHITE);
             g2d.setFont(new Font("Arial", Font.PLAIN, 12));
             super.paintLabels(g);

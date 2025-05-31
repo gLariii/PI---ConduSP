@@ -3,67 +3,161 @@ package Model;
 import java.sql.Date;
 
 public class FeedbackGeral {
-    private int id;
+    private int idUsuario;
+    private String nomeUsuario;
     private String rg;
-    private String nome;
-    private int pontuacao;
+    private String tipoUsuario;
+    private int idResposta;
+    private int pontuacaoAtual;
+    private Date dataResposta;
+    private int idFeedback;
+    private int idPasso;
     private String observacoes;
-    private Date data;
+    private String tipoFeedbackEsperado;
+    private Date dataFeedbackDefinido;
+    private int idFase;
+    private String nomeFase;
+    private String descricaoFase;
 
-    public FeedbackGeral(int id, String rg, String nome, int pontuacao, String observacoes, Date data) {
-        this.id = id;
+    public FeedbackGeral(int idUsuario, String nomeUsuario, String rg, String tipoUsuario,
+                               int idResposta, int pontuacaoAtual, Date dataResposta,
+                               int idFeedback, int idPasso, String observacoes,
+                               String tipoFeedbackEsperado, Date dataFeedbackDefinido,
+                               int idFase, String nomeFase, String descricaoFase) {
+        this.idUsuario = idUsuario;
+        this.nomeUsuario = nomeUsuario;
         this.rg = rg;
-        this.nome = nome;
-        this.pontuacao = pontuacao;
+        this.tipoUsuario = tipoUsuario;
+        this.idResposta = idResposta;
+        this.pontuacaoAtual = pontuacaoAtual;
+        this.dataResposta = dataResposta;
+        this.idFeedback = idFeedback;
+        this.idPasso = idPasso;
         this.observacoes = observacoes;
-        this.data = data;
+        this.tipoFeedbackEsperado = tipoFeedbackEsperado;
+        this.dataFeedbackDefinido = dataFeedbackDefinido;
+        this.idFase = idFase;
+        this.nomeFase = nomeFase;
+        this.descricaoFase = descricaoFase;
     }
 
-    public int getId() {
-        return id;
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public String getNomeUsuario() {
+        return nomeUsuario;
     }
 
     public String getRg() {
         return rg;
     }
 
-    public String getNome() {
-        return nome;
+    public String getTipoUsuario() {
+        return tipoUsuario;
     }
 
-    public int getPontuacao() {
-        return pontuacao;
+    public int getIdResposta() {
+        return idResposta;
+    }
+
+    public int getPontuacaoAtual() {
+        return pontuacaoAtual;
+    }
+
+    public Date getDataResposta() {
+        return dataResposta;
+    }
+
+    public int getIdFeedback() {
+        return idFeedback;
+    }
+
+    public int getIdPasso() {
+        return idPasso;
     }
 
     public String getObservacoes() {
         return observacoes;
     }
 
-    public Date getData() {
-        return data;
+    public String getTipoFeedbackEsperado() {
+        return tipoFeedbackEsperado;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Date getDataFeedbackDefinido() {
+        return dataFeedbackDefinido;
+    }
+
+    public int getIdFase() {
+        return idFase;
+    }
+
+    public String getNomeFase() {
+        return nomeFase;
+    }
+
+    public String getDescricaoFase() {
+        return descricaoFase;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 
     public void setRg(String rg) {
         this.rg = rg;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 
-    public void setPontuacao(int pontuacao) {
-        this.pontuacao = pontuacao;
+    public void setIdResposta(int idResposta) {
+        this.idResposta = idResposta;
+    }
+
+    public void setPontuacaoAtual(int pontuacaoAtual) {
+        this.pontuacaoAtual = pontuacaoAtual;
+    }
+
+    public void setDataResposta(Date dataResposta) {
+        this.dataResposta = dataResposta;
+    }
+
+    public void setIdFeedback(int idFeedback) {
+        this.idFeedback = idFeedback;
+    }
+
+    public void setIdPasso(int idPasso) {
+        this.idPasso = idPasso;
     }
 
     public void setObservacoes(String observacoes) {
         this.observacoes = observacoes;
     }
 
-    public void setData(Date data) {
-        this.data = data;
+    public void setTipoFeedbackEsperado(String tipoFeedbackEsperado) {
+        this.tipoFeedbackEsperado = tipoFeedbackEsperado;
+    }
+
+    public void setDataFeedbackDefinido(Date dataFeedbackDefinido) {
+        this.dataFeedbackDefinido = dataFeedbackDefinido;
+    }
+
+    public void setIdFase(int idFase) {
+        this.idFase = idFase;
+    }
+
+    public void setNomeFase(String nomeFase) {
+        this.nomeFase = nomeFase;
+    }
+
+    public void setDescricaoFase(String descricaoFase) {
+        this.descricaoFase = descricaoFase;
     }
 }

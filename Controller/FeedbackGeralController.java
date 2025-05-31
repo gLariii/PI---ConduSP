@@ -10,4 +10,10 @@ public class FeedbackGeralController {
         FeedbackGeralDAO dao = new FeedbackGeralDAO();
         return dao.listarTodos();
     }
+
+
+    public List<FeedbackGeral> listarFeedbacksPorUsuario(int idUsuario) {
+        FeedbackGeralDAO dao = new FeedbackGeralDAO();
+        return dao.listarPorIdUsuario(idUsuario);
+    }
 }

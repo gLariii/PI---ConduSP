@@ -17,8 +17,8 @@ import Model.Usuario;
 import TelaMetro1.telaMenu.Menu;
 import Assets.Cores; 
 
-import java.security.MessageDigest; // Adicionado para SHA-256
-import java.security.NoSuchAlgorithmException; // Adicionado para SHA-256
+import java.security.MessageDigest; 
+import java.security.NoSuchAlgorithmException; 
 
 public class TelaInicial extends JPanel {
 
@@ -28,7 +28,7 @@ public class TelaInicial extends JPanel {
         initComponents();
         passwordField.setText("Senha:");
         passwordField.setForeground(Color.GRAY);
-        passwordField.setEchoChar((char) 0); // mostra o texto normal
+        passwordField.setEchoChar((char) 0);
     }
 
     private JTextField rgTextField;
@@ -247,7 +247,6 @@ public class TelaInicial extends JPanel {
                     password = senhaTextField.getText();
                 }
 
-                // Verifica se os campos estão vazios ou com texto de placeholder
                 if (rg.equals("RG:") || password.equals("Senha:") || rg.isEmpty() || password.isEmpty()) {
                     new Alerta(null, "Erro de Login", "Por favor, preencha todos os campos.").setVisible(true);
                     return; 
@@ -255,7 +254,7 @@ public class TelaInicial extends JPanel {
 
                 String hashedPassword = null;
                 try {
-                    // Gera o hash SHA-256 da senha digitada
+
                     hashedPassword = hashSHA256(password);
                 } catch (NoSuchAlgorithmException ex) {
                     System.err.println("Erro ao gerar hash SHA-256: " + ex.getMessage());
@@ -267,7 +266,6 @@ public class TelaInicial extends JPanel {
                 
                 Usuario usuarioAutenticado = dao.getUsuarioByRg(rg); 
                 
-                // Compara o hash da senha digitada com o hash armazenado no banco de dados
                 if (usuarioAutenticado != null && usuarioAutenticado.getSenha().equals(hashedPassword)) { 
                     new AlertaBemSucedido(null, "Login Bem-Sucedido", "Bem-vindo, " + usuarioAutenticado.getNome() + "!").setVisible(true);
 

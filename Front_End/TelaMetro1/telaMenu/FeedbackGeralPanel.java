@@ -88,8 +88,10 @@ public class FeedbackGeralPanel extends JPanel {
         painel.setOpaque(false);
         painel.setBorder(BorderFactory.createEmptyBorder(40, 80, 40, 80));
 
+
         modeloTabela = new DefaultTableModel(new Object[]{
-            "RG", "Nome", "Data", "Pontuação", "Observações"
+            "Nome Usuário", "RG", "Pontuação Atual",
+            "Data Resposta", "Observações", "Nome Fase"
         }, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -112,6 +114,9 @@ public class FeedbackGeralPanel extends JPanel {
         for (int i = 0; i < tabelaFeedbacks.getColumnCount(); i++) {
             tabelaFeedbacks.getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
         }
+
+
+        tabelaFeedbacks.getColumnModel().getColumn(4).setPreferredWidth(300); 
 
         tabelaFeedbacks.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
@@ -142,27 +147,28 @@ public class FeedbackGeralPanel extends JPanel {
         modeloTabela.setRowCount(0);
 
         for (FeedbackGeral f : feedbacks) {
+
             modeloTabela.addRow(new Object[]{
+                f.getNomeUsuario(),
                 f.getRg(),
-                f.getNome(),
-                f.getData(),
-                f.getPontuacao(),
-                f.getObservacoes()
+                f.getPontuacaoAtual(),
+                f.getDataResposta(),
+                f.getObservacoes(),
+                f.getNomeFase()
             });
         }
 
-        // Preencher linhas até 22 visíveis
         while (modeloTabela.getRowCount() < 22) {
-            modeloTabela.addRow(new Object[]{"", "", "", "", ""});
+            modeloTabela.addRow(new Object[]{"", "", "", "", "", ""});
         }
     }
 
     public void redimensionarLogo(int width, int height) {
         if (logoOriginal != null) {
             logoRedimensionada = logoOriginal.getScaledInstance(
-                    Math.max(20, Math.min(width, 150)),
-                    Math.max(20, Math.min(height, 150)),
-                    Image.SCALE_SMOOTH
+                                    Math.max(20, Math.min(width, 150)),
+                                    Math.max(20, Math.min(height, 150)),
+                                    Image.SCALE_SMOOTH
             );
             this.logoWidth = width;
             this.logoHeight = height;

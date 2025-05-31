@@ -22,6 +22,7 @@ import Model.Usuario;
 import TelaMetro1.Entrada.Alerta;
 import TelaMetro1.Entrada.AlertaAtualizado;
 import TelaMetro1.Entrada.AlertaBemSucedido;
+import TelaMetro1.Entrada.AlertaEncontrado;
 
 public class BuscarSupervisorPanel extends JPanel {
     private Image ImagemDeFundo;
@@ -37,7 +38,7 @@ public class BuscarSupervisorPanel extends JPanel {
 
     private JButton btnBuscar;
     private JButton btnAtualizarTipo;
-    private JButton btnAtualizarTipoOperario; // New button for Operário
+    private JButton btnAtualizarTipoOperario; 
 
     private Usuario usuarioEncontrado;
 
@@ -153,9 +154,9 @@ public class BuscarSupervisorPanel extends JPanel {
         btnAtualizarTipo.setEnabled(false);
         formPanel.add(btnAtualizarTipo, formGbc);
 
-        // New button for Operário
-        formGbc.gridy = 7; // Next row
-        formGbc.insets = new Insets(10, 0, 0, 0); // Smaller top inset for spacing
+    
+        formGbc.gridy = 7; 
+        formGbc.insets = new Insets(10, 0, 0, 0); 
         btnAtualizarTipoOperario = botoes.criarBotaoPadrao("Atualizar Tipo para Operário", null, 0, 0, SwingConstants.CENTER, new Dimension(300, 50), 20);
         btnAtualizarTipoOperario.addActionListener(new ActionListener() {
             @Override
@@ -171,7 +172,7 @@ public class BuscarSupervisorPanel extends JPanel {
 
         addHoverEffect(btnBuscar);
         addHoverEffect(btnAtualizarTipo);
-        addHoverEffect(btnAtualizarTipoOperario); // Add hover effect to the new button
+        addHoverEffect(btnAtualizarTipoOperario); 
     }
 
     private JLabel criarLabel(String texto) {
@@ -195,7 +196,7 @@ public class BuscarSupervisorPanel extends JPanel {
         campo.setFont(new Font("Arial", Font.PLAIN, 18));
         campo.setBackground(new Color(255, 255, 255, 200));
         campo.setForeground(Color.BLACK);
-        // Não defina a borda aqui, será definida pela PlaceholderBorder
+
 
         try (InputStream is = getClass().getResourceAsStream(iconPath)) {
             if (is != null) {
@@ -234,10 +235,10 @@ public class BuscarSupervisorPanel extends JPanel {
             txtNomeEncontrado.setText(usuarioEncontrado.getNome());
             txtRGEncontrado.setText(usuarioEncontrado.getRg());
             txttipo_usuario.setText(usuarioEncontrado.gettipo_usuario());
-            txttipo_usuario.setEditable(true); // Allow editing of type, if needed, though buttons will change it
+            txttipo_usuario.setEditable(true);
             btnAtualizarTipo.setEnabled(!usuarioEncontrado.gettipo_usuario().equalsIgnoreCase("supervisor"));
             btnAtualizarTipoOperario.setEnabled(!usuarioEncontrado.gettipo_usuario().equalsIgnoreCase("operario"));
-            new AlertaBemSucedido(null, "Usuário Encontrado", "Dados do usuário carregados com sucesso.").setVisible(true);
+            new AlertaEncontrado(null, "Usuário Encontrado", "Dados do usuário carregados com sucesso.").setVisible(true);
         } else {
             new Alerta(null, "Usuário Não Encontrado", "Nenhum usuário encontrado com o RG informado.").setVisible(true);
             limparCamposResultados();
@@ -263,8 +264,8 @@ public class BuscarSupervisorPanel extends JPanel {
         if (sucesso) {
             usuarioEncontrado.settipo_usuario(novoTipo);
             txttipo_usuario.setText(novoTipo);
-            btnAtualizarTipo.setEnabled(false); // Disable after update
-            btnAtualizarTipoOperario.setEnabled(true); // Enable other option
+            btnAtualizarTipo.setEnabled(false);
+            btnAtualizarTipoOperario.setEnabled(true);
             new AlertaAtualizado(null, "Atualização Concluída", "Tipo de usuário atualizado para 'supervisor' com sucesso!").setVisible(true);
         } else {
             new AlertaAtualizado(null, "Erro na Atualização", "Não foi possível atualizar o tipo de usuário.").setVisible(true);
@@ -290,8 +291,7 @@ public class BuscarSupervisorPanel extends JPanel {
         if (sucesso) {
             usuarioEncontrado.settipo_usuario(novoTipo);
             txttipo_usuario.setText(novoTipo);
-            btnAtualizarTipoOperario.setEnabled(false); // Disable after update
-            btnAtualizarTipo.setEnabled(true); // Enable other option
+            btnAtualizarTipo.setEnabled(true); 
             new AlertaAtualizado(null, "Atualização Concluída", "Tipo de usuário atualizado para 'operario' com sucesso!").setVisible(true);
         } else {
             new Alerta(null, "Erro na Atualização", "Não foi possível atualizar o tipo de usuário.").setVisible(true);
@@ -304,7 +304,7 @@ public class BuscarSupervisorPanel extends JPanel {
         txttipo_usuario.setText("");
         txttipo_usuario.setEditable(false);
         btnAtualizarTipo.setEnabled(false);
-        btnAtualizarTipoOperario.setEnabled(false); // Disable new button as well
+        btnAtualizarTipoOperario.setEnabled(false);
         usuarioEncontrado = null;
     }
 

@@ -13,9 +13,14 @@ import java.text.SimpleDateFormat;
 import javax.imageio.ImageIO;
 
 import Assets.Cores;
-import Controller.RespostaUsuarioController;
+import Controller.RespostaUsuarioController; 
 import Model.RespostaUsuario;
+
+
+import Controller.FeedbackGeralController; 
+import Model.FeedbackGeral; 
 import Assets.*;
+
 
 public class FeedbackPanel extends JPanel {
 
@@ -46,7 +51,7 @@ public class FeedbackPanel extends JPanel {
 
         redimensionarLogo(logoWidth, logoHeight);
 
-        carregarDadosRespostaUsuario(idUsuarioLogado);
+        carregarDadosFeedbackGeral(idUsuarioLogado); 
     }
 
     private void carregarImagens(String imagemPath) {
@@ -104,7 +109,7 @@ public class FeedbackPanel extends JPanel {
         painel.setOpaque(false);
         painel.setBorder(BorderFactory.createEmptyBorder(40, 80, 40, 80));
 
-        modeloTabela = new DefaultTableModel(new Object[]{"ID Resposta", "Data", "Pontuação Atual", "ID Feedback"}, 0) {
+        modeloTabela = new DefaultTableModel(new Object[]{"Data da Resposta", "Pontuação Atual", "Nome da Fase", "Observações"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -175,29 +180,29 @@ public class FeedbackPanel extends JPanel {
         return painel;
     }
 
-    void carregarDadosRespostaUsuario(int idUsuario) {
-        System.out.println("Carregando registros de RespostaUsuario para o ID: " + idUsuarioLogado);
+    void carregarDadosFeedbackGeral(int idUsuario) {
+        System.out.println("Carregando registros de Feedback Geral para o ID: " + idUsuario);
 
-        RespostaUsuarioController controller = new RespostaUsuarioController();
-        List<RespostaUsuario> listaRespostas = controller.obterFeedbacksDoUsuario(idUsuario);
+        FeedbackGeralController controller = new FeedbackGeralController();
+        List<FeedbackGeral> listaFeedbacks = controller.listarFeedbacksPorUsuario(idUsuario);
 
         modeloTabela.setRowCount(0);
 
-        if (!listaRespostas.isEmpty()) {
-            for (RespostaUsuario resposta : listaRespostas) {
+        if (!listaFeedbacks.isEmpty()) {
+            for (FeedbackGeral feedback : listaFeedbacks) {
                 modeloTabela.addRow(new Object[]{
-                    resposta.getIdResposta(),
-                    dateFormat.format(resposta.getData()),
-                    resposta.getPontuacaoAtual(),
-                    resposta.getIdFeedback()
+                    dateFormat.format(feedback.getDataResposta()),
+                    feedback.getPontuacaoAtual(),
+                    feedback.getNomeFase(),
+                    feedback.getObservacoes()
                 });
-                System.out.println("Adicionado registro à tabela: ID Resposta: " + resposta.getIdResposta() +
-                                   ", Data: " + dateFormat.format(resposta.getData()) +
-                                   ", Pontuação: " + resposta.getPontuacaoAtual() +
-                                   ", ID Feedback: " + resposta.getIdFeedback());
+                System.out.println("Adicionado registro à tabela: Data: " + dateFormat.format(feedback.getDataResposta()) +
+                                   ", Pontuação: " + feedback.getPontuacaoAtual() +
+                                   ", Nome Fase: " + feedback.getNomeFase() +
+                                   ", Observações: " + feedback.getObservacoes());
             }
         } else {
-            System.out.println("Nenhum registro de RespostaUsuario encontrado para o usuário ID: " + idUsuario);
+            System.out.println("Nenhum registro de Feedback Geral encontrado para o usuário ID: " + idUsuario);
         }
 
         int linhasAtuais = modeloTabela.getRowCount();
