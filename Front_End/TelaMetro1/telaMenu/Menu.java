@@ -2,6 +2,8 @@ package TelaMetro1.telaMenu;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.ImageObserver;
+
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,9 +12,10 @@ import CabineDeControleTela.CabineDeControleTela;
 
 public class Menu extends JLayeredPane {
     private Image ImagemDeFundo, logoOriginal, logoRedimensionada;
-    private JButton btnMaquinario, btnFeedbacks, btnSupervisor, btnConfiguracoes;
-    private int logoWidth = 40;
-    private int logoHeight = 40;
+    private int logoWidth = 40;  
+    private int logoHeight = 40; 
+
+    private JButton btnMaquinario, btnFeedbacks, btnSupervisor, btnConfiguracoes; 
 
     private JPanel mainContentPanel;
     private ConfiguracoesPanel configuracoesPanel;
@@ -33,8 +36,7 @@ public class Menu extends JLayeredPane {
         this.idUsuarioLogado = idUsuario;
 
         carregarImagens(imagemPath);
-
-        setLayout(null);
+        setLayout(null); 
 
         mainContentPanel = new JPanel(new BorderLayout()) {
             @Override
@@ -44,8 +46,8 @@ public class Menu extends JLayeredPane {
                     g.drawImage(ImagemDeFundo, 0, 0, getWidth(), getHeight(), this);
                 }
                 if (logoRedimensionada != null) {
-                    int x = getWidth() - logoWidth - 15;
-                    int y = getHeight() - logoHeight - 15;
+                    int x = getWidth() - Menu.this.logoWidth - 15; 
+                    int y = getHeight() - Menu.this.logoHeight - 15; 
                     g.drawImage(logoRedimensionada, x, y, this);
                     Graphics2D g2d = (Graphics2D) g.create();
                     g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -61,62 +63,69 @@ public class Menu extends JLayeredPane {
                 }
             }
         };
-        mainContentPanel.setOpaque(false);
+        mainContentPanel.setOpaque(false); 
         mainContentPanel.add(criarNavBar(), BorderLayout.NORTH);
         mainContentPanel.add(criarPainelCentral(), BorderLayout.CENTER);
 
         add(mainContentPanel, JLayeredPane.DEFAULT_LAYER);
 
-        redimensionarLogo(logoWidth, logoHeight);
+        redimensionarLogo(40, 40); 
 
         sidebarContainerPanel = new JPanel(new BorderLayout());
         sidebarContainerPanel.setOpaque(true);
         sidebarContainerPanel.setBackground(Cores.AZUL_METRO);
 
         configuracoesPanel = new ConfiguracoesPanel(() -> {
-            toggleConfigPanel(false);
+            toggleConfigPanel(false); 
         });
         configuracoesPanel.setOnSobreAction(() -> {
-            showPanel("sobre");
+            showPanel("sobre"); 
         });
+        
         sidebarContainerPanel.add(configuracoesPanel, BorderLayout.CENTER);
 
         add(sidebarContainerPanel, JLayeredPane.PALETTE_LAYER);
 
         supervisorPanel = new SupervisorPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
-            showPanel("main");
+            showPanel("main"); 
         });
-        add(supervisorPanel, JLayeredPane.MODAL_LAYER);
+        add(supervisorPanel, JLayeredPane.MODAL_LAYER); 
 
         System.out.println("DEBUG: ID do usuário autenticado passado para FeedbackPanel: " + idUsuarioLogado);
         feedbackPanel = new FeedbackPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
-            showPanel("main");
+            showPanel("main"); 
         }, idUsuarioLogado);
         add(feedbackPanel, JLayeredPane.MODAL_LAYER);
 
         sobrePanel = new SobrePanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
-            showPanel("config");
+            showPanel("config"); 
         });
         add(sobrePanel, JLayeredPane.MODAL_LAYER);
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
+                System.out.println("DEBUG: Menu resized to: " + getWidth() + "x" + getHeight());
                 mainContentPanel.setBounds(0, 0, getWidth(), getHeight());
+                System.out.println("DEBUG: mainContentPanel setBounds to: " + mainContentPanel.getBounds());
 
                 if (sidebarContainerPanel.isVisible()) {
                     sidebarContainerPanel.setBounds(0, 0, SIDEBAR_WIDTH, getHeight());
                 } else {
-                    sidebarContainerPanel.setBounds(0, 0, 0, getHeight());
+                    sidebarContainerPanel.setBounds(-SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight());
                 }
+                
                 supervisorPanel.setBounds(0, 0, getWidth(), getHeight());
                 feedbackPanel.setBounds(0, 0, getWidth(), getHeight());
                 sobrePanel.setBounds(0, 0, getWidth(), getHeight());
+
+                revalidate();
+                repaint();
             }
         });
 
-        toggleConfigPanel(false);
-        showPanel("main");
+        showPanel("main");       
+        System.out.println("DEBUG: Chamada inicial showPanel(\"main\") executada.");
     }
 
     private void carregarImagens(String imagemPath) {
@@ -140,8 +149,8 @@ public class Menu extends JLayeredPane {
             height = Math.max(20, Math.min(height, 100));
 
             logoRedimensionada = logoOriginal.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            this.logoWidth = width;
-            this.logoHeight = height;
+            this.logoWidth = width; 
+            this.logoHeight = height; 
             if (mainContentPanel != null) {
                 mainContentPanel.repaint();
             }
@@ -151,18 +160,18 @@ public class Menu extends JLayeredPane {
     private JPanel criarNavBar() {
         JPanel navBar = new JPanel(new BorderLayout());
         navBar.setBackground(Cores.AZUL_METRO);
-        navBar.setPreferredSize(new Dimension(getWidth(), 60));
+        navBar.setPreferredSize(new Dimension(this.getWidth(), 60)); 
 
         JLabel titulo = new JLabel("Sistema de Gerenciamento");
         titulo.setFont(new Font("Arial", Font.BOLD, 32));
         titulo.setForeground(Color.WHITE);
-        titulo.setBorder(BorderFactory.createEmptyBorder(0, 350, 0, 0));
+        titulo.setBorder(BorderFactory.createEmptyBorder(0, 350, 0, 0)); 
 
         navBar.add(titulo, BorderLayout.CENTER);
 
         JButton btnConfiguracoes = botoes.criarBotaoConfiguracoes();
         btnConfiguracoes.addActionListener(e -> {
-            toggleConfigPanel(true);
+            toggleConfigPanel(true); 
         });
 
         JPanel painelConfig = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
@@ -190,8 +199,7 @@ public class Menu extends JLayeredPane {
         });
 
         btnSupervisor.addActionListener(e -> {
-            supervisorPanel.setVisible(true); 
-            showPanel("supervisor");
+            showPanel("supervisor"); 
         });
 
         btnFeedbacks.addActionListener(e -> {
@@ -200,7 +208,6 @@ public class Menu extends JLayeredPane {
             }
             showPanel("feedback");
         });
-
 
         painelBotoes.add(btnMaquinario);
         painelBotoes.add(btnFeedbacks);
@@ -230,6 +237,7 @@ public class Menu extends JLayeredPane {
     }
 
     private void showPanel(String panelName) {
+        System.out.println("DEBUG: showPanel chamado: " + panelName);
         mainContentPanel.setVisible(false);
         sidebarContainerPanel.setVisible(false);
         supervisorPanel.setVisible(false);
@@ -239,57 +247,75 @@ public class Menu extends JLayeredPane {
         switch (panelName) {
             case "main":
                 mainContentPanel.setVisible(true);
+                System.out.println("DEBUG: mainContentPanel agora visível: " + mainContentPanel.isVisible());
                 break;
             case "config":
-                mainContentPanel.setVisible(true);
+                // REMOVIDO: mainContentPanel.setVisible(false); 
+                // Permite que o fundo do metrô (desenhado pelo mainContentPanel) seja visível por baixo
+                mainContentPanel.setVisible(true); // <--- MUDANÇA PRINCIPAL AQUI
                 sidebarContainerPanel.setVisible(true);
+                System.out.println("DEBUG: sidebarContainerPanel agora visível: " + sidebarContainerPanel.isVisible());
                 break;
             case "supervisor":
                 supervisorPanel.setVisible(true);
+                System.out.println("DEBUG: supervisorPanel agora visível: " + supervisorPanel.isVisible());
                 break;
             case "feedback":
                 feedbackPanel.setVisible(true);
+                System.out.println("DEBUG: feedbackPanel agora visível: " + feedbackPanel.isVisible());
                 break;
             case "sobre":
                 sobrePanel.setVisible(true);
+                System.out.println("DEBUG: sobrePanel agora visível: " + sobrePanel.isVisible());
                 break;
         }
-        revalidate();
-        repaint();
+        revalidate(); 
+        repaint();    
+        System.out.println("DEBUG: Revalidate e Repaint chamados para JLayeredPane.");
     }
 
     private void toggleConfigPanel(boolean show) {
+        System.out.println("DEBUG: toggleConfigPanel chamado com show=" + show);
         if (show) {
-            showPanel("config");
-            animatePanel(sidebarContainerPanel, -SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight(), null);
+            showPanel("config"); 
+            
+            System.out.println("DEBUG: ConfiguracoesPanel visível? " + configuracoesPanel.isVisible());
+            System.out.println("DEBUG: ConfiguracoesPanel tamanho preferido: " + configuracoesPanel.getPreferredSize());
+            System.out.println("DEBUG: ConfiguracoesPanel está com componentes? " + (configuracoesPanel.getComponentCount() > 0));
+
+            configuracoesPanel.revalidate(); 
+            configuracoesPanel.repaint();    
+            
+            animatePanel(sidebarContainerPanel, -SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight(), null); 
+
         } else {
             animatePanel(sidebarContainerPanel, 0, -SIDEBAR_WIDTH, SIDEBAR_WIDTH, getHeight(), () -> {
                 sidebarContainerPanel.setVisible(false);
-                showPanel("main");
+                showPanel("main"); 
             });
         }
     }
 
     private void animatePanel(JPanel panel, int startX, int endX, int width, int height, Runnable onComplete) {
-        final int frames = 20;
-        final int delay = 10;
-        Timer timer = new Timer(delay, new AbstractAction() {
+        final int frames = 20; 
+        final int int_delay = 10;  
+        Timer timer = new Timer(int_delay, new AbstractAction() {
             int currentX = startX;
             int step = (endX - startX) / frames;
 
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 currentX += step;
-                panel.setBounds(currentX, 0, width, height);
                 if ((step > 0 && currentX >= endX) || (step < 0 && currentX <= endX)) {
-                    panel.setBounds(endX, 0, width, height);
-                    ((Timer) e.getSource()).stop();
+                    currentX = endX; 
+                    ((Timer) e.getSource()).stop(); 
                     if (onComplete != null) {
-                        onComplete.run();
+                        onComplete.run(); 
                     }
                 }
+                panel.setBounds(currentX, 0, width, height); 
             }
         });
-        timer.start();
+        timer.start(); 
     }
 }
