@@ -82,6 +82,28 @@ public class Menu extends JLayeredPane {
             showPanel("sobre"); 
         });
         
+        // >>>>> MODIFICAÇÃO AQUI: Implementação da ação de Desconectar <<<<<
+        configuracoesPanel.setOnDesconectarAction(() -> {
+            // Garante que a caixa de diálogo seja exibida na Event Dispatch Thread (EDT)
+            SwingUtilities.invokeLater(() -> {
+                int confirmResult = JOptionPane.showConfirmDialog(
+                    parentFrame, // O JFrame pai para centralizar a caixa de diálogo
+                    "Você tem certeza que quer sair?", 
+                    "Confirmação de Saída",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+                );
+
+                if (confirmResult == JOptionPane.YES_OPTION) {
+                    System.out.println("DEBUG: Usuário confirmou a saída. Encerrando aplicação.");
+                    System.exit(0); // Encerra a aplicação Java
+                } else {
+                    System.out.println("DEBUG: Usuário cancelou a saída.");
+                }
+            });
+        });
+        // >>>>> FIM DA MODIFICAÇÃO <<<<<
+
         sidebarContainerPanel.add(configuracoesPanel, BorderLayout.CENTER);
 
         add(sidebarContainerPanel, JLayeredPane.PALETTE_LAYER);
@@ -250,9 +272,7 @@ public class Menu extends JLayeredPane {
                 System.out.println("DEBUG: mainContentPanel agora visível: " + mainContentPanel.isVisible());
                 break;
             case "config":
-                // REMOVIDO: mainContentPanel.setVisible(false); 
-                // Permite que o fundo do metrô (desenhado pelo mainContentPanel) seja visível por baixo
-                mainContentPanel.setVisible(true); // <--- MUDANÇA PRINCIPAL AQUI
+                mainContentPanel.setVisible(true); // Manter o fundo do metrô visível
                 sidebarContainerPanel.setVisible(true);
                 System.out.println("DEBUG: sidebarContainerPanel agora visível: " + sidebarContainerPanel.isVisible());
                 break;
