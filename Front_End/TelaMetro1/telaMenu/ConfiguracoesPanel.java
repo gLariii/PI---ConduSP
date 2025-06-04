@@ -17,7 +17,14 @@ public class ConfiguracoesPanel extends JPanel {
     private Runnable onSobreAction;
     private Runnable onDesconectarAction;
 
+    private boolean isMuted = false;
+    private int lastVolume = 100;
+
     private static final int VERSAO_FONT_SIZE = 14;
+
+    private JPanel muteButtonPanel;
+    private Color defaultMuteColor;
+    private Color mutedColor;
 
     public ConfiguracoesPanel(Runnable onVoltarAction) {
         this.onVoltarAction = onVoltarAction;
@@ -35,7 +42,6 @@ public class ConfiguracoesPanel extends JPanel {
         JPanel backButtonPanel = new JPanel();
         backButtonPanel.setLayout(new GridBagLayout());
         backButtonPanel.setOpaque(false);
-
         backButtonPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 80));
         backButtonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
         backButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -70,7 +76,6 @@ public class ConfiguracoesPanel extends JPanel {
                 }
             }
         });
-
         backButtonPanel.setBorder(new RoundBorder(40, defaultButtonColor));
 
         JLabel iconLabel = new JLabel();
@@ -92,11 +97,9 @@ public class ConfiguracoesPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 0, 0, 18);
         gbc.anchor = GridBagConstraints.CENTER;
-
         gbc.gridx = 0;
         gbc.gridy = 0;
         backButtonPanel.add(iconLabel, gbc);
-
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.insets = new Insets(0, 0, 0, 0);
@@ -118,60 +121,108 @@ public class ConfiguracoesPanel extends JPanel {
         painelCentral.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
         painelCentral.setBackground(Cores.AZUL_METRO);
 
-        JPanel mainContentPanel = new JPanel();
-        mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
-        mainContentPanel.setOpaque(false);
+        JPanel volumeControlPanel = new JPanel(new GridBagLayout());
+        volumeControlPanel.setOpaque(false);
 
-        volumeSlider = new JSlider(0, 100, 100);
+        JLabel volumeLabel = new JLabel("Volume");
+        volumeLabel.setForeground(Color.WHITE);
+        volumeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        GridBagConstraints gbcLabel = new GridBagConstraints();
+        gbcLabel.gridx = 0;
+        gbcLabel.gridy = 0;
+        gbcLabel.anchor = GridBagConstraints.CENTER;
+        gbcLabel.insets = new Insets(0, 0, 5, 0);
+        volumeControlPanel.add(volumeLabel, gbcLabel);
+
+        volumeSlider = new JSlider(JSlider.VERTICAL, 0, 100, 100);
         volumeSlider.setMajorTickSpacing(20);
-        volumeSlider.setPaintTicks(true);
+        volumeSlider.setPaintTicks(false);
         volumeSlider.setPaintLabels(true);
         volumeSlider.setBackground(Cores.AZUL_METRO);
         volumeSlider.setForeground(Color.WHITE);
         volumeSlider.setUI(new CustomSliderUI(volumeSlider));
-        JPanel sliderPanel = new JPanel(new BorderLayout());
-        sliderPanel.setBackground(Cores.AZUL_METRO);
-        JLabel volumeLabel = new JLabel("Volume:");
-        volumeLabel.setForeground(Color.WHITE);
-        volumeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        sliderPanel.add(volumeLabel, BorderLayout.WEST);
-        sliderPanel.add(volumeSlider, BorderLayout.CENTER);
-        mainContentPanel.add(sliderPanel);
-        mainContentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        volumeSlider.setFocusable(false);
 
-        JPanel muteButtonPanel = new JPanel();
+        defaultMuteColor = new Color(0, 40, 160);
+        mutedColor = new Color(160, 0, 0);
+
+        volumeSlider.addChangeListener(e -> {
+            if (!volumeSlider.getValueIsAdjusting()) {
+                if (volumeSlider.getValue() == 0) {
+                    isMuted = true;
+                } else {
+                    isMuted = false;
+                    lastVolume = volumeSlider.getValue();
+                }
+                updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
+            }
+        });
+
+        GridBagConstraints gbcSlider = new GridBagConstraints();
+        gbcSlider.gridx = 0;
+        gbcSlider.gridy = 1;
+        gbcSlider.anchor = GridBagConstraints.CENTER;
+        gbcSlider.fill = GridBagConstraints.VERTICAL;
+        gbcSlider.weighty = 1.0;
+        gbcSlider.insets = new Insets(0, 0, 0, 0);
+        volumeControlPanel.add(volumeSlider, gbcSlider);
+
+        JPanel mainContentPanel = new JPanel();
+        mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
+        mainContentPanel.setOpaque(false);
+        
+        mainContentPanel.add(volumeControlPanel);
+        mainContentPanel.add(Box.createVerticalStrut(20));
+
+        JPanel muteButtonContainerPanel = new JPanel();
+        muteButtonContainerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        muteButtonContainerPanel.setOpaque(false);
+
+        muteButtonPanel = new JPanel();
         muteButtonPanel.setLayout(new GridBagLayout());
         muteButtonPanel.setOpaque(false);
-        muteButtonPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 40));
-        muteButtonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         muteButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        Color defaultMuteColor = new Color(0, 40, 160);
 
         muteButtonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                muteButtonPanel.setBorder(new RoundBorder(20, new Color(20, 60, 180)));
+                if (isMuted) {
+                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(180, 20, 20)));
+                } else {
+                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(20, 60, 180)));
+                }
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                muteButtonPanel.setBorder(new RoundBorder(20, defaultMuteColor));
+                if (isMuted) {
+                    muteButtonPanel.setBorder(new RoundBorder(20, mutedColor));
+                } else {
+                    muteButtonPanel.setBorder(new RoundBorder(20, defaultMuteColor));
+                }
             }
 
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                muteButtonPanel.setBorder(new RoundBorder(20, new Color(0, 20, 100)));
+                if (isMuted) {
+                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(100, 0, 0)));
+                } else {
+                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(0, 20, 100)));
+                }
             }
 
             @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 if (muteButtonPanel.contains(evt.getPoint())) {
-                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(20, 60, 180)));
-                } else {
-                    muteButtonPanel.setBorder(new RoundBorder(20, defaultMuteColor));
+                    if (!isMuted) {
+                        if (volumeSlider.getValue() > 0) {
+                            lastVolume = volumeSlider.getValue();
+                        }
+                        volumeSlider.setValue(0);
+                        isMuted = true;
+                    }
                 }
-                System.out.println("Botão Silenciar clicado!");
+                updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
             }
         });
         muteButtonPanel.setBorder(new RoundBorder(20, defaultMuteColor));
@@ -192,22 +243,19 @@ public class ConfiguracoesPanel extends JPanel {
         muteTextLabel.setFont(new Font("Arial", Font.BOLD, 18));
         muteTextLabel.setForeground(Color.WHITE);
 
-        GridBagConstraints gbcMute = new GridBagConstraints();
-        gbcMute.insets = new Insets(0, 0, 0, 10);
-        gbcMute.anchor = GridBagConstraints.CENTER;
+        GridBagConstraints gbcMuteContent = new GridBagConstraints();
+        gbcMuteContent.insets = new Insets(0, 0, 0, 10);
+        gbcMuteContent.anchor = GridBagConstraints.CENTER;
+        gbcMuteContent.gridx = 0;
+        gbcMuteContent.gridy = 0;
+        muteButtonPanel.add(muteIconLabel, gbcMuteContent);
+        gbcMuteContent.gridx = 1;
+        gbcMuteContent.gridy = 0;
+        gbcMuteContent.insets = new Insets(0, 0, 0, 0);
+        muteButtonPanel.add(muteTextLabel, gbcMuteContent);
 
-        gbcMute.gridx = 0;
-        gbcMute.gridy = 0;
-        muteButtonPanel.add(muteIconLabel, gbcMute);
-
-        gbcMute.gridx = 1;
-        gbcMute.gridy = 0;
-        gbcMute.insets = new Insets(0, 0, 0, 0);
-        muteButtonPanel.add(muteTextLabel, gbcMute);
-
-        mainContentPanel.add(muteButtonPanel);
-        mainContentPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-
+        muteButtonContainerPanel.add(muteButtonPanel);
+        mainContentPanel.add(muteButtonContainerPanel);
 
         painelCentral.add(mainContentPanel, BorderLayout.CENTER);
 
@@ -215,6 +263,8 @@ public class ConfiguracoesPanel extends JPanel {
         painelRodape.setLayout(new BoxLayout(painelRodape, BoxLayout.Y_AXIS));
         painelRodape.setOpaque(false);
         painelRodape.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
+
+        painelRodape.add(Box.createRigidArea(new Dimension(0, 15)));
 
         JPanel desconectarButtonPanel = new JPanel();
         desconectarButtonPanel.setLayout(new GridBagLayout());
@@ -274,11 +324,9 @@ public class ConfiguracoesPanel extends JPanel {
         GridBagConstraints gbcDesconectar = new GridBagConstraints();
         gbcDesconectar.insets = new Insets(0, 0, 0, 15);
         gbcDesconectar.anchor = GridBagConstraints.CENTER;
-
         gbcDesconectar.gridx = 0;
         gbcDesconectar.gridy = 0;
         desconectarButtonPanel.add(sairIconLabel, gbcDesconectar);
-
         gbcDesconectar.gridx = 1;
         gbcDesconectar.gridy = 0;
         gbcDesconectar.insets = new Insets(0, 0, 0, 0);
@@ -290,7 +338,6 @@ public class ConfiguracoesPanel extends JPanel {
         JPanel sobreButtonPanel = new JPanel();
         sobreButtonPanel.setLayout(new GridBagLayout());
         sobreButtonPanel.setOpaque(false);
-
         sobreButtonPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 60));
         sobreButtonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         sobreButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -347,18 +394,15 @@ public class ConfiguracoesPanel extends JPanel {
         GridBagConstraints gbcSobre = new GridBagConstraints();
         gbcSobre.insets = new Insets(0, 0, 0, 15);
         gbcSobre.anchor = GridBagConstraints.CENTER;
-
         gbcSobre.gridx = 0;
         gbcSobre.gridy = 0;
         sobreButtonPanel.add(perfilIconLabel, gbcSobre);
-
         gbcSobre.gridx = 1;
         gbcSobre.gridy = 0;
         gbcSobre.insets = new Insets(0, 0, 0, 0);
         sobreButtonPanel.add(sobreTextLabel, gbcSobre);
 
         painelRodape.add(sobreButtonPanel);
-
         painelRodape.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel versaoPanel = new JPanel(new BorderLayout());
@@ -384,8 +428,17 @@ public class ConfiguracoesPanel extends JPanel {
         this.onDesconectarAction = action;
     }
 
-    private static class CustomSliderUI extends BasicSliderUI {
+    private void updateMuteButtonBorder(JPanel buttonPanel, Color defaultColor, Color mutedColor, boolean isMutedState) {
+        if (buttonPanel != null) {
+            if (isMutedState) {
+                buttonPanel.setBorder(new RoundBorder(20, mutedColor));
+            } else {
+                buttonPanel.setBorder(new RoundBorder(20, defaultColor));
+            }
+        }
+    }
 
+    private static class CustomSliderUI extends BasicSliderUI {
         public CustomSliderUI(JSlider b) {
             super(b);
         }
@@ -393,14 +446,15 @@ public class ConfiguracoesPanel extends JPanel {
         @Override
         public void paintTrack(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             Rectangle trackBounds = trackRect;
 
             g2d.setColor(new Color(255, 255, 255, 100));
-            g2d.fillRect(trackBounds.x, trackBounds.y + (trackBounds.height / 2) - 2, trackBounds.width, 4);
+            g2d.fillRect(trackBounds.x + (trackBounds.width / 2) - 2, trackBounds.y, 4, trackBounds.height);
 
-            int thumbX = thumbRect.x + (thumbRect.width / 2);
             g2d.setColor(Color.WHITE);
-            g2d.fillRect(trackBounds.x, trackBounds.y + (trackBounds.height / 2) - 2, thumbX - trackBounds.x, 4);
+            int fillHeight = (int) (slider.getValue() / (double) slider.getMaximum() * trackBounds.height);
+            g2d.fillRect(trackBounds.x + (trackBounds.width / 2) - 2, trackBounds.y + trackBounds.height - fillHeight, 4, fillHeight);
         }
 
         @Override
@@ -408,19 +462,20 @@ public class ConfiguracoesPanel extends JPanel {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+            int diameter = Math.min(thumbRect.width, thumbRect.height);
+            int x = thumbRect.x + (thumbRect.width - diameter) / 2;
+            int y = thumbRect.y + (thumbRect.height - diameter) / 2;
+
             g2d.setColor(Color.WHITE);
-            g2d.fillOval(thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height);
+            g2d.fillOval(x, y, diameter, diameter);
 
             g2d.setColor(Cores.AZUL_METRO);
             g2d.setStroke(new BasicStroke(1));
-            g2d.drawOval(thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height);
+            g2d.drawOval(x, y, diameter, diameter);
         }
 
         @Override
         public void paintTicks(Graphics g) {
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setColor(Color.WHITE);
-            super.paintTicks(g);
         }
 
         @Override

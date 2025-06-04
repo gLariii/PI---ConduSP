@@ -12,7 +12,6 @@ import CabineDeControleTela.CabineDeControleTela;
 
 public class Menu extends JLayeredPane {
     private Image ImagemDeFundo, logoOriginal, logoRedimensionada;
-    // Variáveis de instância para a largura e altura da logo, usadas corretamente agora.
     private int logoWidth = 40;  
     private int logoHeight = 40; 
 
@@ -38,7 +37,7 @@ public class Menu extends JLayeredPane {
 
         carregarImagens(imagemPath);
 
-        // Usamos setLayout(null) porque estamos controlando as posições com setBounds no componentResized
+        
         setLayout(null); 
 
         mainContentPanel = new JPanel(new BorderLayout()) {
@@ -49,8 +48,6 @@ public class Menu extends JLayeredPane {
                     g.drawImage(ImagemDeFundo, 0, 0, getWidth(), getHeight(), this);
                 }
                 if (logoRedimensionada != null) {
-                    // Usar as variáveis de instância 'this.logoWidth' e 'this.logoHeight'
-                    // Acesso explícito à variável da instância 'Menu.this.logoWidth' para evitar ambiguidade com constantes
                     int x = getWidth() - Menu.this.logoWidth - 15; 
                     int y = getHeight() - Menu.this.logoHeight - 15; 
                     g.drawImage(logoRedimensionada, x, y, this);
@@ -68,29 +65,28 @@ public class Menu extends JLayeredPane {
                 }
             }
         };
-        mainContentPanel.setOpaque(false); // Permite que a imagem de fundo do JLayeredPane seja visível
+        mainContentPanel.setOpaque(false); 
         mainContentPanel.add(criarNavBar(), BorderLayout.NORTH);
         mainContentPanel.add(criarPainelCentral(), BorderLayout.CENTER);
 
-        // Adiciona o painel de conteúdo principal na camada padrão (DEFAULT_LAYER)
         add(mainContentPanel, JLayeredPane.DEFAULT_LAYER);
 
-        redimensionarLogo(40, 40); // Redimensiona a logo após o carregamento
+        redimensionarLogo(40, 40); 
 
-        // Configuração do painel lateral (sidebar)
+
         sidebarContainerPanel = new JPanel(new BorderLayout());
         sidebarContainerPanel.setOpaque(true);
-        sidebarContainerPanel.setBackground(Cores.AZUL_METRO); // Cor de fundo da barra lateral
+        sidebarContainerPanel.setBackground(Cores.AZUL_METRO); 
 
-        // Inicializa o ConfiguracoesPanel e define as ações para seus botões
+      
         configuracoesPanel = new ConfiguracoesPanel(() -> {
-            toggleConfigPanel(false); // Ação para o botão "Voltar" do ConfigPanel (fecha a sidebar)
+            toggleConfigPanel(false); 
         });
         configuracoesPanel.setOnSobreAction(() -> {
-            showPanel("sobre"); // Ação para o botão "Sobre" do ConfigPanel (mostra o painel "Sobre")
+            showPanel("sobre"); 
         });
         
-        // >>>>> MODIFICAÇÃO AQUI: Implementação da ação de Desconectar com o JDialog customizado <<<<<
+
         configuracoesPanel.setOnDesconectarAction(() -> {
             // Garante que a caixa de diálogo seja exibida na Event Dispatch Thread (EDT)
             SwingUtilities.invokeLater(() -> {
