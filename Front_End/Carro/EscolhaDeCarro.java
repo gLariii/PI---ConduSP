@@ -53,7 +53,7 @@ public class EscolhaDeCarro extends JPanel {
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
         btnVoltar.setOpaque(true);
-        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> substituirPainel(new AreaLateral(parentFrame, ordemCliques)));
         add(btnVoltar);
 
         adicionarListenerRedimensionamento();

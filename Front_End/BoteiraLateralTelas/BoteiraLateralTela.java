@@ -31,13 +31,69 @@ public class BoteiraLateralTela extends JPanel {
         carregarImagemFundo();
 
         // Botão para trocar o fundo
-        btnTrocar = new JButton("");
-        btnTrocar.setOpaque(false);
-        btnTrocar.setContentAreaFilled(false);
-        btnTrocar.setBorderPainted(true);
-        btnTrocar.setFocusPainted(false);
-        btnTrocar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnTrocar.setForeground(new Color(0, 0, 0, 0));
+        btnTrocar = new JButton("") {
+            private boolean isHovering = false;
+        
+            {
+                setOpaque(false);
+                setContentAreaFilled(false);
+                setBorderPainted(false);
+                setFocusPainted(false);
+                setCursor(new Cursor(Cursor.HAND_CURSOR));
+                setForeground(Color.BLACK);
+        
+                addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent e) {
+                        isHovering = true;
+                        repaint();
+                    }
+        
+                    @Override
+                    public void mouseExited(java.awt.event.MouseEvent e) {
+                        isHovering = false;
+                        repaint();
+                    }
+                });
+            }
+        
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                int width = getWidth();
+                int height = getHeight();
+        
+                if (getModel().isPressed()) {
+                    g2.setColor(new Color(0, 0, 0, 0));
+
+                } else if (isHovering) {
+                    g2.setColor(new Color(0, 0, 0, 0));
+
+                } else {
+                    g2.setColor(new Color(0, 0, 0, 0));
+
+                }
+        
+                g2.fillOval(0, 0, width, height);
+        
+                if (isHovering) {
+                    g2.setColor(Color.YELLOW);
+                    g2.setStroke(new BasicStroke(2));
+                } else {
+                    g2.setColor(Color.BLACK);
+                    g2.setStroke(new BasicStroke(0));
+                }
+        
+                g2.drawOval(0, 0, width - 1, height - 1);
+                g2.dispose();
+            }
+        
+            @Override
+            public boolean contains(int x, int y) {
+                int radius = getWidth() / 2;
+                return Math.pow(x - getWidth() / 2, 2) + Math.pow(y - getHeight() / 2, 2) <= Math.pow(radius, 2);
+            }
+        };
         btnTrocar.addActionListener(e -> {
             index = (index + 1) % backgrounds.length;
             carregarImagemFundo();
@@ -45,6 +101,7 @@ public class BoteiraLateralTela extends JPanel {
             repaint();
         });
         add(btnTrocar);
+        
 
         // Botão Voltar
         btnVoltar = new JButton("Voltar");
@@ -102,9 +159,9 @@ public class BoteiraLateralTela extends JPanel {
 
         // Troca posição do botão de acordo com a imagem de fundo
         if (index == 0) {
-            btnTrocar.setBounds((int)(w * 0.472), (int)(h * 0.47), (int)(w * 0.06), (int)(h * 0.09));
+            btnTrocar.setBounds((int)(w * 0.472), (int)(h * 0.467), (int)(w * 0.06), (int)(h * 0.09));
         } else {
-            btnTrocar.setBounds((int)(w * 0.47), (int)(h * 0.715), (int)(w * 0.06), (int)(h * 0.09));
+            btnTrocar.setBounds((int)(w * 0.472), (int)(h * 0.714), (int)(w * 0.06), (int)(h * 0.09));
         }
     }
 

@@ -142,7 +142,7 @@ public class CabineDeControleTela extends JPanel {
             // Tela cheia
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setUndecorated(true); // opcional: remove bordas e barra de título
-            frame.setContentPane(new PainelExternoAberto(frame, ordemCliques));
+            frame.setContentPane(new CabineDeControleTela(frame, ordemCliques));
         frame.setVisible(true);
     });
 }
