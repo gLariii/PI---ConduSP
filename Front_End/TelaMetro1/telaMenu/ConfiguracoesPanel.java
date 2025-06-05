@@ -131,7 +131,7 @@ public class ConfiguracoesPanel extends JPanel {
         gbcLabel.gridx = 0;
         gbcLabel.gridy = 0;
         gbcLabel.anchor = GridBagConstraints.CENTER;
-        gbcLabel.insets = new Insets(0, 0, 5, 0);
+        gbcLabel.insets = new Insets(0, -20, 5, 0);
         volumeControlPanel.add(volumeLabel, gbcLabel);
 
         volumeSlider = new JSlider(JSlider.VERTICAL, 0, 100, 100);
@@ -147,14 +147,20 @@ public class ConfiguracoesPanel extends JPanel {
         mutedColor = new Color(160, 0, 0);
 
         volumeSlider.addChangeListener(e -> {
+            volumeSlider.repaint();
             if (!volumeSlider.getValueIsAdjusting()) {
                 if (volumeSlider.getValue() == 0) {
-                    isMuted = true;
+                    if (!isMuted) {
+                        isMuted = true;
+                        updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
+                    }
                 } else {
-                    isMuted = false;
+                    if (isMuted) {
+                        isMuted = false;
+                        updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
+                    }
                     lastVolume = volumeSlider.getValue();
                 }
-                updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
             }
         });
 
@@ -195,11 +201,7 @@ public class ConfiguracoesPanel extends JPanel {
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                if (isMuted) {
-                    muteButtonPanel.setBorder(new RoundBorder(20, mutedColor));
-                } else {
-                    muteButtonPanel.setBorder(new RoundBorder(20, defaultMuteColor));
-                }
+                updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
             }
 
             @Override
@@ -214,18 +216,24 @@ public class ConfiguracoesPanel extends JPanel {
             @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 if (muteButtonPanel.contains(evt.getPoint())) {
-                    if (!isMuted) {
+                    if (isMuted) {
+                        isMuted = false;
+                        volumeSlider.setValue(lastVolume);
+                        volumeSlider.setEnabled(true);
+                    } else {
                         if (volumeSlider.getValue() > 0) {
                             lastVolume = volumeSlider.getValue();
                         }
                         volumeSlider.setValue(0);
                         isMuted = true;
+                        volumeSlider.setEnabled(false);
                     }
                 }
                 updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
             }
         });
-        muteButtonPanel.setBorder(new RoundBorder(20, defaultMuteColor));
+        updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
+        volumeSlider.setEnabled(!isMuted);
 
         JLabel muteIconLabel = new JLabel();
         try (InputStream is = getClass().getResourceAsStream("/Assets/Imagens/mute.png")) {
@@ -447,43 +455,69 @@ public class ConfiguracoesPanel extends JPanel {
         public void paintTrack(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
             Rectangle trackBounds = trackRect;
 
-            g2d.setColor(new Color(255, 255, 255, 100));
-            g2d.fillRect(trackBounds.x + (trackBounds.width / 2) - 2, trackBounds.y, 4, trackBounds.height);
+            final int TRACK_WIDTH = 8;
+            final int ARC_SIZE = 8; 
+            int trackX = trackBounds.x + (trackBounds.width / 2) - (TRACK_WIDTH / 2);
 
-            g2d.setColor(Color.WHITE);
+            g2d.setColor(new Color(255, 255, 255, 60));
+            g2d.fillRoundRect(trackX, trackBounds.y, TRACK_WIDTH, trackBounds.height, ARC_SIZE, ARC_SIZE);
+
             int fillHeight = (int) (slider.getValue() / (double) slider.getMaximum() * trackBounds.height);
-            g2d.fillRect(trackBounds.x + (trackBounds.width / 2) - 2, trackBounds.y + trackBounds.height - fillHeight, 4, fillHeight);
+            
+            if (slider.isEnabled()) {
+                g2d.setColor(Color.WHITE);
+            } else {
+                g2d.setColor(new Color(150, 150, 150));
+            }
+
+            if (slider.getValue() > 0) {
+                if (fillHeight > ARC_SIZE) { 
+                    g2d.fillRect(trackX, trackBounds.y + trackBounds.height - fillHeight, TRACK_WIDTH, fillHeight - ARC_SIZE / 2);
+                    g2d.fillRoundRect(trackX, trackBounds.y + trackBounds.height - ARC_SIZE, TRACK_WIDTH, ARC_SIZE, ARC_SIZE, ARC_SIZE);
+                } else { 
+                    g2d.fillRoundRect(trackX, trackBounds.y + trackBounds.height - fillHeight, TRACK_WIDTH, fillHeight, ARC_SIZE, ARC_SIZE);
+                }
+            }
         }
 
         @Override
         public void paintThumb(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-            int diameter = Math.min(thumbRect.width, thumbRect.height);
+            int diameter = 10; 
             int x = thumbRect.x + (thumbRect.width - diameter) / 2;
             int y = thumbRect.y + (thumbRect.height - diameter) / 2;
 
+            if (slider.isEnabled()) {
+                g2d.setColor(Cores.AZUL_BORDA_BARRA);
+            } else {
+                g2d.setColor(new Color(100, 100, 100));
+            }
+            g2d.fillOval(x, y, diameter, diameter); 
+
             g2d.setColor(Color.WHITE);
-            g2d.fillOval(x, y, diameter, diameter);
-
-            g2d.setColor(Cores.AZUL_METRO);
-            g2d.setStroke(new BasicStroke(1));
+            g2d.setStroke(new BasicStroke(2));
             g2d.drawOval(x, y, diameter, diameter);
-        }
-
-        @Override
-        public void paintTicks(Graphics g) {
         }
 
         @Override
         public void paintLabels(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
-            g2d.setColor(Color.WHITE);
+            
+            if (slider.isEnabled()) {
+                 g2d.setColor(Color.WHITE);
+            } else {
+                g2d.setColor(new Color(150, 150, 150));
+            }
             g2d.setFont(new Font("Arial", Font.PLAIN, 12));
-            super.paintLabels(g);
+            
+            super.paintLabels(g); 
         }
     }
 
@@ -498,7 +532,7 @@ public class ConfiguracoesPanel extends JPanel {
 
         @Override
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-            Graphics2D g2 = (Graphics2D) g.create();
+            Graphics2D g2 = (Graphics2D) g.create(); 
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setColor(color);
             g2.fillRoundRect(x, y, width - 1, height - 1, radius, radius);

@@ -2,8 +2,7 @@ package TelaMetro1.telaMenu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.ImageObserver; // Importado, mas as constantes não serão mais usadas para atribuição
-
+import java.awt.image.ImageObserver;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +37,6 @@ public class Menu extends JLayeredPane {
 
         carregarImagens(imagemPath);
 
-        
         setLayout(null); 
 
         mainContentPanel = new JPanel(new BorderLayout()) {
@@ -74,12 +72,10 @@ public class Menu extends JLayeredPane {
 
         redimensionarLogo(40, 40); 
 
-
         sidebarContainerPanel = new JPanel(new BorderLayout());
         sidebarContainerPanel.setOpaque(true);
         sidebarContainerPanel.setBackground(Cores.AZUL_METRO); 
 
-      
         configuracoesPanel = new ConfiguracoesPanel(() -> {
             toggleConfigPanel(false); 
         });
@@ -87,22 +83,16 @@ public class Menu extends JLayeredPane {
             showPanel("sobre"); 
         });
         
+        configuracoesPanel.setOnDesconectarAction(() -> {
+            SwingUtilities.invokeLater(() -> {
+                ConfirmarSaidaDialog dialog = new ConfirmarSaidaDialog(parentFrame);
+                dialog.setVisible(true);
 
-        // configuracoesPanel.setOnDesconectarAction(() -> {
-        //     // Garante que a caixa de diálogo seja exibida na Event Dispatch Thread (EDT)
-        //     SwingUtilities.invokeLater(() -> {
-        //         ConfirmarSaidaDialog dialog = new ConfirmarSaidaDialog(parentFrame);
-        //         dialog.setVisible(true); // Exibe o diálogo (bloqueia até ser fechado)
-
-        //         if (dialog.isConfirmed()) { // Verifica o resultado retornado pelo diálogo
-        //             System.out.println("DEBUG: Usuário confirmou a saída. Encerrando aplicação.");
-        //             System.exit(0); // Encerra a aplicação Java
-        //         } else {
-        //             System.out.println("DEBUG: Usuário cancelou a saída.");
-        //         }
-        //     });
-        // });
-        // // >>>>> FIM DA MODIFICAÇÃO <<<<<
+                if (dialog.isConfirmed()) {
+                    System.exit(0);
+                }
+            });
+        });
 
         sidebarContainerPanel.add(configuracoesPanel, BorderLayout.CENTER);
 
@@ -113,7 +103,6 @@ public class Menu extends JLayeredPane {
         });
         add(supervisorPanel, JLayeredPane.MODAL_LAYER); 
 
-        System.out.println("DEBUG: ID do usuário autenticado passado para FeedbackPanel: " + idUsuarioLogado);
         feedbackPanel = new FeedbackPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
             showPanel("main"); 
         }, idUsuarioLogado);
@@ -127,9 +116,7 @@ public class Menu extends JLayeredPane {
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
-                System.out.println("DEBUG: Menu resized to: " + getWidth() + "x" + getHeight());
                 mainContentPanel.setBounds(0, 0, getWidth(), getHeight());
-                System.out.println("DEBUG: mainContentPanel setBounds to: " + mainContentPanel.getBounds());
 
                 if (sidebarContainerPanel.isVisible()) {
                     sidebarContainerPanel.setBounds(0, 0, SIDEBAR_WIDTH, getHeight());
@@ -147,7 +134,6 @@ public class Menu extends JLayeredPane {
         });
 
         showPanel("main");       
-        System.out.println("DEBUG: Chamada inicial showPanel(\"main\") executada.");
     }
 
     private void carregarImagens(String imagemPath) {
@@ -260,7 +246,6 @@ public class Menu extends JLayeredPane {
     }
 
     private void showPanel(String panelName) {
-        System.out.println("DEBUG: showPanel chamado: " + panelName);
         mainContentPanel.setVisible(false);
         sidebarContainerPanel.setVisible(false);
         supervisorPanel.setVisible(false);
@@ -270,45 +255,31 @@ public class Menu extends JLayeredPane {
         switch (panelName) {
             case "main":
                 mainContentPanel.setVisible(true);
-                System.out.println("DEBUG: mainContentPanel agora visível: " + mainContentPanel.isVisible());
                 break;
             case "config":
-                mainContentPanel.setVisible(true); // Manter o fundo do metrô visível
+                mainContentPanel.setVisible(true);
                 sidebarContainerPanel.setVisible(true);
-                System.out.println("DEBUG: sidebarContainerPanel agora visível: " + sidebarContainerPanel.isVisible());
                 break;
             case "supervisor":
                 supervisorPanel.setVisible(true);
-                System.out.println("DEBUG: supervisorPanel agora visível: " + supervisorPanel.isVisible());
                 break;
             case "feedback":
                 feedbackPanel.setVisible(true);
-                System.out.println("DEBUG: feedbackPanel agora visível: " + feedbackPanel.isVisible());
                 break;
             case "sobre":
                 sobrePanel.setVisible(true);
-                System.out.println("DEBUG: sobrePanel agora visível: " + sobrePanel.isVisible());
                 break;
         }
         revalidate(); 
         repaint();    
-        System.out.println("DEBUG: Revalidate e Repaint chamados para JLayeredPane.");
     }
 
     private void toggleConfigPanel(boolean show) {
-        System.out.println("DEBUG: toggleConfigPanel chamado com show=" + show);
         if (show) {
             showPanel("config"); 
-            
-            System.out.println("DEBUG: ConfiguracoesPanel visível? " + configuracoesPanel.isVisible());
-            System.out.println("DEBUG: ConfiguracoesPanel tamanho preferido: " + configuracoesPanel.getPreferredSize());
-            System.out.println("DEBUG: ConfiguracoesPanel está com componentes? " + (configuracoesPanel.getComponentCount() > 0));
-
             configuracoesPanel.revalidate(); 
             configuracoesPanel.repaint();    
-            
             animatePanel(sidebarContainerPanel, -SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight(), null); 
-
         } else {
             animatePanel(sidebarContainerPanel, 0, -SIDEBAR_WIDTH, SIDEBAR_WIDTH, getHeight(), () -> {
                 sidebarContainerPanel.setVisible(false);
