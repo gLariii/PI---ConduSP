@@ -6,6 +6,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import CabineDeControleTela.*;
 
+
 public class PainelExternoAberto extends JPanel {
 
     private final String[] backgrounds = {
@@ -64,7 +65,7 @@ public class PainelExternoAberto extends JPanel {
         btnFechar.setBorderPainted(true);
         btnFechar.setFocusPainted(false);
         btnFechar.setForeground(new Color(0, 0, 0, 0));
-        btnFechar.addActionListener(e -> substituirPainel(new PainelExternoFechado(parentFrame, ordemCliques)));
+        btnFechar.addActionListener(e -> {AudioPlayer.playSound("SomPorta.wav");substituirPainel(new PainelExternoFechado(parentFrame, ordemCliques));});
         add(btnFechar);
 
         btnVoltar = new JButton("Voltar");
@@ -94,8 +95,10 @@ public class PainelExternoAberto extends JPanel {
     btn.addActionListener(e -> {
         // Verifica se o botão é o btnPorta2
         if (e.getSource() != btnPorta6) {
+            AudioPlayer.playSound("SomErro.wav");
             JOptionPane.showMessageDialog(this, "Você clicou no botão errado!", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
+            ChaveReversoraTela.AudioPlayer.playSound("SomAlavanca.wav");
             index = (index + 1) % backgrounds.length;
             carregarImagemFundo();
             repaint();

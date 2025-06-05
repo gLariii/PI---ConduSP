@@ -7,6 +7,7 @@ import CabineDeControleTela.*;
 import Controller.RespostaUsuarioController;
 import DAO.RespostaUsuarioDAO;
 import Model.*;
+import ChaveReversoraTela.AudioPlayer;
 
 public class ChaveReversoraTela extends JPanel {
 
@@ -26,6 +27,7 @@ public class ChaveReversoraTela extends JPanel {
     private int pontuacao;
     private int feedback;
     private int ordemCliques;
+    
 
     // Modifique o construtor para receber o idUsuario
     public ChaveReversoraTela(JFrame frame, int idUsuario) {
@@ -45,6 +47,7 @@ public class ChaveReversoraTela extends JPanel {
         btnTrocar.setFocusPainted(false);
         btnTrocar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnTrocar.addActionListener(e -> {
+            AudioPlayer.playSound("SomAlavanca.wav");
             indexChaveReversora = (indexChaveReversora + 1) % backgrounds.length;
             carregarImagemFundo();
             repaint();

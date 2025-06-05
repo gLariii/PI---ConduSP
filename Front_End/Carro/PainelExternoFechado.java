@@ -61,7 +61,7 @@ public class PainelExternoFechado extends JPanel {
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
         btnVoltar.setOpaque(true);
-        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques));});
         add(btnVoltar);
         reposicionarBotoes();
         
@@ -69,7 +69,7 @@ public class PainelExternoFechado extends JPanel {
 
     private JButton criarBotao(Runnable action) {
         JButton botao = new JButton("");
-        botao.addActionListener(e -> action.run());
+        botao.addActionListener(e -> {AudioPlayer.playSound("SomPorta.wav");action.run();});
         botao.setOpaque(false);
         botao.setContentAreaFilled(false);
         botao.setBorderPainted(false);

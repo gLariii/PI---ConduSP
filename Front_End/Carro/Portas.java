@@ -64,7 +64,7 @@ public class Portas extends JPanel {
 
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques));});
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));
@@ -99,6 +99,7 @@ public class Portas extends JPanel {
         btnFechar.setOpaque(true);
         btnFechar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnFechar.addActionListener(e -> {
+            AudioPlayer.playSound("SomPorta.wav");
             if (index == 0){
                 botao1.setVisible(false);
                 botao2.setVisible(false);

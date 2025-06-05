@@ -78,7 +78,7 @@ public class AreaLateral extends JPanel {
         add(botaoTraseira);
 
         btnPorta = new JButton("");
-        btnPorta.addActionListener(e -> trocarTela(new EscolhaDeCarro(parentFrame, ordemCliques)));            
+        btnPorta.addActionListener(e -> trocarTela(new EscolhaDeCarro(parentFrame, ordemCliques)));           
         btnPorta.setOpaque(false);
         btnPorta.setContentAreaFilled(false);
         btnPorta.setBorderPainted(false);

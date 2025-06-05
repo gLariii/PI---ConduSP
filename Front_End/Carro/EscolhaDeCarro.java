@@ -70,8 +70,10 @@ public class EscolhaDeCarro extends JPanel {
 
         btn.addActionListener(e -> {
             if (isBotaoCorreto) {
+                AudioPlayer.playSound("SomPorta.wav");
                 substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques));
             } else {
+                AudioPlayer.playSound("SomErro.wav"); 
                 JOptionPane.showMessageDialog(this, "Você clicou no botão errado!", "Aviso", JOptionPane.WARNING_MESSAGE);
             }
         });

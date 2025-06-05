@@ -78,7 +78,7 @@ public class Carro5VisaoGeral extends JPanel {
 
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> substituirPainel(new AreaLateral(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomPorta.wav");substituirPainel(new AreaLateral(parentFrame, ordemCliques));});
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));
@@ -86,9 +86,9 @@ public class Carro5VisaoGeral extends JPanel {
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
         btnVoltar.setOpaque(true);
-        btnPortas = criarBotao(() -> substituirPainel(new Portas(parentFrame, ordemCliques)));
-        btnPainel = criarBotao(() -> substituirPainel(new PainelExternoFechado(parentFrame, ordemCliques)));
-        btnSinalização = criarBotao (() -> substituirPainel(new Sinalizacao(parentFrame)));
+        btnPortas = criarBotao(() -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Portas(parentFrame, ordemCliques));});
+        btnPainel = criarBotao(() -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new PainelExternoFechado(parentFrame, ordemCliques));});
+        btnSinalização = criarBotao (() -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Sinalizacao(parentFrame));});
         
         lblSinalizacaoTexto = new JComponent() {
         @Override

@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
+import CabineDeControleTela.*;
 
 public class Sinalizacao extends JPanel {
     private final String[] backgrounds = {
@@ -48,7 +49,7 @@ public class Sinalizacao extends JPanel {
 
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques));});
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));

@@ -72,6 +72,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         botao2.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                AudioPlayer.playSound("SomDigitacao.wav");
                 index = 2;
                 carregarImagemFundo();
                 repaint();
@@ -88,6 +89,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                AudioPlayer.stopSound();
                 index = 0;
                 carregarImagemFundo();
                 repaint();
@@ -100,6 +102,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         botao1.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                AudioPlayer.playSound("SomDigitacao.wav");
                 index = 1;
                 carregarImagemFundo();
                 repaint();
@@ -109,6 +112,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                AudioPlayer.stopSound();
                 index = 0;
                 carregarImagemFundo();
                 repaint();
