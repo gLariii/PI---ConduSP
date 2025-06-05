@@ -12,9 +12,15 @@ public class ADUMenu extends JPanel {
     private JFrame parentFrame;
     private Image imagemDeFundo;
     private JButton btnVoltar;
+    private int ordemCliques;
 
-    public ADUMenu(JFrame frame) {
+    public ADUMenu(JFrame frame, int ordemCliques) {
         this.parentFrame = frame;
+        this.ordemCliques = ordemCliques;
+        //ordemCliques++;
+
+        this.parentFrame = frame;
+
         setLayout(null);
         setSize(frame.getSize());
 

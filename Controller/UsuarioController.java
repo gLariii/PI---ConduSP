@@ -43,42 +43,6 @@ public class UsuarioController {
         return usuarioDAO.atualizartipo_usuario(rg, novotipo_usuario);
     }
     
-    public boolean registrarUsuario(String rg, String senha, String nome, String tipo_usuario, int volume) {
-        if (!RGValido(rg)) {
-            System.out.println("RG inválido para registro. Verifique o formato.");
-            return false;
-        }
-        if (usuarioDAO.existeRg(rg)) {
-            System.out.println("RG já cadastrado.");
-            return false;
-        }
-        if (senha == null || senha.trim().isEmpty()) {
-            System.out.println("A senha não pode ser vazia.");
-            return false;
-        }
-        if (nome == null || nome.trim().isEmpty()) {
-            System.out.println("O nome não pode ser vazio.");
-            return false;
-        }
-        if (!tipo_usuario.equalsIgnoreCase("operario") && !tipo_usuario.equalsIgnoreCase("supervisor")) {
-            System.out.println("Tipo de usuário inválido. Deve ser 'operario' ou 'supervisor'.");
-            return false;
-        }
-        if (volume < 0 || volume > 100) {
-            System.out.println("O volume deve ser entre 0 e 100.");
-            return false;
-        }
-        
-        String senhaHasheada = Criptografia.gerarHashSHA256(senha);
-        if (senhaHasheada == null) {
-            System.out.println("Erro ao gerar hash da senha.");
-            return false;
-        }
-
-        Usuario novoUsuario = new Usuario(0, rg, senhaHasheada, nome, tipo_usuario, volume);
-        return usuarioDAO.registrarUsuario(novoUsuario);
-    }
-    
     public boolean atualizarVolumeUsuario(String rg, int novoVolume) {
         if (!RGValido(rg)) {
             System.out.println("RG inválido para atualização de volume. Verifique o formato.");

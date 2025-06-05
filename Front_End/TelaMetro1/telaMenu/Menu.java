@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import Assets.Cores;
 import CabineDeControleTela.CabineDeControleTela;
+import Model.*;
 
 public class Menu extends JLayeredPane {
     private Image ImagemDeFundo, logoOriginal, logoRedimensionada;
@@ -25,15 +26,15 @@ public class Menu extends JLayeredPane {
     private SobrePanel sobrePanel;
 
     private JFrame parentFrame;
-    private String tipoUsuarioLogado;
+    private String tipo_usuarioLogado;
     private int idUsuarioLogado; 
 
     private final int SIDEBAR_WIDTH = 300;
 
-    public Menu(JFrame frame, String imagemPath, String tipoUsuario, int idUsuario) {
+    public Menu(JFrame frame, String imagemPath, String tipo_usuario, int idUsuarioLogado) {
         this.parentFrame = frame;
-        this.tipoUsuarioLogado = tipoUsuario;
-        this.idUsuarioLogado = idUsuario;
+        this.tipo_usuarioLogado = tipo_usuario;
+        this.idUsuarioLogado = idUsuarioLogado;
 
         carregarImagens(imagemPath);
 
@@ -87,21 +88,21 @@ public class Menu extends JLayeredPane {
         });
         
 
-        configuracoesPanel.setOnDesconectarAction(() -> {
-            // Garante que a caixa de diálogo seja exibida na Event Dispatch Thread (EDT)
-            SwingUtilities.invokeLater(() -> {
-                ConfirmarSaidaDialog dialog = new ConfirmarSaidaDialog(parentFrame);
-                dialog.setVisible(true); // Exibe o diálogo (bloqueia até ser fechado)
+        // configuracoesPanel.setOnDesconectarAction(() -> {
+        //     // Garante que a caixa de diálogo seja exibida na Event Dispatch Thread (EDT)
+        //     SwingUtilities.invokeLater(() -> {
+        //         ConfirmarSaidaDialog dialog = new ConfirmarSaidaDialog(parentFrame);
+        //         dialog.setVisible(true); // Exibe o diálogo (bloqueia até ser fechado)
 
-                if (dialog.isConfirmed()) { // Verifica o resultado retornado pelo diálogo
-                    System.out.println("DEBUG: Usuário confirmou a saída. Encerrando aplicação.");
-                    System.exit(0); // Encerra a aplicação Java
-                } else {
-                    System.out.println("DEBUG: Usuário cancelou a saída.");
-                }
-            });
-        });
-        // >>>>> FIM DA MODIFICAÇÃO <<<<<
+        //         if (dialog.isConfirmed()) { // Verifica o resultado retornado pelo diálogo
+        //             System.out.println("DEBUG: Usuário confirmou a saída. Encerrando aplicação.");
+        //             System.exit(0); // Encerra a aplicação Java
+        //         } else {
+        //             System.out.println("DEBUG: Usuário cancelou a saída.");
+        //         }
+        //     });
+        // });
+        // // >>>>> FIM DA MODIFICAÇÃO <<<<<
 
         sidebarContainerPanel.add(configuracoesPanel, BorderLayout.CENTER);
 
@@ -217,6 +218,7 @@ public class Menu extends JLayeredPane {
 
         btnMaquinario.addActionListener(e -> {
             substituirPainel(new CabineDeControleTela(parentFrame, idUsuarioLogado)); 
+            SalvarResposta.pontuacao =0;
         });
 
         btnSupervisor.addActionListener(e -> {
@@ -233,7 +235,7 @@ public class Menu extends JLayeredPane {
         painelBotoes.add(btnMaquinario);
         painelBotoes.add(btnFeedbacks);
 
-        if ("supervisor".equalsIgnoreCase(tipoUsuarioLogado)) {
+        if ("supervisor".equalsIgnoreCase(tipo_usuarioLogado)) {
             painelBotoes.add(btnSupervisor);
         } else {
             btnSupervisor.setVisible(false);

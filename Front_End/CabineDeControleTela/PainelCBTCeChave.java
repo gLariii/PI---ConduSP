@@ -3,17 +3,22 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
-
+import ChaveReversoraTela.*;
+import Model.*;
 public class PainelCBTCeChave extends JPanel {
+    private int idUsuarioLogado;
     public static int indexCBCT = 0;
     public static int indexChave = 0;
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private int ordemCliques;
+    private boolean geraPontuacao = false;
+    private int pontuacao;
+    private int feedback;
 
     private final String[] backgroundsCBTC = {
-        "Imagens/ChaveCBTCRM.jpg",
         "Imagens/ChaveCBTCAM.jpg",
+        "Imagens/ChaveCBTCRM.jpg",
     };
     private final String[] backgroundsChave = {
         "Imagens/ComChaveOperador.jpg",
@@ -23,10 +28,10 @@ public class PainelCBTCeChave extends JPanel {
     // Botões como atributos
     private JButton btnVoltar, btnCBTC, btnChave;
 
-    public PainelCBTCeChave(JFrame frame, int ordemCliques) {
+    public PainelCBTCeChave(JFrame frame, int idUsuario) {
         this.parentFrame = frame;
-        this.ordemCliques = ordemCliques;
-        ordemCliques++;
+        this.idUsuarioLogado = idUsuario;
+        this.ordemCliques = 0;
 
         setLayout(null);
         adicionarBotoes();
@@ -70,6 +75,11 @@ public class PainelCBTCeChave extends JPanel {
         btnCBTC.setBorderPainted(false);
         btnCBTC.setFocusPainted(false);
         btnCBTC.addActionListener(e -> {
+            if (geraPontuacao == false && ChaveReversoraTela.indexChaveReversora == 2){
+                SalvarResposta.pontuacao +=1;
+                this.feedback = 4;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+            }
             indexCBCT = (indexCBCT + 1) % backgroundsCBTC.length;
             atualizarIconeCBTC();
         });
@@ -92,7 +102,7 @@ public class PainelCBTCeChave extends JPanel {
         add(btnChave);
 
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, idUsuarioLogado)));
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));

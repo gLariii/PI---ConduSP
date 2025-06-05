@@ -102,23 +102,6 @@ public class UsuarioDAO {
         return false;
     }
     
-    public boolean registrarUsuario(Usuario usuario) {
-        String sql = "INSERT INTO tb_usuario (rg, senha, nome, tipo_usuario, volume) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = Conexao.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, usuario.getRg());
-            stmt.setString(2, usuario.getSenha()); 
-            stmt.setString(3, usuario.getNome());
-            stmt.setString(4, usuario.gettipo_usuario());
-            stmt.setInt(5, usuario.getVolume());
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            System.err.println("Erro ao registrar usuário: " + e.getMessage());
-            return false;
-        }
-    }
-    
     public boolean atualizarVolume(String rg, int novoVolume) {
         String sql = "UPDATE tb_usuario SET volume = ? WHERE rg = ?";
         try (Connection conn = Conexao.getConexao();

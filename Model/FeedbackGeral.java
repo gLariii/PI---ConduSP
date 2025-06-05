@@ -7,14 +7,17 @@ public class FeedbackGeral {
     private String nomeUsuario;
     private String rg;
     private String tipoUsuario;
+
     private int idResposta;
     private int pontuacaoAtual;
     private Date dataResposta;
     private int idFeedback;
     private int idPasso;
+
     private String observacoes;
     private String tipoFeedbackEsperado;
     private Date dataFeedbackDefinido;
+    
     private int idFase;
     private String nomeFase;
     private String descricaoFase;

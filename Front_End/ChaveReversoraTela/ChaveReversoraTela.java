@@ -1,34 +1,38 @@
 package ChaveReversoraTela;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import CabineDeControleTela.*;
+import Controller.RespostaUsuarioController;
+import DAO.RespostaUsuarioDAO;
+import Model.*;
 
 public class ChaveReversoraTela extends JPanel {
 
     private final String[] backgrounds = {
-        "ChaveReversoraFrente.jpg",
         "ChaveReversoraNeutro.jpg",
-        "ChaveReversoraRe.jpg"
+        "ChaveReversoraRe.jpg",
+        "ChaveReversoraFrente.jpg"
     };
 
-    private static int index = 0;
+    private int idUsuarioLogado;
+    public static int indexChaveReversora = 0;
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private JButton btnTrocar;
     private JButton btnVoltar;
-
+    private boolean primeiroClique = true;
+    private int pontuacao;
+    private int feedback;
     private int ordemCliques;
 
-    public ChaveReversoraTela(JFrame frame, int ordemCliques) {
-        this.ordemCliques = ordemCliques;
-        ordemCliques++;
-
-        // sei que qual foi esse clique a partir daqui
-
+    // Modifique o construtor para receber o idUsuario
+    public ChaveReversoraTela(JFrame frame, int idUsuario) {
         this.parentFrame = frame;
+        this.idUsuarioLogado = idUsuario; // Atribua o valor do parâmetro à variável de instância
+        this.ordemCliques = 0; // Você pode redefinir ou gerenciar 'ordemCliques' de outra forma se precisar
+
         setLayout(null);
 
         carregarImagemFundo();
@@ -40,10 +44,14 @@ public class ChaveReversoraTela extends JPanel {
         btnTrocar.setBorderPainted(false);
         btnTrocar.setFocusPainted(false);
         btnTrocar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnTrocar.addActionListener(e -> trocarImagemFundo());
+        btnTrocar.addActionListener(e -> {
+            indexChaveReversora = (indexChaveReversora + 1) % backgrounds.length;
+            carregarImagemFundo();
+            repaint();
+        });
         add(btnTrocar);
 
-        // Botão Voltar
+       // Botão Voltar
         btnVoltar = new JButton("Voltar");
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
@@ -54,7 +62,23 @@ public class ChaveReversoraTela extends JPanel {
         btnVoltar.setOpaque(true);
         
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnVoltar.addActionListener(e -> voltarParaCabine());
+        btnVoltar.addActionListener(e -> {
+            if (primeiroClique == true){
+                if (indexChaveReversora == 2){
+                    if (PainelCBTCeChave.indexCBCT == 0){
+                        SalvarResposta.pontuacao += 1;
+                        this.feedback = 1;
+                        SalvarResposta.salvarResposta(idUsuario, this.feedback);
+                    }
+                }else if (indexChaveReversora == 1){
+                    SalvarResposta.pontuacao -= 3;
+                    this.feedback = 2;
+                    SalvarResposta.salvarResposta(idUsuario, this.feedback);
+                }
+            }
+            voltarParaCabine();
+        });
+        
         add(btnVoltar);
 
         adicionarListenerRedimensionamento();
@@ -62,18 +86,13 @@ public class ChaveReversoraTela extends JPanel {
     }
 
     private void carregarImagemFundo() {
-        ImageIcon icon = new ImageIcon(getClass().getResource(backgrounds[index]));
+        ImageIcon icon = new ImageIcon(getClass().getResource(backgrounds[indexChaveReversora]));
         imagemDeFundo = icon.getImage();
     }
 
-    private void trocarImagemFundo() {
-        index = (index + 1) % backgrounds.length;
-        carregarImagemFundo();
-        repaint();
-    }
-
     private void voltarParaCabine() {
-        parentFrame.setContentPane(new CabineDeControleTela(parentFrame, ordemCliques));
+        // Ao voltar para a CabineDeControleTela, passe o idUsuarioLogado novamente
+        parentFrame.setContentPane(new CabineDeControleTela(parentFrame, idUsuarioLogado));
         parentFrame.revalidate();
         parentFrame.repaint();
     }
@@ -82,7 +101,7 @@ public class ChaveReversoraTela extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (imagemDeFundo != null) {
-            carregarImagemFundo();
+            // carregarImagemFundo(); // Esta linha pode causar recarregamento excessivo se não houver mudança
         }
         g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
         int w = getWidth();

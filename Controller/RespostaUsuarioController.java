@@ -15,4 +15,9 @@ public class RespostaUsuarioController {
     public List<RespostaUsuario> obterFeedbacksDoUsuario(int idUsuario) {
         return respostaUsuarioDAO.obterRespostasDoUsuario(idUsuario);
     }
+    
+    public boolean salvarResposta(RespostaUsuario resposta) {
+    return respostaUsuarioDAO.salvarRespostaUsuario(resposta);
+}
+
 }

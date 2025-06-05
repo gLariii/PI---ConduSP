@@ -41,4 +41,26 @@ public class RespostaUsuarioDAO {
         }
         return respostas;
     }
+    
+public boolean salvarRespostaUsuario(RespostaUsuario resposta) {
+    String sql = "INSERT INTO RespostaUsuario (id_usuario, id_feedback, pontuacaoAtual, data) VALUES (?, ?, ?, ?)";
+
+    try (Connection conn = Conexao.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, resposta.getIdUsuario());
+        stmt.setInt(2, resposta.getIdFeedback());
+        stmt.setInt(3, resposta.getPontuacaoAtual());
+        stmt.setTimestamp(4, resposta.getData());
+
+        return stmt.executeUpdate() > 0;
+
+    } catch (SQLException e) {
+        System.err.println("Erro ao salvar resposta do usuário: " + e.getMessage());
+        e.printStackTrace();
+        return false;
+    }
+}
+
+
 }

@@ -12,6 +12,7 @@ import Model.FeedbackGeral;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class FeedbackGeralPanel extends JPanel {
@@ -25,6 +26,9 @@ public class FeedbackGeralPanel extends JPanel {
     private DefaultTableModel modeloTabela;
 
     private Runnable voltarAcao;
+
+    private static final int NUM_LINHAS_VISIVEIS_MINIMO = 22;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     public FeedbackGeralPanel(String imagemPath, Runnable voltarAcao) {
         this.voltarAcao = voltarAcao;
@@ -60,7 +64,15 @@ public class FeedbackGeralPanel extends JPanel {
         navBar.setBackground(Cores.AZUL_METRO);
         navBar.setPreferredSize(new Dimension(getWidth(), 60));
 
-        JButton btnVoltar = botoes.criarBotaoVoltar();
+        JButton btnVoltar = new JButton("Voltar");
+        btnVoltar.setBackground(Cores.AZUL_METRO);
+        btnVoltar.setForeground(Color.WHITE);
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.setBorderPainted(false);
+        btnVoltar.setFont(new Font("Arial", Font.BOLD, 18));
+        btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnVoltar.setPreferredSize(new Dimension(100, 40));
+
         btnVoltar.addActionListener(e -> {
             if (voltarAcao != null) voltarAcao.run();
         });
@@ -71,13 +83,13 @@ public class FeedbackGeralPanel extends JPanel {
         navBar.add(painelEsquerdo, BorderLayout.WEST);
 
         JLabel titulo = new JLabel("Feedback Geral dos Usuários", SwingConstants.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 28));
+        titulo.setFont(new Font("Arial", Font.BOLD, 32));
         titulo.setForeground(Color.WHITE);
         navBar.add(titulo, BorderLayout.CENTER);
 
         JPanel painelDireito = new JPanel();
         painelDireito.setOpaque(false);
-        painelDireito.setPreferredSize(new Dimension(80, 1));
+        painelDireito.setPreferredSize(new Dimension(btnVoltar.getPreferredSize().width + 30, 1));
         navBar.add(painelDireito, BorderLayout.EAST);
 
         return navBar;
@@ -88,11 +100,9 @@ public class FeedbackGeralPanel extends JPanel {
         painel.setOpaque(false);
         painel.setBorder(BorderFactory.createEmptyBorder(40, 80, 40, 80));
 
-
         modeloTabela = new DefaultTableModel(new Object[]{
-            "Nome Usuário", "RG", "Pontuação Atual",
-            "Data Resposta", "Observações", "Nome Fase"
-        }, 0) {
+            "Nome da Fase", "Observações", "Pontuação Atual", "Data da Resposta"}, 0)
+        {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -103,37 +113,57 @@ public class FeedbackGeralPanel extends JPanel {
         tabelaFeedbacks.setFont(new Font("Arial", Font.PLAIN, 16));
         tabelaFeedbacks.setRowHeight(25);
         tabelaFeedbacks.setFillsViewportHeight(true);
+        tabelaFeedbacks.getTableHeader().setReorderingAllowed(false);
 
-        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-        headerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        headerRenderer.setBackground(Cores.AZUL_METRO);
-        headerRenderer.setForeground(Color.WHITE);
-        headerRenderer.setFont(new Font("Arial", Font.BOLD, 16));
-        headerRenderer.setOpaque(true);
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus,
+                                                           int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                label.setBackground(Cores.AZUL_METRO);
+                label.setForeground(Color.WHITE);
+                label.setFont(new Font("Arial", Font.BOLD, 16));
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.WHITE));
+                label.setOpaque(true);
+                return label;
+            }
+        };
 
-        for (int i = 0; i < tabelaFeedbacks.getColumnCount(); i++) {
+        for (int i = 0; i < tabelaFeedbacks.getColumnModel().getColumnCount(); i++) {
             tabelaFeedbacks.getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
         }
-
-
-        tabelaFeedbacks.getColumnModel().getColumn(4).setPreferredWidth(300); 
 
         tabelaFeedbacks.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel c = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                c.setHorizontalAlignment(SwingConstants.CENTER);
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (!isSelected) {
+                    c.setBackground(Cores.AZUL_METRO);
+                } else {
+                    c.setBackground(new Color(0, 80, 200));
+                }
                 c.setForeground(Color.WHITE);
-                c.setBackground(isSelected ? new Color(0, 80, 200) : Cores.AZUL_METRO);
-                c.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+                ((JLabel) c).setHorizontalAlignment(SwingConstants.CENTER);
+                ((JComponent) c).setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+                ((JComponent) c).setOpaque(true); 
                 return c;
             }
         });
+        tabelaFeedbacks.setGridColor(Color.WHITE);
+        tabelaFeedbacks.setShowGrid(true);
+        tabelaFeedbacks.setOpaque(false);
 
         JScrollPane scroll = new JScrollPane(tabelaFeedbacks);
-        scroll.setBorder(new RoundBorder(20, Color.WHITE));
-        scroll.setOpaque(false);
-        scroll.getViewport().setOpaque(false);
+        scroll.getViewport().setOpaque(true);
+        scroll.getViewport().setBackground(Cores.AZUL_METRO);
+        scroll.setOpaque(false); 
+
+        int radius = 20;
+        Color borderColor = Color.WHITE;
+        scroll.setBorder(new RoundBorder(radius, borderColor));
 
         painel.add(scroll, BorderLayout.CENTER);
 
@@ -147,28 +177,26 @@ public class FeedbackGeralPanel extends JPanel {
         modeloTabela.setRowCount(0);
 
         for (FeedbackGeral f : feedbacks) {
-
             modeloTabela.addRow(new Object[]{
-                f.getNomeUsuario(),
-                f.getRg(),
-                f.getPontuacaoAtual(),
-                f.getDataResposta(),
+                f.getNomeFase(),
                 f.getObservacoes(),
-                f.getNomeFase()
+                f.getPontuacaoAtual(),
+                dateFormat.format(f.getDataResposta())
             });
         }
 
-        while (modeloTabela.getRowCount() < 22) {
-            modeloTabela.addRow(new Object[]{"", "", "", "", "", ""});
+        int linhasAtuais = modeloTabela.getRowCount();
+        for (int i = linhasAtuais; i < NUM_LINHAS_VISIVEIS_MINIMO; i++) {
+            modeloTabela.addRow(new Object[]{"", "", "", ""});
         }
     }
 
     public void redimensionarLogo(int width, int height) {
         if (logoOriginal != null) {
             logoRedimensionada = logoOriginal.getScaledInstance(
-                                    Math.max(20, Math.min(width, 150)),
-                                    Math.max(20, Math.min(height, 150)),
-                                    Image.SCALE_SMOOTH
+                Math.max(20, Math.min(width, 150)),
+                Math.max(20, Math.min(height, 150)),
+                Image.SCALE_SMOOTH
             );
             this.logoWidth = width;
             this.logoHeight = height;

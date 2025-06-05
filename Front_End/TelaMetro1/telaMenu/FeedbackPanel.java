@@ -109,12 +109,15 @@ public class FeedbackPanel extends JPanel {
         painel.setOpaque(false);
         painel.setBorder(BorderFactory.createEmptyBorder(40, 80, 40, 80));
 
-        modeloTabela = new DefaultTableModel(new Object[]{"Data da Resposta", "Pontuação Atual", "Nome da Fase", "Observações"}, 0) {
+        modeloTabela = new DefaultTableModel(new Object[]{
+            "Nome da Fase", "Observações", "Pontuação Atual", "Data da Resposta"}, 0) 
+            {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+
 
         tabelaFeedbacks = new JTable(modeloTabela);
         tabelaFeedbacks.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -191,11 +194,12 @@ public class FeedbackPanel extends JPanel {
         if (!listaFeedbacks.isEmpty()) {
             for (FeedbackGeral feedback : listaFeedbacks) {
                 modeloTabela.addRow(new Object[]{
-                    dateFormat.format(feedback.getDataResposta()),
-                    feedback.getPontuacaoAtual(),
                     feedback.getNomeFase(),
-                    feedback.getObservacoes()
-                });
+                    feedback.getObservacoes(),
+                    feedback.getPontuacaoAtual(),
+                    dateFormat.format(feedback.getDataResposta())
+            });
+
                 System.out.println("Adicionado registro à tabela: Data: " + dateFormat.format(feedback.getDataResposta()) +
                                    ", Pontuação: " + feedback.getPontuacaoAtual() +
                                    ", Nome Fase: " + feedback.getNomeFase() +

@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import CabineDeControleTela.*;
+import ChaveReversoraTela.*;
 import Assets.*;
 
 public class BoteiraLateralTela extends JPanel {
@@ -100,7 +101,10 @@ public class BoteiraLateralTela extends JPanel {
             reposicionarComponentes();
             repaint();
         });
-        add(btnTrocar);
+
+        if (ChaveReversoraTela.indexChaveReversora != 0){
+            add(btnTrocar);
+        }
         
 
         // Botão Voltar
