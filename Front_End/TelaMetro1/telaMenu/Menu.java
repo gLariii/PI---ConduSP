@@ -85,7 +85,7 @@ public class Menu extends JLayeredPane {
         
         configuracoesPanel.setOnDesconectarAction(() -> {
             SwingUtilities.invokeLater(() -> {
-                ConfirmarSaidaDialog dialog = new ConfirmarSaidaDialog(parentFrame);
+                ConfirmarSaida dialog = new ConfirmarSaida(parentFrame);
                 dialog.setVisible(true);
 
                 if (dialog.isConfirmed()) {
@@ -202,10 +202,19 @@ public class Menu extends JLayeredPane {
         btnFeedbacks = botoes.criarBotaoFeedBackPessoal();
         btnSupervisor = botoes.criarBotaoSupervisor();
 
+        // --- MODIFICAÇÃO AQUI ---
         btnMaquinario.addActionListener(e -> {
-            substituirPainel(new CabineDeControleTela(parentFrame, idUsuarioLogado)); 
-            SalvarResposta.pontuacao =0;
+            SwingUtilities.invokeLater(() -> {
+                ConfirmarJogar dialog = new ConfirmarJogar(parentFrame);
+                dialog.setVisible(true);
+
+                if (dialog.isConfirmed()) {
+                    substituirPainel(new CabineDeControleTela(parentFrame, idUsuarioLogado)); 
+                    SalvarResposta.pontuacao = 0;
+                }
+            });
         });
+        // --- FIM DA MODIFICAÇÃO ---
 
         btnSupervisor.addActionListener(e -> {
             showPanel("supervisor"); 

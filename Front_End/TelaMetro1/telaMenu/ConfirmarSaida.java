@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 import Assets.Cores; 
 
-public class ConfirmarSaidaDialog extends JDialog {
+public class ConfirmarSaida extends JDialog {
 
     private boolean confirmed = false; 
 
@@ -45,7 +45,7 @@ public class ConfirmarSaidaDialog extends JDialog {
     }
 
 
-    public ConfirmarSaidaDialog(JFrame parent) {
+    public ConfirmarSaida(JFrame parent) {
         super(parent, "Confirmação de Saída", true);
 
         setUndecorated(true); 
@@ -53,8 +53,8 @@ public class ConfirmarSaidaDialog extends JDialog {
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS)); 
-        contentPanel.setBackground(Cores.AZUL_METRO); 
-        contentPanel.setBorder(new RoundBorder(20, Cores.AZUL_METRO)); 
+        contentPanel.setBackground(Cores.AZUL_GRADIENTE_START ); 
+        contentPanel.setBorder(new RoundBorder(20, Cores.AZUL_GRADIENTE_START)); 
         contentPanel.setAlignmentX(Component.CENTER_ALIGNMENT); 
 
         JPanel messageArea = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15)); 
