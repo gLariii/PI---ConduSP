@@ -2,20 +2,20 @@ package TelaMetro1.telaMenu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.ImageObserver;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
 import Assets.Cores;
 import CabineDeControleTela.CabineDeControleTela;
 import Model.*;
+import TelaMetro1.Musica.InicialMusica;
 
 public class Menu extends JLayeredPane {
     private Image ImagemDeFundo, logoOriginal, logoRedimensionada;
-    private int logoWidth = 40;  
-    private int logoHeight = 40; 
+    private int logoWidth = 40;
+    private int logoHeight = 40;
 
-    private JButton btnMaquinario, btnFeedbacks, btnSupervisor, btnConfiguracoes; 
+    private JButton btnMaquinario, btnFeedbacks, btnSupervisor;
 
     private JPanel mainContentPanel;
     private ConfiguracoesPanel configuracoesPanel;
@@ -26,7 +26,7 @@ public class Menu extends JLayeredPane {
 
     private JFrame parentFrame;
     private String tipo_usuarioLogado;
-    private int idUsuarioLogado; 
+    private int idUsuarioLogado;
 
     private final int SIDEBAR_WIDTH = 300;
 
@@ -35,9 +35,11 @@ public class Menu extends JLayeredPane {
         this.tipo_usuarioLogado = tipo_usuario;
         this.idUsuarioLogado = idUsuarioLogado;
 
+        InicialMusica.startBackgroundMusic("/TelaMetro1/Musica/musicamenu.wav", true);
+
         carregarImagens(imagemPath);
 
-        setLayout(null); 
+        setLayout(null);
 
         mainContentPanel = new JPanel(new BorderLayout()) {
             @Override
@@ -47,8 +49,8 @@ public class Menu extends JLayeredPane {
                     g.drawImage(ImagemDeFundo, 0, 0, getWidth(), getHeight(), this);
                 }
                 if (logoRedimensionada != null) {
-                    int x = getWidth() - Menu.this.logoWidth - 15; 
-                    int y = getHeight() - Menu.this.logoHeight - 15; 
+                    int x = getWidth() - Menu.this.logoWidth - 15;
+                    int y = getHeight() - Menu.this.logoHeight - 15;
                     g.drawImage(logoRedimensionada, x, y, this);
                     Graphics2D g2d = (Graphics2D) g.create();
                     g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -64,34 +66,41 @@ public class Menu extends JLayeredPane {
                 }
             }
         };
-        mainContentPanel.setOpaque(false); 
+        mainContentPanel.setOpaque(false);
         mainContentPanel.add(criarNavBar(), BorderLayout.NORTH);
         mainContentPanel.add(criarPainelCentral(), BorderLayout.CENTER);
 
         add(mainContentPanel, JLayeredPane.DEFAULT_LAYER);
 
-        redimensionarLogo(40, 40); 
+        redimensionarLogo(40, 40);
 
         sidebarContainerPanel = new JPanel(new BorderLayout());
         sidebarContainerPanel.setOpaque(true);
-        sidebarContainerPanel.setBackground(Cores.AZUL_METRO); 
+        sidebarContainerPanel.setBackground(Cores.AZUL_METRO);
 
         configuracoesPanel = new ConfiguracoesPanel(() -> {
-            toggleConfigPanel(false); 
+            toggleConfigPanel(false);
         });
         configuracoesPanel.setOnSobreAction(() -> {
-            showPanel("sobre"); 
+            showPanel("sobre");
         });
-        
+
         configuracoesPanel.setOnDesconectarAction(() -> {
             SwingUtilities.invokeLater(() -> {
                 ConfirmarSaida dialog = new ConfirmarSaida(parentFrame);
                 dialog.setVisible(true);
 
                 if (dialog.isConfirmed()) {
+                    InicialMusica.stopMusic();
                     System.exit(0);
                 }
             });
+        });
+
+        configuracoesPanel.addPropertyChangeListener("ancestor", evt -> {
+            if (evt.getNewValue() != null && InicialMusica.getBackgroundMusicPlayer() != null) {
+                configuracoesPanel.setMusicaPlayer(InicialMusica.getBackgroundMusicPlayer());
+            }
         });
 
         sidebarContainerPanel.add(configuracoesPanel, BorderLayout.CENTER);
@@ -99,17 +108,17 @@ public class Menu extends JLayeredPane {
         add(sidebarContainerPanel, JLayeredPane.PALETTE_LAYER);
 
         supervisorPanel = new SupervisorPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
-            showPanel("main"); 
+            showPanel("main");
         });
-        add(supervisorPanel, JLayeredPane.MODAL_LAYER); 
+        add(supervisorPanel, JLayeredPane.MODAL_LAYER);
 
         feedbackPanel = new FeedbackPanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
-            showPanel("main"); 
+            showPanel("main");
         }, idUsuarioLogado);
         add(feedbackPanel, JLayeredPane.MODAL_LAYER);
 
         sobrePanel = new SobrePanel("/Assets/Imagens/TelaInicial4Corrigida.png", () -> {
-            showPanel("config"); 
+            showPanel("config");
         });
         add(sobrePanel, JLayeredPane.MODAL_LAYER);
 
@@ -123,7 +132,7 @@ public class Menu extends JLayeredPane {
                 } else {
                     sidebarContainerPanel.setBounds(-SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight());
                 }
-                
+
                 supervisorPanel.setBounds(0, 0, getWidth(), getHeight());
                 feedbackPanel.setBounds(0, 0, getWidth(), getHeight());
                 sobrePanel.setBounds(0, 0, getWidth(), getHeight());
@@ -133,7 +142,7 @@ public class Menu extends JLayeredPane {
             }
         });
 
-        showPanel("main");       
+        showPanel("main");
     }
 
     private void carregarImagens(String imagemPath) {
@@ -157,8 +166,8 @@ public class Menu extends JLayeredPane {
             height = Math.max(20, Math.min(height, 100));
 
             logoRedimensionada = logoOriginal.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            this.logoWidth = width; 
-            this.logoHeight = height; 
+            this.logoWidth = width;
+            this.logoHeight = height;
             if (mainContentPanel != null) {
                 mainContentPanel.repaint();
             }
@@ -168,18 +177,18 @@ public class Menu extends JLayeredPane {
     private JPanel criarNavBar() {
         JPanel navBar = new JPanel(new BorderLayout());
         navBar.setBackground(Cores.AZUL_METRO);
-        navBar.setPreferredSize(new Dimension(this.getWidth(), 60)); 
+        navBar.setPreferredSize(new Dimension(this.getWidth(), 60));
 
         JLabel titulo = new JLabel("Sistema de Gerenciamento");
         titulo.setFont(new Font("Arial", Font.BOLD, 32));
         titulo.setForeground(Color.WHITE);
-        titulo.setBorder(BorderFactory.createEmptyBorder(0, 350, 0, 0)); 
+        titulo.setBorder(BorderFactory.createEmptyBorder(0, 350, 0, 0));
 
         navBar.add(titulo, BorderLayout.CENTER);
 
         JButton btnConfiguracoes = botoes.criarBotaoConfiguracoes();
         btnConfiguracoes.addActionListener(e -> {
-            toggleConfigPanel(true); 
+            toggleConfigPanel(true);
         });
 
         JPanel painelConfig = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 0));
@@ -202,27 +211,26 @@ public class Menu extends JLayeredPane {
         btnFeedbacks = botoes.criarBotaoFeedBackPessoal();
         btnSupervisor = botoes.criarBotaoSupervisor();
 
-        // --- MODIFICAÇÃO AQUI ---
         btnMaquinario.addActionListener(e -> {
             SwingUtilities.invokeLater(() -> {
                 ConfirmarJogar dialog = new ConfirmarJogar(parentFrame);
                 dialog.setVisible(true);
 
                 if (dialog.isConfirmed()) {
-                    substituirPainel(new CabineDeControleTela(parentFrame, idUsuarioLogado)); 
+                    InicialMusica.stopMusic();
+                    substituirPainel(new CabineDeControleTela(parentFrame, idUsuarioLogado));
                     SalvarResposta.pontuacao = 0;
                 }
             });
         });
-        // --- FIM DA MODIFICAÇÃO ---
 
         btnSupervisor.addActionListener(e -> {
-            showPanel("supervisor"); 
+            showPanel("supervisor");
         });
 
         btnFeedbacks.addActionListener(e -> {
             if (feedbackPanel instanceof FeedbackPanel) {
-                ((FeedbackPanel)feedbackPanel).carregarDadosFeedbackGeral(idUsuarioLogado); 
+                ((FeedbackPanel)feedbackPanel).carregarDadosFeedbackGeral(idUsuarioLogado);
             }
             showPanel("feedback");
         });
@@ -279,27 +287,27 @@ public class Menu extends JLayeredPane {
                 sobrePanel.setVisible(true);
                 break;
         }
-        revalidate(); 
-        repaint();    
+        revalidate();
+        repaint();
     }
 
     private void toggleConfigPanel(boolean show) {
         if (show) {
-            showPanel("config"); 
-            configuracoesPanel.revalidate(); 
-            configuracoesPanel.repaint();    
-            animatePanel(sidebarContainerPanel, -SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight(), null); 
+            showPanel("config");
+            configuracoesPanel.revalidate();
+            configuracoesPanel.repaint();
+            animatePanel(sidebarContainerPanel, -SIDEBAR_WIDTH, 0, SIDEBAR_WIDTH, getHeight(), null);
         } else {
             animatePanel(sidebarContainerPanel, 0, -SIDEBAR_WIDTH, SIDEBAR_WIDTH, getHeight(), () -> {
                 sidebarContainerPanel.setVisible(false);
-                showPanel("main"); 
+                showPanel("main");
             });
         }
     }
 
     private void animatePanel(JPanel panel, int startX, int endX, int width, int height, Runnable onComplete) {
-        final int frames = 20; 
-        final int int_delay = 10;  
+        final int frames = 20;
+        final int int_delay = 10;
         Timer timer = new Timer(int_delay, new AbstractAction() {
             int currentX = startX;
             int step = (endX - startX) / frames;
@@ -308,15 +316,15 @@ public class Menu extends JLayeredPane {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 currentX += step;
                 if ((step > 0 && currentX >= endX) || (step < 0 && currentX <= endX)) {
-                    currentX = endX; 
-                    ((Timer) e.getSource()).stop(); 
+                    currentX = endX;
+                    ((Timer) e.getSource()).stop();
                     if (onComplete != null) {
-                        onComplete.run(); 
+                        onComplete.run();
                     }
                 }
-                panel.setBounds(currentX, 0, width, height); 
+                panel.setBounds(currentX, 0, width, height);
             }
         });
-        timer.start(); 
+        timer.start();
     }
 }

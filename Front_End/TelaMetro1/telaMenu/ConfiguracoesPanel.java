@@ -2,14 +2,14 @@ package TelaMetro1.telaMenu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Graphics2D;
 import Assets.Cores;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.swing.plaf.basic.BasicSliderUI;
 import javax.swing.border.AbstractBorder;
-import javax.swing.border.Border;
+
+import TelaMetro1.Musica.Musica;
 
 public class ConfiguracoesPanel extends JPanel {
     private JSlider volumeSlider;
@@ -17,10 +17,10 @@ public class ConfiguracoesPanel extends JPanel {
     private Runnable onSobreAction;
     private Runnable onDesconectarAction;
 
+    private Musica musicaPlayer;
+
     private boolean isMuted = false;
     private int lastVolume = 100;
-
-    private static final int VERSAO_FONT_SIZE = 14;
 
     private JPanel muteButtonPanel;
     private Color defaultMuteColor;
@@ -148,19 +148,24 @@ public class ConfiguracoesPanel extends JPanel {
 
         volumeSlider.addChangeListener(e -> {
             volumeSlider.repaint();
-            if (!volumeSlider.getValueIsAdjusting()) {
-                if (volumeSlider.getValue() == 0) {
-                    if (!isMuted) {
-                        isMuted = true;
-                        updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
-                    }
-                } else {
-                    if (isMuted) {
-                        isMuted = false;
-                        updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
-                    }
-                    lastVolume = volumeSlider.getValue();
+
+            int currentVolume = volumeSlider.getValue();
+
+            if (currentVolume == 0) {
+                if (!isMuted) {
+                    isMuted = true;
+                    updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
                 }
+            } else {
+                if (isMuted) {
+                    isMuted = false;
+                    updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
+                }
+                lastVolume = currentVolume;
+            }
+
+            if (musicaPlayer != null) {
+                musicaPlayer.setVolume(currentVolume);
             }
         });
 
@@ -176,7 +181,7 @@ public class ConfiguracoesPanel extends JPanel {
         JPanel mainContentPanel = new JPanel();
         mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
         mainContentPanel.setOpaque(false);
-        
+
         mainContentPanel.add(volumeControlPanel);
         mainContentPanel.add(Box.createVerticalStrut(20));
 
@@ -227,6 +232,9 @@ public class ConfiguracoesPanel extends JPanel {
                         volumeSlider.setValue(0);
                         isMuted = true;
                         volumeSlider.setEnabled(false);
+                    }
+                    if (musicaPlayer != null) {
+                        musicaPlayer.setVolume(volumeSlider.getValue());
                     }
                 }
                 updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
@@ -418,7 +426,7 @@ public class ConfiguracoesPanel extends JPanel {
 
         JLabel versao = new JLabel("Versão: 1.2", SwingConstants.LEFT);
         versao.setForeground(Color.WHITE);
-        versao.setFont(new Font("Arial", Font.PLAIN, VERSAO_FONT_SIZE));
+        versao.setFont(new Font("Arial", Font.PLAIN, 14));
 
         versaoPanel.add(versao, BorderLayout.WEST);
         painelRodape.add(versaoPanel);
@@ -426,6 +434,13 @@ public class ConfiguracoesPanel extends JPanel {
         painelCentral.add(painelRodape, BorderLayout.SOUTH);
 
         add(painelCentral, BorderLayout.CENTER);
+    }
+
+    public void setMusicaPlayer(Musica musicaPlayer) {
+        this.musicaPlayer = musicaPlayer;
+        if (this.musicaPlayer != null) {
+            this.musicaPlayer.setVolume(volumeSlider.getValue());
+        }
     }
 
     public void setOnSobreAction(Runnable action) {
@@ -460,14 +475,14 @@ public class ConfiguracoesPanel extends JPanel {
             Rectangle trackBounds = trackRect;
 
             final int TRACK_WIDTH = 8;
-            final int ARC_SIZE = 8; 
+            final int ARC_SIZE = 8;
             int trackX = trackBounds.x + (trackBounds.width / 2) - (TRACK_WIDTH / 2);
 
             g2d.setColor(new Color(255, 255, 255, 60));
             g2d.fillRoundRect(trackX, trackBounds.y, TRACK_WIDTH, trackBounds.height, ARC_SIZE, ARC_SIZE);
 
             int fillHeight = (int) (slider.getValue() / (double) slider.getMaximum() * trackBounds.height);
-            
+
             if (slider.isEnabled()) {
                 g2d.setColor(Color.WHITE);
             } else {
@@ -475,10 +490,10 @@ public class ConfiguracoesPanel extends JPanel {
             }
 
             if (slider.getValue() > 0) {
-                if (fillHeight > ARC_SIZE) { 
+                if (fillHeight > ARC_SIZE) {
                     g2d.fillRect(trackX, trackBounds.y + trackBounds.height - fillHeight, TRACK_WIDTH, fillHeight - ARC_SIZE / 2);
                     g2d.fillRoundRect(trackX, trackBounds.y + trackBounds.height - ARC_SIZE, TRACK_WIDTH, ARC_SIZE, ARC_SIZE, ARC_SIZE);
-                } else { 
+                } else {
                     g2d.fillRoundRect(trackX, trackBounds.y + trackBounds.height - fillHeight, TRACK_WIDTH, fillHeight, ARC_SIZE, ARC_SIZE);
                 }
             }
@@ -490,7 +505,7 @@ public class ConfiguracoesPanel extends JPanel {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-            int diameter = 10; 
+            int diameter = 10;
             int x = thumbRect.x + (thumbRect.width - diameter) / 2;
             int y = thumbRect.y + (thumbRect.height - diameter) / 2;
 
@@ -499,7 +514,7 @@ public class ConfiguracoesPanel extends JPanel {
             } else {
                 g2d.setColor(new Color(100, 100, 100));
             }
-            g2d.fillOval(x, y, diameter, diameter); 
+            g2d.fillOval(x, y, diameter, diameter);
 
             g2d.setColor(Color.WHITE);
             g2d.setStroke(new BasicStroke(2));
@@ -509,15 +524,15 @@ public class ConfiguracoesPanel extends JPanel {
         @Override
         public void paintLabels(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
-            
+
             if (slider.isEnabled()) {
-                 g2d.setColor(Color.WHITE);
+                g2d.setColor(Color.WHITE);
             } else {
                 g2d.setColor(new Color(150, 150, 150));
             }
             g2d.setFont(new Font("Arial", Font.PLAIN, 12));
-            
-            super.paintLabels(g); 
+
+            super.paintLabels(g);
         }
     }
 
@@ -532,7 +547,7 @@ public class ConfiguracoesPanel extends JPanel {
 
         @Override
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-            Graphics2D g2 = (Graphics2D) g.create(); 
+            Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setColor(color);
             g2.fillRoundRect(x, y, width - 1, height - 1, radius, radius);
