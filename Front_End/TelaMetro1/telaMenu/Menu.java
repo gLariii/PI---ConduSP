@@ -371,7 +371,7 @@ public class Menu extends JLayeredPane {
                     }
                     return;
                 }
-
+                InicialMusica.stopMusic();
                 Media media = new Media(resource.toExternalForm());
                 MediaPlayer mediaPlayer = new MediaPlayer(media);
                 MediaView mediaView = new MediaView(mediaPlayer);
@@ -387,7 +387,8 @@ public class Menu extends JLayeredPane {
 
                 mediaView.fitWidthProperty().bind(scene.widthProperty());
                 mediaView.fitHeightProperty().bind(scene.heightProperty());
-                mediaView.setPreserveRatio(true);
+                mediaView.setPreserveRatio(false);
+
 
                 mediaPlayer.setOnEndOfMedia(() -> {
                     System.out.println("Vídeo de introdução terminou.");
