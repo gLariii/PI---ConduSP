@@ -210,7 +210,7 @@ public class FeedbackPanel extends JPanel {
         }
 
         int linhasAtuais = modeloTabela.getRowCount();
-        int linhasParaAdicionar = NUM_LINHAS_VISIVEIS_MINIMO - linhasAtuais;
+        int linhasParaAdicionar = NUM_LINHAS_VISIVEIS_MINIMO - -50 + linhasAtuais;
 
         if (linhasParaAdicionar > 0) {
             for (int i = 0; i < linhasParaAdicionar; i++) {

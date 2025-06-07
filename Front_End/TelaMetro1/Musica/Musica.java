@@ -4,23 +4,20 @@ import javax.sound.sampled.*;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class Musica { // A CLASSE AGORA SE CHAMA MUSICA
+public class Musica {
     private Clip clip;
-    private FloatControl gainControl; // Para controle de volume
+    private FloatControl gainControl;
 
-    public Musica() { // Construtor com o novo nome da classe
-        // Construtor vazio, a inicialização do Clip acontece em play()
+    public Musica() {
     }
 
     public void play(String audioFilePath, boolean loop) {
         try {
-            // Se já houver um clip tocando, pare e feche-o antes de iniciar um novo
             if (clip != null && clip.isOpen()) {
                 clip.stop();
                 clip.close();
             }
 
-            // Usando getResourceAsStream para carregar de dentro do JAR (se o Assets for um recurso)
             InputStream audioStream = getClass().getResourceAsStream(audioFilePath);
             if (audioStream == null) {
                 System.err.println("Arquivo de áudio não encontrado: " + audioFilePath);
@@ -32,7 +29,6 @@ public class Musica { // A CLASSE AGORA SE CHAMA MUSICA
             clip = AudioSystem.getClip();
             clip.open(audioIn);
 
-            // Obter o controle de volume
             if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
                 gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             } else {
@@ -41,9 +37,9 @@ public class Musica { // A CLASSE AGORA SE CHAMA MUSICA
             }
 
             if (loop) {
-                clip.loop(Clip.LOOP_CONTINUOUSLY); // Toca em loop contínuo
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
             } else {
-                clip.start(); // Toca uma vez
+                clip.start();
             }
 
         } catch (UnsupportedAudioFileException e) {
@@ -70,15 +66,15 @@ public class Musica { // A CLASSE AGORA SE CHAMA MUSICA
         }
     }
 
-    public void setVolume(float volume) { // volume de 0.0 a 1.0 (ou 0 a 100 como no slider)
+    public void setVolume(float volume) {
         if (gainControl != null) {
             float minDb = gainControl.getMinimum();
             float maxDb = gainControl.getMaximum();
-            
+
             if (volume <= 0) {
-                gainControl.setValue(minDb); // Mudo total
+                gainControl.setValue(minDb);
             } else {
-                float scaledVolume = volume / 100.0f; // Mapeia 0-100 para 0-1
+                float scaledVolume = volume / 100.0f;
                 float db = minDb + (maxDb - minDb) * (float) (Math.log10(scaledVolume * 9 + 1) / Math.log10(10));
                 db = Math.max(minDb, Math.min(db, maxDb));
                 gainControl.setValue(db);
