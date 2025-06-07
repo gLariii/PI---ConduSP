@@ -5,10 +5,22 @@ import java.awt.*;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.io.File;
+
 import Assets.Cores;
 import CabineDeControleTela.CabineDeControleTela;
 import Model.*;
 import TelaMetro1.Musica.InicialMusica;
+
+// Importações JavaFX
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.application.Platform;
 
 public class Menu extends JLayeredPane {
     private Image ImagemDeFundo, logoOriginal, logoRedimensionada;
@@ -211,16 +223,16 @@ public class Menu extends JLayeredPane {
         btnFeedbacks = botoes.criarBotaoFeedBackPessoal();
         btnSupervisor = botoes.criarBotaoSupervisor();
 
+        // Lógica do botão Maquinário modificada para incluir o vídeo
         btnMaquinario.addActionListener(e -> {
-            SwingUtilities.invokeLater(() -> {
-                ConfirmarJogar dialog = new ConfirmarJogar(parentFrame);
-                dialog.setVisible(true);
-
-                if (dialog.isConfirmed()) {
+            // Reproduz o vídeo e, ao final, inicia a CabineDeControleTela
+            playVideoIntro("/Assets/Imagens/videoJogo.mp4", () -> {
+                // Esta callback será executada quando o vídeo terminar
+                SwingUtilities.invokeLater(() -> {
                     InicialMusica.stopMusic();
                     substituirPainel(new CabineDeControleTela(parentFrame, idUsuarioLogado));
                     SalvarResposta.pontuacao = 0;
-                }
+                });
             });
         });
 
@@ -326,5 +338,91 @@ public class Menu extends JLayeredPane {
             }
         });
         timer.start();
+    }
+
+    // Método para reproduzir o vídeo de introdução
+    /**
+     * Exibe um vídeo de introdução em uma nova janela Swing/JavaFX.
+     *
+     * @param videoPath O caminho do recurso para o arquivo de vídeo (ex: "/Assets/Imagens/videoJogo.mp4").
+     * @param onVideoEnd Runnable a ser executado quando o vídeo terminar.
+     */
+    private void playVideoIntro(String videoPath, Runnable onVideoEnd) {
+        JFrame videoFrame = new JFrame("Introdução ao Jogo");
+        videoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        videoFrame.setUndecorated(true);
+        videoFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        videoFrame.setResizable(false);
+
+        JFXPanel jfxPanel = new JFXPanel();
+        videoFrame.add(jfxPanel, BorderLayout.CENTER);
+
+        Platform.runLater(() -> {
+            try {
+                java.net.URL resource = getClass().getResource(videoPath);
+                if (resource == null) {
+                    System.err.println("Recurso de vídeo não encontrado: " + videoPath);
+                    JOptionPane.showMessageDialog(videoFrame,
+                        "Erro: Arquivo de vídeo não encontrado! Caminho: " + videoPath,
+                        "Erro de Carregamento", JOptionPane.ERROR_MESSAGE);
+                    videoFrame.dispose();
+                    if (onVideoEnd != null) {
+                        onVideoEnd.run();
+                    }
+                    return;
+                }
+
+                Media media = new Media(resource.toExternalForm());
+                MediaPlayer mediaPlayer = new MediaPlayer(media);
+                MediaView mediaView = new MediaView(mediaPlayer);
+
+                // Vincula o MediaView às propriedades da cena (Scene)
+                Group root = new Group(); // Root para a cena
+                Scene scene = new Scene(root);
+                jfxPanel.setScene(scene); // Define a cena para o JFXPanel
+
+                // Adiciona o mediaView ao root APÓS a cena ser setada no jfxPanel
+                // Para que as propriedades de tamanho da cena já estejam válidas para o binding.
+                root.getChildren().add(mediaView);
+
+                mediaView.fitWidthProperty().bind(scene.widthProperty());
+                mediaView.fitHeightProperty().bind(scene.heightProperty());
+                mediaView.setPreserveRatio(true);
+
+                mediaPlayer.setOnEndOfMedia(() -> {
+                    System.out.println("Vídeo de introdução terminou.");
+                    mediaPlayer.stop();
+                    videoFrame.dispose();
+                    if (onVideoEnd != null) {
+                        onVideoEnd.run();
+                    }
+                });
+
+                mediaPlayer.setOnError(() -> {
+                    System.err.println("Erro durante a reprodução do vídeo: " + mediaPlayer.getError());
+                    JOptionPane.showMessageDialog(videoFrame,
+                        "Erro ao reproduzir o vídeo: " + mediaPlayer.getError().getMessage(),
+                        "Erro de Vídeo", JOptionPane.ERROR_MESSAGE);
+                    videoFrame.dispose();
+                    if (onVideoEnd != null) {
+                        onVideoEnd.run();
+                    }
+                });
+
+                mediaPlayer.play();
+            } catch (Exception ex) {
+                System.err.println("Erro ao inicializar o player de vídeo: " + ex.getMessage());
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(videoFrame,
+                    "Erro inesperado ao carregar o vídeo: " + ex.getMessage(),
+                    "Erro de Vídeo", JOptionPane.ERROR_MESSAGE);
+                videoFrame.dispose();
+                if (onVideoEnd != null) {
+                    onVideoEnd.run();
+                }
+            }
+        });
+
+        videoFrame.setVisible(true);
     }
 }

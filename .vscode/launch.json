@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "CabineDeControleTela",
+            "request": "launch",
+            "mainClass": "CabineDeControleTela.CabineDeControleTela",
+            "projectName": "PI---ConduSP_78859dfa"
+        },
+        {
+            "type": "java",
+            "name": "Inicial",
+            "request": "launch",
+            "mainClass": "TelaMetro1.Entrada.Inicial",
+            "projectName": "PI---ConduSP"
+        },
+        {
+            "type": "java",
+            "name": "fundoMenu",
+            "request": "launch",
+            "mainClass": "TelaMetro1.telaMenu.fundoMenu",
+            "projectName": "PI---ConduSP"
+            // <-- A LINHA "vmArgs" DEVE SER REMOVIDA DAQUI
+        }
+    ]
+}
