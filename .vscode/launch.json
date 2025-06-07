@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CabineDeControleTela",
+            "request": "launch",
+            "mainClass": "CabineDeControleTela.CabineDeControleTela",
+            "projectName": "PI---ConduSP_8047192d"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -27,7 +34,6 @@
             "request": "launch",
             "mainClass": "TelaMetro1.telaMenu.fundoMenu",
             "projectName": "PI---ConduSP"
-            // <-- A LINHA "vmArgs" DEVE SER REMOVIDA DAQUI
         }
     ]
 }

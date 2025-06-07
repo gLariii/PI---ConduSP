@@ -130,6 +130,7 @@ public class Portas extends JPanel {
         btnLacrar.setOpaque(true);
         btnLacrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnLacrar.addActionListener(e -> {
+            AudioPlayer.playSound("SomFita.wav");
             index = 2;
             btnFechar.setVisible(false);
             btnLacrar.setVisible(false);

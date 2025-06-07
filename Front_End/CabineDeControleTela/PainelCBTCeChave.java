@@ -94,6 +94,7 @@ public class PainelCBTCeChave extends JPanel {
         btnChave.setBorderPainted(false);
         btnChave.setFocusPainted(false);
         btnChave.addActionListener(e -> {
+            AudioPlayer.playSound("SomChave.wav");
             indexChave = (indexChave + 1) % backgroundsChave.length;
             atualizarIconeChave();
             repaint();
