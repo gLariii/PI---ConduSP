@@ -35,7 +35,7 @@ public class FeedbackPanel extends JPanel {
     private int idUsuarioLogado;
 
     private static final int NUM_LINHAS_VISIVEIS_MINIMO = 22;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public FeedbackPanel(String imagemPath, Runnable voltarAcao, int idUsuario) {
         this.voltarAcao = voltarAcao;

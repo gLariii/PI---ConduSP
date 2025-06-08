@@ -1,19 +1,22 @@
 package TelaMetro1.telaMenu;
 
 import javax.swing.*;
-import javax.swing.border.AbstractBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.border.AbstractBorder;
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Date;
+
+import javax.imageio.ImageIO;
 
 import Assets.Cores;
 import Controller.FeedbackGeralController;
 import Model.FeedbackGeral;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.List;
+import Assets.*;
 
 public class FeedbackGeralPanel extends JPanel {
 
@@ -21,18 +24,17 @@ public class FeedbackGeralPanel extends JPanel {
     private Image logoOriginal, logoRedimensionada;
     private int logoWidth = 60;
     private int logoHeight = 60;
+    private Runnable voltarAcao;
 
     private JTable tabelaFeedbacks;
     private DefaultTableModel modeloTabela;
-
-    private Runnable voltarAcao;
-
+    
     private static final int NUM_LINHAS_VISIVEIS_MINIMO = 22;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public FeedbackGeralPanel(String imagemPath, Runnable voltarAcao) {
         this.voltarAcao = voltarAcao;
-
         carregarImagens(imagemPath);
 
         setLayout(new BorderLayout());
@@ -42,20 +44,27 @@ public class FeedbackGeralPanel extends JPanel {
         add(criarPainelCentral(), BorderLayout.CENTER);
 
         redimensionarLogo(logoWidth, logoHeight);
-
         carregarFeedbacks();
     }
 
     private void carregarImagens(String imagemPath) {
         try {
             InputStream isFundo = getClass().getResourceAsStream(imagemPath);
-            if (isFundo != null) imagemDeFundo = ImageIO.read(isFundo);
+            if (isFundo != null) {
+                imagemDeFundo = ImageIO.read(isFundo);
+            } else {
+                System.err.println("Imagem de fundo não encontrada: " + imagemPath);
+            }
 
             InputStream isLogo = getClass().getResourceAsStream("/Assets/Imagens/LogoCorrigida4.png");
-            if (isLogo != null) logoOriginal = ImageIO.read(isLogo);
-
-        } catch (Exception e) {
+            if (isLogo != null) {
+                logoOriginal = ImageIO.read(isLogo);
+            } else {
+                System.err.println("Logo não encontrada.");
+            }
+        } catch (IOException e) {
             System.err.println("Erro ao carregar imagens: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -64,15 +73,7 @@ public class FeedbackGeralPanel extends JPanel {
         navBar.setBackground(Cores.AZUL_METRO);
         navBar.setPreferredSize(new Dimension(getWidth(), 60));
 
-        JButton btnVoltar = new JButton("Voltar");
-        btnVoltar.setBackground(Cores.AZUL_METRO);
-        btnVoltar.setForeground(Color.WHITE);
-        btnVoltar.setFocusPainted(false);
-        btnVoltar.setBorderPainted(false);
-        btnVoltar.setFont(new Font("Arial", Font.BOLD, 18));
-        btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnVoltar.setPreferredSize(new Dimension(100, 40));
-
+        JButton btnVoltar = botoes.criarBotaoVoltar();
         btnVoltar.addActionListener(e -> {
             if (voltarAcao != null) voltarAcao.run();
         });
@@ -87,10 +88,10 @@ public class FeedbackGeralPanel extends JPanel {
         titulo.setForeground(Color.WHITE);
         navBar.add(titulo, BorderLayout.CENTER);
 
-        JPanel painelDireito = new JPanel();
-        painelDireito.setOpaque(false);
-        painelDireito.setPreferredSize(new Dimension(btnVoltar.getPreferredSize().width + 30, 1));
-        navBar.add(painelDireito, BorderLayout.EAST);
+        JPanel painelDireitoVazio = new JPanel();
+        painelDireitoVazio.setOpaque(false);
+        painelDireitoVazio.setPreferredSize(new Dimension(btnVoltar.getPreferredSize().width + 30, 1));
+        navBar.add(painelDireitoVazio, BorderLayout.EAST);
 
         return navBar;
     }
@@ -101,8 +102,7 @@ public class FeedbackGeralPanel extends JPanel {
         painel.setBorder(BorderFactory.createEmptyBorder(40, 80, 40, 80));
 
         modeloTabela = new DefaultTableModel(new Object[]{
-            "Nome da Fase", "Observações", "Pontuação Atual", "Data da Resposta"}, 0)
-        {
+                "Nome da Fase", "Observações", "Pontuação Atual", "Data da Resposta"}, 20) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -118,8 +118,8 @@ public class FeedbackGeralPanel extends JPanel {
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
-                                                           boolean isSelected, boolean hasFocus,
-                                                           int row, int column) {
+                                                            boolean isSelected, boolean hasFocus,
+                                                            int row, int column) {
                 JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 label.setBackground(Cores.AZUL_METRO);
                 label.setForeground(Color.WHITE);
@@ -137,9 +137,10 @@ public class FeedbackGeralPanel extends JPanel {
 
         tabelaFeedbacks.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                            boolean isSelected, boolean hasFocus,
+                                                            int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
                 if (!isSelected) {
                     c.setBackground(Cores.AZUL_METRO);
                 } else {
@@ -148,25 +149,24 @@ public class FeedbackGeralPanel extends JPanel {
                 c.setForeground(Color.WHITE);
                 ((JLabel) c).setHorizontalAlignment(SwingConstants.CENTER);
                 ((JComponent) c).setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-                ((JComponent) c).setOpaque(true); 
+                ((JComponent) c).setOpaque(true);
                 return c;
             }
         });
+
         tabelaFeedbacks.setGridColor(Color.WHITE);
         tabelaFeedbacks.setShowGrid(true);
         tabelaFeedbacks.setOpaque(false);
 
         JScrollPane scroll = new JScrollPane(tabelaFeedbacks);
-        scroll.getViewport().setOpaque(true);
-        scroll.getViewport().setBackground(Cores.AZUL_METRO);
-        scroll.setOpaque(false); 
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scroll.getViewport().setOpaque(false);
+        scroll.setOpaque(false);
+        scroll.setBorder(new RoundBorder(20, Color.WHITE));
+        scroll.setPreferredSize(new Dimension(800, 400));
 
-        int radius = 20;
-        Color borderColor = Color.WHITE;
-        scroll.setBorder(new RoundBorder(radius, borderColor));
 
         painel.add(scroll, BorderLayout.CENTER);
-
         return painel;
     }
 
@@ -178,25 +178,29 @@ public class FeedbackGeralPanel extends JPanel {
 
         for (FeedbackGeral f : feedbacks) {
             modeloTabela.addRow(new Object[]{
-                f.getNomeFase(),
-                f.getObservacoes(),
-                f.getPontuacaoAtual(),
-                dateFormat.format(f.getDataResposta())
+                    f.getNomeFase(),
+                    f.getObservacoes(),
+                    f.getPontuacaoAtual(),
+                    dateFormat.format(f.getDataResposta())
             });
         }
-
+        
         int linhasAtuais = modeloTabela.getRowCount();
-        for (int i = linhasAtuais; i < NUM_LINHAS_VISIVEIS_MINIMO; i++) {
-            modeloTabela.addRow(new Object[]{"", "", "", ""});
+        int linhasParaAdicionar = NUM_LINHAS_VISIVEIS_MINIMO - -50 + linhasAtuais;
+        
+        if (linhasParaAdicionar > 0) {
+            for (int i = 0; i < linhasParaAdicionar; i++) {
+                modeloTabela.addRow(new Object[]{"", "", "", ""});
+            }
         }
     }
 
     public void redimensionarLogo(int width, int height) {
         if (logoOriginal != null) {
             logoRedimensionada = logoOriginal.getScaledInstance(
-                Math.max(20, Math.min(width, 150)),
-                Math.max(20, Math.min(height, 150)),
-                Image.SCALE_SMOOTH
+                    Math.max(20, Math.min(width, 150)),
+                    Math.max(20, Math.min(height, 150)),
+                    Image.SCALE_SMOOTH
             );
             this.logoWidth = width;
             this.logoHeight = height;
