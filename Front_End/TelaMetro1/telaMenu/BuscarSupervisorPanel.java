@@ -38,11 +38,13 @@ public class BuscarSupervisorPanel extends JPanel {
 
     private JButton btnBuscar;
     private JButton btnAtualizarTipo;
-    private JButton btnAtualizarTipoOperario; 
+    private JButton btnAtualizarTipoOperario;
 
     private Usuario usuarioEncontrado;
 
     private Font helveticaFont = new Font("Helvetica", Font.PLAIN, 16);
+
+    private Border defaultTextFieldBorder;
 
     public BuscarSupervisorPanel(String imagemPath, Runnable voltarAcao) {
         this.voltarAcao = voltarAcao;
@@ -50,13 +52,14 @@ public class BuscarSupervisorPanel extends JPanel {
         carregarLogo("/Assets/Imagens/logoORG.png");
         setLayout(new BorderLayout());
 
-        setOpaque(true);
+        setOpaque(true); 
+
+        defaultTextFieldBorder = new RoundedBorder(Color.WHITE, 2, 10);
 
         add(criarNavBarBuscarSupervisor(), BorderLayout.NORTH);
 
         JPanel painelCentralBuscar = new JPanel(new GridBagLayout());
         painelCentralBuscar.setOpaque(false);
-
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -84,14 +87,13 @@ public class BuscarSupervisorPanel extends JPanel {
         formGbc.gridy = 1;
         formPanel.add(criarLabel("RG para Busca:"), formGbc);
         formGbc.gridx = 1;
-        txtRGBusca = criarCampoTextoComIcone("/Assets/Imagens/lupa.png", 20, 20);
+        JPanel rgBuscaPanel = criarCampoTextoComIconeWrapper("/Assets/Imagens/lupa.png", 20, 20, getAzulMetro(), 15);
+        txtRGBusca = (JTextField) rgBuscaPanel.getClientProperty("textField");
         txtRGBusca.setFont(helveticaFont.deriveFont(Font.PLAIN, 18f));
-
-        txtRGBusca.setBorder(new PlaceholderBorder(getAzulMetro(), "Digite o RG", 15, txtRGBusca));
         txtRGBusca.setForeground(Color.GRAY);
         txtRGBusca.setText("Digite o RG");
         txtRGBusca.addFocusListener(new PlaceholderFocusListener(txtRGBusca, "Digite o RG"));
-        formPanel.add(txtRGBusca, formGbc);
+        formPanel.add(rgBuscaPanel, formGbc);
 
         formGbc.gridx = 0;
         formGbc.gridy = 2;
@@ -115,7 +117,7 @@ public class BuscarSupervisorPanel extends JPanel {
         txtNomeEncontrado = criarCampoTextoSemIcone();
         txtNomeEncontrado.setEditable(false);
         txtNomeEncontrado.setFont(helveticaFont.deriveFont(Font.PLAIN, 18f));
-        txtNomeEncontrado.setBorder(new RoundedBorder(Color.WHITE, 2, 10));
+        txtNomeEncontrado.setBorder(defaultTextFieldBorder);
         formPanel.add(txtNomeEncontrado, formGbc);
 
         formGbc.gridx = 0;
@@ -126,7 +128,7 @@ public class BuscarSupervisorPanel extends JPanel {
         txtRGEncontrado = criarCampoTextoSemIcone();
         txtRGEncontrado.setEditable(false);
         txtRGEncontrado.setFont(helveticaFont.deriveFont(Font.PLAIN, 18f));
-        txtRGEncontrado.setBorder(new RoundedBorder(Color.WHITE, 2, 10));
+        txtRGEncontrado.setBorder(defaultTextFieldBorder);
         formPanel.add(txtRGEncontrado, formGbc);
 
         formGbc.gridx = 0;
@@ -135,8 +137,7 @@ public class BuscarSupervisorPanel extends JPanel {
         formGbc.gridx = 1;
         txttipo_usuario = criarCampoTextoSemIcone();
         txttipo_usuario.setFont(helveticaFont.deriveFont(Font.PLAIN, 18f));
-        txttipo_usuario.setBorder(new RoundedBorder(getAzulMetro(), 2, 10));
-        txttipo_usuario.setEditable(false);
+        txttipo_usuario.setBorder(new RoundedBorder(getAzulMetro(), 2, 10)); 
         formPanel.add(txttipo_usuario, formGbc);
 
         formGbc.gridx = 0;
@@ -154,9 +155,8 @@ public class BuscarSupervisorPanel extends JPanel {
         btnAtualizarTipo.setEnabled(false);
         formPanel.add(btnAtualizarTipo, formGbc);
 
-    
-        formGbc.gridy = 7; 
-        formGbc.insets = new Insets(10, 0, 0, 0); 
+        formGbc.gridy = 7;
+        formGbc.insets = new Insets(10, 0, 0, 0);
         btnAtualizarTipoOperario = botoes.criarBotaoPadrao("Atualizar Tipo para Operário", null, 0, 0, SwingConstants.CENTER, new Dimension(300, 50), 20);
         btnAtualizarTipoOperario.addActionListener(new ActionListener() {
             @Override
@@ -172,7 +172,7 @@ public class BuscarSupervisorPanel extends JPanel {
 
         addHoverEffect(btnBuscar);
         addHoverEffect(btnAtualizarTipo);
-        addHoverEffect(btnAtualizarTipoOperario); 
+        addHoverEffect(btnAtualizarTipoOperario);
     }
 
     private JLabel criarLabel(String texto) {
@@ -185,30 +185,44 @@ public class BuscarSupervisorPanel extends JPanel {
     private JTextField criarCampoTextoSemIcone() {
         JTextField campo = new JTextField(20);
         campo.setFont(new Font("Arial", Font.PLAIN, 18));
-        campo.setBackground(new Color(255, 255, 255, 200));
+        campo.setBackground(Color.WHITE); 
         campo.setForeground(Color.BLACK);
         campo.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        campo.setOpaque(true); 
         return campo;
     }
 
-    private JTextField criarCampoTextoComIcone(String iconPath, int iconWidth, int iconHeight) {
-        JTextField campo = new JTextField(20);
-        campo.setFont(new Font("Arial", Font.PLAIN, 18));
-        campo.setBackground(new Color(255, 255, 255, 200));
-        campo.setForeground(Color.BLACK);
+    private JPanel criarCampoTextoComIconeWrapper(String iconPath, int iconWidth, int iconHeight, Color borderColor, int borderRadius) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false); 
+        panel.setBorder(new RoundedBorder(borderColor, 2, borderRadius)); 
 
+        JTextField textField = new JTextField(20);
+        textField.setFont(new Font("Arial", Font.PLAIN, 18));
+        textField.setBackground(Color.WHITE);
+        textField.setForeground(Color.BLACK);
+        textField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        textField.setOpaque(true); 
 
+        JLabel iconLabel = new JLabel();
         try (InputStream is = getClass().getResourceAsStream(iconPath)) {
             if (is != null) {
                 Image img = ImageIO.read(is).getScaledInstance(iconWidth, iconHeight, Image.SCALE_SMOOTH);
-                JLabel iconLabel = new JLabel(new ImageIcon(img));
-                campo.putClientProperty("iconLabel", iconLabel);
+                iconLabel.setIcon(new ImageIcon(img));
+                iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5)); 
+            } else {
+                System.err.println("Erro ao carregar ícone para campo de texto: " + iconPath);
             }
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Erro ao carregar ícone para campo de texto: " + iconPath);
         }
-        return campo;
+
+        panel.add(textField, BorderLayout.CENTER);
+        panel.add(iconLabel, BorderLayout.EAST);
+        panel.putClientProperty("textField", textField);
+
+        return panel;
     }
 
     private void realizarBuscaRG() {
@@ -220,7 +234,6 @@ public class BuscarSupervisorPanel extends JPanel {
             return;
         }
 
-        // Validação de formato de RG
         if (!rg.matches("\\d{2}\\.\\d{3}\\.\\d{3}-\\d{1}")) {
             new Alerta(null, "Formato Inválido", "Formato de RG inválido. Use XX.XXX.XXX-X").setVisible(true);
             limparCamposResultados();
@@ -291,7 +304,8 @@ public class BuscarSupervisorPanel extends JPanel {
         if (sucesso) {
             usuarioEncontrado.settipo_usuario(novoTipo);
             txttipo_usuario.setText(novoTipo);
-            btnAtualizarTipo.setEnabled(true); 
+            btnAtualizarTipo.setEnabled(true);
+            btnAtualizarTipoOperario.setEnabled(false);
             new AlertaAtualizado(null, "Atualização Concluída", "Tipo de usuário atualizado para 'operario' com sucesso!").setVisible(true);
         } else {
             new Alerta(null, "Erro na Atualização", "Não foi possível atualizar o tipo de usuário.").setVisible(true);
@@ -302,7 +316,7 @@ public class BuscarSupervisorPanel extends JPanel {
         txtNomeEncontrado.setText("");
         txtRGEncontrado.setText("");
         txttipo_usuario.setText("");
-        txttipo_usuario.setEditable(false);
+        txttipo_usuario.setEditable(false); 
         btnAtualizarTipo.setEnabled(false);
         btnAtualizarTipoOperario.setEnabled(false);
         usuarioEncontrado = null;
@@ -313,6 +327,8 @@ public class BuscarSupervisorPanel extends JPanel {
             InputStream isFundo = getClass().getResourceAsStream(imagemPath);
             if (isFundo != null) {
                 ImagemDeFundo = ImageIO.read(isFundo);
+            } else {
+                System.err.println("Imagem de fundo não encontrada: " + imagemPath);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -378,44 +394,48 @@ public class BuscarSupervisorPanel extends JPanel {
         return Cores.AZUL_METRO;
     }
 
-
     private void addHoverEffect(JButton button) {
-        Color originalBorderColor = Color.WHITE;
-        int originalBorderThickness = 3;
-        Color originalTextColor = Color.WHITE;
-        Color clickedBorderColor = Color.DARK_GRAY;
+        Border originalBorder = button.getBorder();
+        Color originalTextColor = button.getForeground();
+
+        Color hoverBorderColor = new Color(255, 255, 255);
+        int hoverBorderThickness = 3;
+        Color pressedBorderColor = Color.DARK_GRAY;
+        int pressedBorderThickness = 4; 
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-
-                button.setBorder(new RoundedBorder(originalBorderColor, originalBorderThickness, 15));
-                button.setForeground(originalTextColor);
+                button.setBorder(new RoundedBorder(hoverBorderColor, hoverBorderThickness, 20)); 
+                button.setForeground(hoverBorderColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
-                button.setBorder(new RoundedBorder(originalBorderColor, originalBorderThickness, 15));
+                button.setBorder(originalBorder);
                 button.setForeground(originalTextColor);
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                button.setBorder(new RoundedBorder(clickedBorderColor, originalBorderThickness + 1, 15));
+                button.setBorder(new RoundedBorder(pressedBorderColor, pressedBorderThickness, 20));
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
-                button.setBorder(new RoundedBorder(originalBorderColor, originalBorderThickness, 15));
+                if (button.contains(e.getPoint())) { 
+                    button.setBorder(new RoundedBorder(hoverBorderColor, hoverBorderThickness, 20));
+                } else {
+                    button.setBorder(originalBorder);
+                }
             }
         });
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        super.paintComponent(g); 
+
         if (ImagemDeFundo != null) {
             g.drawImage(ImagemDeFundo, 0, 0, getWidth(), getHeight(), this);
         }
@@ -424,81 +444,22 @@ public class BuscarSupervisorPanel extends JPanel {
             int x = getWidth() - logoWidth - 15;
             int y = getHeight() - logoHeight - 15;
             g.drawImage(logoRedimensionada, x, y, this);
-
-            Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-            g2d.setColor(Color.WHITE);
-            g2d.setFont(new Font("Arial", Font.PLAIN, 10));
-
-            String texto = "Condução SP";
-            int textoX = 15;
-            int textoY = getHeight() - 15;
-
-            g2d.drawString(texto, textoX, textoY);
-            g2d.dispose();
         }
+
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("Arial", Font.PLAIN, 10));
+
+        String texto = "Condução SP";
+        int textoX = 15;
+        int textoY = getHeight() - 15;
+
+        g2d.drawString(texto, textoX, textoY);
+        g2d.dispose();
     }
 
-    class PlaceholderBorder implements Border {
-        private Color focusColor;
-        private String placeholder;
-        private int radius;
-        private JTextField textField;
-        public PlaceholderBorder(Color focusColor, String placeholder, int radius, JTextField textField) {
-            this.focusColor = focusColor;
-            this.placeholder = placeholder;
-            this.radius = radius;
-            this.textField = textField;
-        }
-
-        @Override
-        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-            Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2d.setStroke(new BasicStroke(2));
-
-            g2d.setColor(focusColor);
-            g2d.draw(new RoundRectangle2D.Double(x, y, width - 1, height - 1, radius, radius));
-
-            if (textField.getText().isEmpty() && !textField.isFocusOwner()) {
-                g2d.setColor(Color.GRAY);
-                g2d.setFont(helveticaFont);
-                FontMetrics fm = g.getFontMetrics();
-                int textX = x + 10;
-                int textY = y + fm.getAscent() + (height - fm.getHeight()) / 2;
-                g2d.drawString(placeholder, textX, textY);
-            }
-
-
-            JLabel iconLabel = (JLabel) textField.getClientProperty("iconLabel");
-            if (iconLabel != null && iconLabel.getIcon() != null) {
-                ImageIcon icon = (ImageIcon) iconLabel.getIcon();
-                Image img = icon.getImage();
-
-                int iconX = x + width - icon.getIconWidth() - 10;
-                int iconY = y + (height - icon.getIconHeight()) / 2;
-                g2d.drawImage(img, iconX, iconY, c);
-            }
-            g2d.dispose();
-        }
-
-        @Override
-        public Insets getBorderInsets(Component c) {
-            int iconWidth = 0;
-            JLabel iconLabel = (JLabel) textField.getClientProperty("iconLabel");
-            if (iconLabel != null && iconLabel.getIcon() != null) {
-                iconWidth = iconLabel.getIcon().getIconWidth();
-            }
-            return new Insets(5, 10, 5, 10 + iconWidth + 5);
-        }
-
-        @Override
-        public boolean isBorderOpaque() {
-            return false;
-        }
-    }
-
-    class RoundedBorder implements Border {
+    public static class RoundedBorder implements Border {
         private int radius;
         private Color color;
         private int thickness;
@@ -515,48 +476,48 @@ public class BuscarSupervisorPanel extends JPanel {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setColor(color);
             g2d.setStroke(new BasicStroke(thickness));
-            g2d.draw(new RoundRectangle2D.Double(x, y, width - thickness, height - thickness, radius, radius));
+            g2d.draw(new RoundRectangle2D.Double(x + thickness / 2.0, y + thickness / 2.0,
+                    width - thickness, height - thickness, radius, radius));
             g2d.dispose();
         }
 
         @Override
         public Insets getBorderInsets(Component c) {
-
-            int pad = Math.max(radius, thickness);
-            return new Insets(pad, pad, pad, pad);
+            int padding = thickness + 8;
+            return new Insets(padding, padding, padding, padding);
         }
 
         @Override
         public boolean isBorderOpaque() {
-            return false;
+            return false; 
         }
     }
 
     class PlaceholderFocusListener implements FocusListener {
         private JTextField textField;
         private String placeholder;
+        private Color originalForeground;
 
         public PlaceholderFocusListener(JTextField textField, String placeholder) {
             this.textField = textField;
             this.placeholder = placeholder;
+            this.originalForeground = textField.getForeground(); 
         }
 
         @Override
         public void focusGained(FocusEvent e) {
             if (textField.getText().equals(placeholder)) {
                 textField.setText("");
-                textField.setForeground(Color.BLACK);
+                textField.setForeground(Color.BLACK); 
             }
-            textField.repaint();
         }
 
         @Override
         public void focusLost(FocusEvent e) {
             if (textField.getText().isEmpty()) {
                 textField.setText(placeholder);
-                textField.setForeground(Color.GRAY);
+                textField.setForeground(originalForeground); 
             }
-            textField.repaint();
         }
     }
 }

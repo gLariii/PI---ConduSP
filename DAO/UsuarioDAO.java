@@ -17,7 +17,7 @@ public class UsuarioDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, usuario.getRg());
-            stmt.setString(2, usuario.getSenha()); 
+            stmt.setString(2, usuario.getSenha());
 
             ResultSet rs = stmt.executeQuery();
             return rs.next();
@@ -42,6 +42,33 @@ public class UsuarioDAO {
         return false;
     }
 
+    // New method: Get user by ID
+    public Usuario getUsuarioById(int id) {
+        String sql = "SELECT id, rg, senha, nome, tipo_usuario, volume FROM tb_usuario WHERE id = ?";
+
+        try (Connection conn = Conexao.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id); // Set ID in the prepared statement
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("rg"),
+                        rs.getString("senha"),
+                        rs.getString("nome"),
+                        rs.getString("tipo_usuario"),
+                        rs.getInt("volume")
+                );
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar usuário por ID: " + e.getMessage());
+        }
+        return null;
+    }
+
+    // Keep getUsuarioByRg as it might be used for other purposes, like login
     public Usuario getUsuarioByRg(String rg) {
         String sql = "SELECT id, rg, senha, nome, tipo_usuario, volume FROM tb_usuario WHERE rg = ?";
 
@@ -101,7 +128,21 @@ public class UsuarioDAO {
         }
         return false;
     }
-    
+
+    public boolean atualizarVolumeById(int id, int novoVolume) {
+        String sql = "UPDATE tb_usuario SET volume = ? WHERE id = ?";
+        try (Connection conn = Conexao.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, novoVolume);
+            stmt.setInt(2, id); 
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar volume do usuário por ID: " + e.getMessage());
+            return false;
+        }
+    }
+
     public boolean atualizarVolume(String rg, int novoVolume) {
         String sql = "UPDATE tb_usuario SET volume = ? WHERE rg = ?";
         try (Connection conn = Conexao.getConexao();

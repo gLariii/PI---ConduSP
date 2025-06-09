@@ -10,6 +10,10 @@ import javax.swing.plaf.basic.BasicSliderUI;
 import javax.swing.border.AbstractBorder;
 
 import TelaMetro1.Musica.Musica;
+import DAO.UsuarioDAO;
+import Model.Usuario;
+
+import javax.swing.SwingWorker;
 
 public class ConfiguracoesPanel extends JPanel {
     private JSlider volumeSlider;
@@ -18,6 +22,8 @@ public class ConfiguracoesPanel extends JPanel {
     private Runnable onDesconectarAction;
 
     private Musica musicaPlayer;
+    private UsuarioDAO usuarioDAO;
+    private int userId; 
 
     private boolean isMuted = false;
     private int lastVolume = 100;
@@ -26,10 +32,12 @@ public class ConfiguracoesPanel extends JPanel {
     private Color defaultMuteColor;
     private Color mutedColor;
 
-    public ConfiguracoesPanel(Runnable onVoltarAction) {
+    public ConfiguracoesPanel(Runnable onVoltarAction, int userId) {
         this.onVoltarAction = onVoltarAction;
         this.onSobreAction = null;
         this.onDesconectarAction = null;
+        this.userId = userId; 
+        this.usuarioDAO = new UsuarioDAO();
 
         setLayout(new BorderLayout());
         setBackground(Cores.AZUL_METRO);
@@ -47,6 +55,7 @@ public class ConfiguracoesPanel extends JPanel {
         backButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         Color defaultButtonColor = new Color(0, 40, 160);
+        backButtonPanel.setBorder(new RoundBorder(40, defaultButtonColor)); 
 
         backButtonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -67,17 +76,18 @@ public class ConfiguracoesPanel extends JPanel {
             @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 if (backButtonPanel.contains(evt.getPoint())) {
+                    if (onVoltarAction != null) {
+                        onVoltarAction.run();
+                    }
+                }
+                if (backButtonPanel.contains(evt.getPoint())) {
                     backButtonPanel.setBorder(new RoundBorder(40, new Color(20, 60, 180)));
                 } else {
                     backButtonPanel.setBorder(new RoundBorder(40, defaultButtonColor));
                 }
-                if (onVoltarAction != null) {
-                    onVoltarAction.run();
-                }
             }
         });
-        backButtonPanel.setBorder(new RoundBorder(40, defaultButtonColor));
-
+        
         JLabel iconLabel = new JLabel();
         try (InputStream is = getClass().getResourceAsStream("/Assets/Imagens/seta.png")) {
             if (is != null) {
@@ -143,6 +153,8 @@ public class ConfiguracoesPanel extends JPanel {
         volumeSlider.setUI(new CustomSliderUI(volumeSlider));
         volumeSlider.setFocusable(false);
 
+        loadVolumeFromDatabase();
+
         defaultMuteColor = new Color(0, 40, 160);
         mutedColor = new Color(160, 0, 0);
 
@@ -155,6 +167,7 @@ public class ConfiguracoesPanel extends JPanel {
                 if (!isMuted) {
                     isMuted = true;
                     updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
+                    volumeSlider.setEnabled(false); 
                 }
             } else {
                 if (isMuted) {
@@ -162,12 +175,15 @@ public class ConfiguracoesPanel extends JPanel {
                     updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
                 }
                 lastVolume = currentVolume;
+                volumeSlider.setEnabled(true); 
             }
 
             if (musicaPlayer != null) {
                 musicaPlayer.setVolume(currentVolume);
             }
+            saveVolumeToDatabase(currentVolume);
         });
+
 
         GridBagConstraints gbcSlider = new GridBagConstraints();
         gbcSlider.gridx = 0;
@@ -194,55 +210,51 @@ public class ConfiguracoesPanel extends JPanel {
         muteButtonPanel.setOpaque(false);
         muteButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
+
         muteButtonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if (isMuted) {
-                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(180, 20, 20)));
+                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(180, 20, 20))); 
                 } else {
-                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(20, 60, 180)));
+                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(20, 60, 180))); 
                 }
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
+                updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted); 
             }
 
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 if (isMuted) {
-                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(100, 0, 0)));
+                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(100, 0, 0))); 
                 } else {
-                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(0, 20, 100)));
+                    muteButtonPanel.setBorder(new RoundBorder(20, new Color(0, 20, 100))); 
                 }
             }
 
             @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                if (muteButtonPanel.contains(evt.getPoint())) {
+                if (muteButtonPanel.contains(evt.getPoint())) { 
                     if (isMuted) {
                         isMuted = false;
-                        volumeSlider.setValue(lastVolume);
-                        volumeSlider.setEnabled(true);
+                        volumeSlider.setValue(lastVolume); 
                     } else {
                         if (volumeSlider.getValue() > 0) {
-                            lastVolume = volumeSlider.getValue();
+                            lastVolume = volumeSlider.getValue(); 
                         }
-                        volumeSlider.setValue(0);
+                        volumeSlider.setValue(0); 
                         isMuted = true;
-                        volumeSlider.setEnabled(false);
                     }
-                    if (musicaPlayer != null) {
-                        musicaPlayer.setVolume(volumeSlider.getValue());
-                    }
+                    volumeSlider.setEnabled(!isMuted); 
                 }
-                updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
+                updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted); 
             }
         });
-        updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted);
-        volumeSlider.setEnabled(!isMuted);
-
+        
         JLabel muteIconLabel = new JLabel();
         try (InputStream is = getClass().getResourceAsStream("/Assets/Imagens/mute.png")) {
             if (is != null) {
@@ -290,6 +302,7 @@ public class ConfiguracoesPanel extends JPanel {
         desconectarButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         Color defaultDesconectarColor = new Color(160, 40, 0);
+        desconectarButtonPanel.setBorder(new RoundBorder(30, defaultDesconectarColor)); 
 
         desconectarButtonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -310,17 +323,18 @@ public class ConfiguracoesPanel extends JPanel {
             @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 if (desconectarButtonPanel.contains(evt.getPoint())) {
+                    if (onDesconectarAction != null) {
+                        onDesconectarAction.run();
+                    }
+                }
+                if (desconectarButtonPanel.contains(evt.getPoint())) {
                     desconectarButtonPanel.setBorder(new RoundBorder(30, new Color(180, 60, 20)));
                 } else {
                     desconectarButtonPanel.setBorder(new RoundBorder(30, defaultDesconectarColor));
                 }
-                if (onDesconectarAction != null) {
-                    onDesconectarAction.run();
-                }
             }
         });
-        desconectarButtonPanel.setBorder(new RoundBorder(30, defaultDesconectarColor));
-
+        
         JLabel sairIconLabel = new JLabel();
         try (InputStream is = getClass().getResourceAsStream("/Assets/Imagens/sair.png")) {
             if (is != null) {
@@ -359,6 +373,7 @@ public class ConfiguracoesPanel extends JPanel {
         sobreButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         Color defaultSobreColor = new Color(0, 40, 160);
+        sobreButtonPanel.setBorder(new RoundBorder(30, defaultSobreColor)); 
 
         sobreButtonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -379,17 +394,17 @@ public class ConfiguracoesPanel extends JPanel {
             @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 if (sobreButtonPanel.contains(evt.getPoint())) {
+                    if (onSobreAction != null) {
+                        onSobreAction.run();
+                    }
+                }
+                if (sobreButtonPanel.contains(evt.getPoint())) {
                     sobreButtonPanel.setBorder(new RoundBorder(30, new Color(20, 60, 180)));
                 } else {
                     sobreButtonPanel.setBorder(new RoundBorder(30, defaultSobreColor));
                 }
-                if (onSobreAction != null) {
-                    onSobreAction.run();
-                }
             }
         });
-
-        sobreButtonPanel.setBorder(new RoundBorder(30, defaultSobreColor));
 
         JLabel perfilIconLabel = new JLabel();
         try (InputStream is = getClass().getResourceAsStream("/Assets/Imagens/perfil.png")) {
@@ -459,6 +474,69 @@ public class ConfiguracoesPanel extends JPanel {
                 buttonPanel.setBorder(new RoundBorder(20, defaultColor));
             }
         }
+    }
+    private void loadVolumeFromDatabase() {
+        if (userId == 0) { 
+            System.err.println("ID de usuário inválido para carregar volume.");
+            return;
+        }
+
+        new SwingWorker<Usuario, Void>() {
+            @Override
+            protected Usuario doInBackground() throws Exception {
+                return usuarioDAO.getUsuarioById(userId);
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    Usuario usuario = get(); 
+                    if (usuario != null) {
+                        int savedVolume = usuario.getVolume();
+                        volumeSlider.setValue(savedVolume);
+                        lastVolume = savedVolume;
+                        isMuted = (savedVolume == 0); 
+                        volumeSlider.setEnabled(!isMuted); 
+                        updateMuteButtonBorder(muteButtonPanel, defaultMuteColor, mutedColor, isMuted); 
+                    } else {
+                        System.err.println("Usuário com ID " + userId + " não encontrado no banco de dados.");
+                    }
+                } catch (Exception e) {
+                    System.err.println("Erro ao carregar volume do banco de dados: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }.execute(); 
+    }
+
+    /*
+     * @param volume 
+     */
+    private void saveVolumeToDatabase(int volume) {
+        if (userId == 0) {
+            System.err.println("ID de usuário inválido para salvar volume.");
+            return;
+        }
+        final int volumeToSave = volume; 
+
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                usuarioDAO.atualizarVolumeById(userId, volumeToSave);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+
+                try {
+                    get();
+                } catch (Exception e) {
+                    System.err.println("Erro ao salvar volume no banco de dados: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }.execute(); 
     }
 
     private static class CustomSliderUI extends BasicSliderUI {

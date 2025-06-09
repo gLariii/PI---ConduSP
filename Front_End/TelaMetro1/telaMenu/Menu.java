@@ -13,7 +13,6 @@ import CabineDeControleTela.CabineDeControleTela;
 import Model.*;
 import TelaMetro1.Musica.InicialMusica;
 
-// Importações JavaFX
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -41,6 +40,10 @@ public class Menu extends JLayeredPane {
     private int idUsuarioLogado;
 
     private final int SIDEBAR_WIDTH = 300;
+
+    private JFXPanel videoJFXPanel;
+    private MediaPlayer currentMediaPlayer;
+
 
     public Menu(JFrame frame, String imagemPath, String tipo_usuario, int idUsuarioLogado) {
         this.parentFrame = frame;
@@ -90,9 +93,7 @@ public class Menu extends JLayeredPane {
         sidebarContainerPanel.setOpaque(true);
         sidebarContainerPanel.setBackground(Cores.AZUL_METRO);
 
-        configuracoesPanel = new ConfiguracoesPanel(() -> {
-            toggleConfigPanel(false);
-        });
+        configuracoesPanel = new ConfiguracoesPanel(() -> {toggleConfigPanel(false);},idUsuarioLogado);
         configuracoesPanel.setOnSobreAction(() -> {
             showPanel("sobre");
         });
@@ -134,6 +135,11 @@ public class Menu extends JLayeredPane {
         });
         add(sobrePanel, JLayeredPane.MODAL_LAYER);
 
+        videoJFXPanel = new JFXPanel();
+        videoJFXPanel.setBackground(Color.BLACK);
+        videoJFXPanel.setOpaque(true);
+        add(videoJFXPanel, JLayeredPane.PALETTE_LAYER);
+
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
@@ -148,6 +154,7 @@ public class Menu extends JLayeredPane {
                 supervisorPanel.setBounds(0, 0, getWidth(), getHeight());
                 feedbackPanel.setBounds(0, 0, getWidth(), getHeight());
                 sobrePanel.setBounds(0, 0, getWidth(), getHeight());
+                videoJFXPanel.setBounds(0, 0, getWidth(), getHeight());
 
                 revalidate();
                 repaint();
@@ -155,6 +162,7 @@ public class Menu extends JLayeredPane {
         });
 
         showPanel("main");
+        videoJFXPanel.setVisible(false);
     }
 
     private void carregarImagens(String imagemPath) {
@@ -223,14 +231,20 @@ public class Menu extends JLayeredPane {
         btnFeedbacks = botoes.criarBotaoFeedBackPessoal();
         btnSupervisor = botoes.criarBotaoSupervisor();
 
-        // Lógica do botão Maquinário modificada para incluir o vídeo
         btnMaquinario.addActionListener(e -> {
-            // Reproduz o vídeo e, ao final, inicia a CabineDeControleTela
+            mainContentPanel.setVisible(false);
+            sidebarContainerPanel.setVisible(false);
+            supervisorPanel.setVisible(false);
+            feedbackPanel.setVisible(false);
+            sobrePanel.setVisible(false);
+            videoJFXPanel.setVisible(true);
+
             playVideoIntro("/Assets/Imagens/videoJogo.mp4", () -> {
-                // Esta callback será executada quando o vídeo terminar
                 SwingUtilities.invokeLater(() -> {
                     InicialMusica.stopMusic();
-                    substituirPainel(new CabineDeControleTela(parentFrame, idUsuarioLogado));
+                    parentFrame.setContentPane(new CabineDeControleTela(parentFrame, idUsuarioLogado));
+                    parentFrame.revalidate();
+                    parentFrame.repaint();
                     SalvarResposta.pontuacao = 0;
                 });
             });
@@ -239,7 +253,7 @@ public class Menu extends JLayeredPane {
         btnSupervisor.addActionListener(e -> {
             showPanel("supervisor");
         });
-
+        
         btnFeedbacks.addActionListener(e -> {
             if (feedbackPanel instanceof FeedbackPanel) {
                 ((FeedbackPanel)feedbackPanel).carregarDadosFeedbackGeral(idUsuarioLogado);
@@ -280,6 +294,7 @@ public class Menu extends JLayeredPane {
         supervisorPanel.setVisible(false);
         feedbackPanel.setVisible(false);
         sobrePanel.setVisible(false);
+        videoJFXPanel.setVisible(false);
 
         switch (panelName) {
             case "main":
@@ -340,32 +355,45 @@ public class Menu extends JLayeredPane {
         timer.start();
     }
 
-    // Método para reproduzir o vídeo de introdução
-    /**
-     * Exibe um vídeo de introdução em uma nova janela Swing/JavaFX.
-     *
-     * @param videoPath O caminho do recurso para o arquivo de vídeo (ex: "/Assets/Imagens/videoJogo.mp4").
-     * @param onVideoEnd Runnable a ser executado quando o vídeo terminar.
-     */
     private void playVideoIntro(String videoPath, Runnable onVideoEnd) {
-        JFrame videoFrame = new JFrame("Introdução ao Jogo");
-        videoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        videoFrame.setUndecorated(true);
-        videoFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        videoFrame.setResizable(false);
+        if (currentMediaPlayer != null) {
+            currentMediaPlayer.stop();
+            currentMediaPlayer.dispose();
+        }
 
-        JFXPanel jfxPanel = new JFXPanel();
-        videoFrame.add(jfxPanel, BorderLayout.CENTER);
+        JButton skipButton = new JButton("Pular Introdução");
+        skipButton.setFont(new Font("Arial", Font.BOLD, 20));
+        skipButton.setBackground(Cores.AZUL_METRO);
+        skipButton.setForeground(Color.WHITE);
+        skipButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        skipButton.setFocusPainted(false);
+        skipButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        skipButton.setOpaque(true);
+
+        add(skipButton, JLayeredPane.DRAG_LAYER);
+
+        skipButton.setBounds(
+            getWidth() - skipButton.getPreferredSize().width - 20,
+            getHeight() - skipButton.getPreferredSize().height - 20,
+            skipButton.getPreferredSize().width,
+            skipButton.getPreferredSize().height
+        );
+        skipButton.setVisible(true);
+        revalidate();
+        repaint();
+
 
         Platform.runLater(() -> {
             try {
                 java.net.URL resource = getClass().getResource(videoPath);
                 if (resource == null) {
                     System.err.println("Recurso de vídeo não encontrado: " + videoPath);
-                    JOptionPane.showMessageDialog(videoFrame,
+                    JOptionPane.showMessageDialog(parentFrame,
                         "Erro: Arquivo de vídeo não encontrado! Caminho: " + videoPath,
                         "Erro de Carregamento", JOptionPane.ERROR_MESSAGE);
-                    videoFrame.dispose();
+                    videoJFXPanel.setVisible(false);
+                    skipButton.setVisible(false);
+                    remove(skipButton);
                     if (onVideoEnd != null) {
                         onVideoEnd.run();
                     }
@@ -373,16 +401,13 @@ public class Menu extends JLayeredPane {
                 }
                 InicialMusica.stopMusic();
                 Media media = new Media(resource.toExternalForm());
-                MediaPlayer mediaPlayer = new MediaPlayer(media);
-                MediaView mediaView = new MediaView(mediaPlayer);
+                currentMediaPlayer = new MediaPlayer(media);
+                MediaView mediaView = new MediaView(currentMediaPlayer);
 
-                // Vincula o MediaView às propriedades da cena (Scene)
-                Group root = new Group(); // Root para a cena
+                Group root = new Group();
                 Scene scene = new Scene(root);
-                jfxPanel.setScene(scene); // Define a cena para o JFXPanel
+                videoJFXPanel.setScene(scene);
 
-                // Adiciona o mediaView ao root APÓS a cena ser setada no jfxPanel
-                // Para que as propriedades de tamanho da cena já estejam válidas para o binding.
                 root.getChildren().add(mediaView);
 
                 mediaView.fitWidthProperty().bind(scene.widthProperty());
@@ -390,40 +415,57 @@ public class Menu extends JLayeredPane {
                 mediaView.setPreserveRatio(false);
 
 
-                mediaPlayer.setOnEndOfMedia(() -> {
+                Runnable finishAction = () -> {
+                    if (currentMediaPlayer != null) {
+                        currentMediaPlayer.stop();
+                        currentMediaPlayer.dispose();
+                        currentMediaPlayer = null;
+                    }
+                    videoJFXPanel.setScene(null);
+                    videoJFXPanel.setVisible(false);
+                    skipButton.setVisible(false);
+                    remove(skipButton);
+                    if (onVideoEnd != null) {
+                        onVideoEnd.run();
+                    }
+                    revalidate();
+                    repaint();
+                };
+
+                skipButton.addActionListener(e -> {
+                    System.out.println("Vídeo pulado pelo usuário.");
+                    finishAction.run();
+                });
+
+                currentMediaPlayer.setOnEndOfMedia(() -> {
                     System.out.println("Vídeo de introdução terminou.");
-                    mediaPlayer.stop();
-                    videoFrame.dispose();
-                    if (onVideoEnd != null) {
-                        onVideoEnd.run();
-                    }
+                    finishAction.run();
                 });
 
-                mediaPlayer.setOnError(() -> {
-                    System.err.println("Erro durante a reprodução do vídeo: " + mediaPlayer.getError());
-                    JOptionPane.showMessageDialog(videoFrame,
-                        "Erro ao reproduzir o vídeo: " + mediaPlayer.getError().getMessage(),
+                currentMediaPlayer.setOnError(() -> {
+                    System.err.println("Erro durante a reprodução do vídeo: " + currentMediaPlayer.getError());
+                    JOptionPane.showMessageDialog(parentFrame,
+                        "Erro ao reproduzir o vídeo: " + currentMediaPlayer.getError().getMessage(),
                         "Erro de Vídeo", JOptionPane.ERROR_MESSAGE);
-                    videoFrame.dispose();
-                    if (onVideoEnd != null) {
-                        onVideoEnd.run();
-                    }
+                    finishAction.run();
                 });
 
-                mediaPlayer.play();
+                currentMediaPlayer.play();
             } catch (Exception ex) {
                 System.err.println("Erro ao inicializar o player de vídeo: " + ex.getMessage());
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(videoFrame,
+                JOptionPane.showMessageDialog(parentFrame,
                     "Erro inesperado ao carregar o vídeo: " + ex.getMessage(),
                     "Erro de Vídeo", JOptionPane.ERROR_MESSAGE);
-                videoFrame.dispose();
+                videoJFXPanel.setVisible(false);
+                skipButton.setVisible(false);
+                remove(skipButton);
                 if (onVideoEnd != null) {
                     onVideoEnd.run();
                 }
+                revalidate();
+                repaint();
             }
         });
-
-        videoFrame.setVisible(true);
     }
 }
