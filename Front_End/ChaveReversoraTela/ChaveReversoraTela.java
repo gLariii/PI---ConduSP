@@ -17,14 +17,13 @@ public class ChaveReversoraTela extends JPanel {
         "ChaveReversoraFrente.jpg"
     };
 
-    private int idUsuarioLogado;
     public static int indexChaveReversora = 0;
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private JButton btnTrocar;
     private JButton btnVoltar;
+    private int idUsuarioLogado;
     private boolean primeiroClique = true;
-    private int pontuacao;
     private int feedback;
     private int ordemCliques;
     
@@ -66,14 +65,9 @@ public class ChaveReversoraTela extends JPanel {
         
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVoltar.addActionListener(e -> {
+            //Verifica se chave reversora foi colocada em ré e retira pontos
             if (primeiroClique == true){
-                if (indexChaveReversora == 2){
-                    if (PainelCBTCeChave.indexCBCT == 0){
-                        SalvarResposta.pontuacao += 1;
-                        this.feedback = 1;
-                        SalvarResposta.salvarResposta(idUsuario, this.feedback);
-                    }
-                }else if (indexChaveReversora == 1){
+                if (indexChaveReversora == 1){
                     SalvarResposta.pontuacao -= 3;
                     this.feedback = 2;
                     SalvarResposta.salvarResposta(idUsuario, this.feedback);

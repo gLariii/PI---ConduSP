@@ -4,6 +4,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
 import CabineDeControleTela.*;
+import Model.*;
 
 public class Portas extends JPanel {
     public final String[] backgrounds = {
@@ -18,9 +19,14 @@ public class Portas extends JPanel {
     private static JButton botao1, botao2, btnVoltar,btnFechar, btnLacrar, btnVerificar;
     
     private int ordemCliques;
+    private int idUsuarioLogado;
+    private boolean primeiroClique = true;
+    private int feedback;
     
 
-    public Portas(JFrame frame, int ordemCliques) {
+    public Portas(JFrame frame, int idUsuario) {
+        this.parentFrame = frame;
+        this.idUsuarioLogado = idUsuario;
         this.ordemCliques = ordemCliques;
         ordemCliques++;
 
@@ -78,7 +84,18 @@ public class Portas extends JPanel {
         botao1.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 3, true));
         add(botao1);
 
-        botao2 = criarBotao(() -> substituirPainel(new Soleira(parentFrame, ordemCliques)));
+        botao2 = new JButton("");
+        botao2.addActionListener(e -> {
+            if (primeiroClique == true){
+                SalvarResposta.pontuacao += 1;
+                this.feedback = 18;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                primeiroClique = false;
+            }
+            substituirPainel(new Soleira(parentFrame, ordemCliques));
+        });
+        botao2.setContentAreaFilled(false);
+        botao2.setVisible(false);
         botao2.setText("Conferir soleira");
         botao2.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botao2.setBackground(new Color(30, 60, 90));

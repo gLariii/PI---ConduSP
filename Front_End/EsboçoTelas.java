@@ -2,16 +2,21 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
+import Model.*;
 
 public class EsboçoTelas extends JPanel {
     private Image imagemDeFundo;
     private JFrame parentFrame;
+    private int idUsuarioLogado;
+    private boolean primeiroClique = true;
+    private int feedback;
 
     // Botões como atributos
     private JButton botao1;
 
-    public EsboçoTelas(JFrame frame) {
+    public EsboçoTelas(JFrame frame, int idUsuario) {
         this.parentFrame = frame;
+        this.idUsuarioLogado = idUsuario;
         setLayout(null);
         adicionarBotoes();
 

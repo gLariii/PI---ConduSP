@@ -6,6 +6,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import CabineDeControleTela.*;
 import ChaveReversoraTela.*;
+import Model.SalvarResposta;
+import ModuloDeComunicaçãoTela.*;
 import Assets.*;
 
 public class BoteiraLateralTela extends JPanel {
@@ -20,13 +22,14 @@ public class BoteiraLateralTela extends JPanel {
     private JFrame parentFrame;
     private JButton btnTrocar;
     private JButton btnVoltar;
-
+    private int idUsuarioLogado;
+    private boolean primeiroClique = true;
+    private int feedback;   
     private int ordemCliques;
 
-    public BoteiraLateralTela(JFrame frame, int ordemCliques) {
-        this.ordemCliques = ordemCliques;
-        
+    public BoteiraLateralTela(JFrame frame, int idUsuario) {
         this.parentFrame = frame;
+        this.idUsuarioLogado = idUsuario;
         setLayout(null);
 
         carregarImagemFundo();
@@ -97,6 +100,14 @@ public class BoteiraLateralTela extends JPanel {
         };
         btnTrocar.addActionListener(e -> {
             index = (index + 1) % backgrounds.length;
+            if (ChaveReversoraTela.indexChaveReversora != 0 && ModuloDeComunicacaoTelaInicial.primeiroClique == false){
+                if (primeiroClique == true){
+                    SalvarResposta.pontuacao += 2;
+                    feedback = 10;
+                    SalvarResposta.salvarResposta(idUsuarioLogado, feedback);
+                    }
+                primeiroClique = false;
+                }
             carregarImagemFundo();
             reposicionarComponentes();
             repaint();

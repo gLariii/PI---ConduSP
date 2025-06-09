@@ -1,6 +1,9 @@
 package CabineDeControleTela;
 
 import javax.swing.*;
+
+import Model.SalvarResposta;
+
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -13,7 +16,9 @@ public class Cinturao extends JPanel {
         "Imagens/Cinturao.png",
         "Imagens/ItensColetados.jpg"
     };
-
+    private int idUsuarioLogado;
+    private boolean primeiroClique = true;
+    private int feedback;
     public static int index = 0;
     private Image imagemDeFundo;
     private JButton botao1;
@@ -22,7 +27,9 @@ public class Cinturao extends JPanel {
 
     private int ordemCliques;
 
-    public Cinturao(JFrame frame, int ordemCliques) {
+    public Cinturao(JFrame frame, int idUsuario) {
+        this.parentFrame = frame;
+        this.idUsuarioLogado = idUsuario;
         this.ordemCliques = ordemCliques;
         ordemCliques++;
         
@@ -82,6 +89,12 @@ public class Cinturao extends JPanel {
             repaint();
             botao1.setVisible(false);
             labelItensColetados.setVisible(true);
+            if (primeiroClique == true){
+                SalvarResposta.pontuacao += 2;
+                this.feedback = 14;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                primeiroClique = false;
+            }
         });
         botao1.setFont(new Font("Arial", Font.BOLD, 14));
         botao1.setForeground(Color.WHITE);

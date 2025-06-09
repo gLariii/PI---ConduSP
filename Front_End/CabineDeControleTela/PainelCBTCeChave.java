@@ -15,6 +15,7 @@ public class PainelCBTCeChave extends JPanel {
     private boolean geraPontuacao = false;
     private int pontuacao;
     private int feedback;
+    private boolean primeiroClique = true;
 
     private final String[] backgroundsCBTC = {
         "Imagens/ChaveCBTCAM.jpg",
@@ -79,6 +80,7 @@ public class PainelCBTCeChave extends JPanel {
                 SalvarResposta.pontuacao +=1;
                 this.feedback = 4;
                 SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                geraPontuacao = true;
             }
             indexCBCT = (indexCBCT + 1) % backgroundsCBTC.length;
             atualizarIconeCBTC();
@@ -98,6 +100,12 @@ public class PainelCBTCeChave extends JPanel {
             indexChave = (indexChave + 1) % backgroundsChave.length;
             atualizarIconeChave();
             repaint();
+            if (primeiroClique == true){
+                SalvarResposta.pontuacao += 2;
+                this.feedback = 16;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                primeiroClique = false;
+            }
         });
         atualizarIconeChave(); // <- Aqui! Para carregar inicialmente
         add(btnChave);

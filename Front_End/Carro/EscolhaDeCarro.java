@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import CabineDeControleTela.*;
+import Model.SalvarResposta;
 
 public class EscolhaDeCarro extends JPanel {
 
@@ -21,8 +22,13 @@ public class EscolhaDeCarro extends JPanel {
     private JButton btnPorta6;
 
     private int ordemCliques;
+    private int idUsuarioLogado;
+    private boolean primeiroClique = true;
+    private int feedback;
 
-    public EscolhaDeCarro(JFrame frame, int ordemCliques) {
+    public EscolhaDeCarro(JFrame frame, int idUsuario) {
+        this.parentFrame = frame;
+        this.idUsuarioLogado = idUsuario;
         this.ordemCliques = ordemCliques;
         this.parentFrame = frame;
         setLayout(null);
@@ -72,6 +78,12 @@ public class EscolhaDeCarro extends JPanel {
             if (isBotaoCorreto) {
                 AudioPlayer.playSound("SomPorta.wav");
                 substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques));
+                if (primeiroClique == true){
+                SalvarResposta.pontuacao += 1;
+                this.feedback = 18;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                primeiroClique = false;
+            }
             } else {
                 AudioPlayer.playSound("SomErro.wav"); 
                 JOptionPane.showMessageDialog(this, "Você clicou no botão errado!", "Aviso", JOptionPane.WARNING_MESSAGE);

@@ -5,6 +5,11 @@ import CabineDeControleTela.*;
 import java.awt.*;
 import java.awt.event.*;
 import Carro.*;
+import Model.SalvarResposta;
+import ChaveReversoraTela.*;
+import Model.*;
+import Controller.RespostaUsuarioController;
+import DAO.RespostaUsuarioDAO;
 
 public class ModuloDeComunicacaoTelaInicial extends JPanel {
 
@@ -14,12 +19,14 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         "Imagens/Modulo de comunicação radio.jpg"
     };
 
+    private int idUsuarioLogado;
+    
     private static int index = 0;
     private Image imagemDeFundo;
     private JFrame parentFrame;
 
-    private CircleButton botao1;
-    private CircleButton botao2;
+    private CircleButton botaoPA;
+    private CircleButton botaoCCO;
     private JButton btnVoltar;
 
     private int ordemCliques;
@@ -28,6 +35,10 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     private Timer timerEscrita;
     private StringBuilder mensagemParcial = new StringBuilder();
     private int CCOEmitido = 0;
+    public static boolean primeiroClique = true;
+    public static boolean segundoClique = true;
+    public static boolean terceiroClique = true;
+    private int feedback;
 
     // Mensagens para PA
     private final String[] mensagensPA = {
@@ -53,11 +64,10 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
             + "</html>";
 
 
-    public ModuloDeComunicacaoTelaInicial(JFrame frame, int ordemCliques) {
-        this.ordemCliques = ordemCliques;
-        ordemCliques++;
-
+    public ModuloDeComunicacaoTelaInicial(JFrame frame, int idUsuario) {
+        this.idUsuarioLogado = idUsuario;
         this.parentFrame = frame;
+        this.ordemCliques = ordemCliques;
         setLayout(null);
 
         carregarImagemFundo();
@@ -68,8 +78,8 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     }
 
     private void criarBotoes() {
-        botao2 = new CircleButton("", null);
-        botao2.addMouseListener(new MouseAdapter() {
+        botaoCCO = new CircleButton("", null);
+        botaoCCO.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 AudioPlayer.playSound("SomDigitacao.wav");
@@ -91,6 +101,12 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 AudioPlayer.stopSound();
                 index = 0;
+                if (segundoClique == true){
+                    SalvarResposta.pontuacao += 1;
+                    feedback = 12;
+                    segundoClique = false;
+                    SalvarResposta.salvarResposta(idUsuarioLogado, feedback);
+                }
                 carregarImagemFundo();
                 repaint();
                 pararEscrita();
@@ -98,8 +114,8 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
             }
         });
 
-        botao1 = new CircleButton("", null);
-        botao1.addMouseListener(new MouseAdapter() {
+        botaoPA = new CircleButton("", null);
+        botaoPA.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 AudioPlayer.playSound("SomDigitacao.wav");
@@ -118,6 +134,22 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
                 repaint();
                 pararEscrita();
                 labelMensagem.setVisible(false);
+                if (primeiroClique == true){
+                    SalvarResposta.pontuacao += 1;
+                    if (ChaveReversoraTela.indexChaveReversora == 0)
+                        feedback = 8;
+                    else{
+                        feedback = 7;
+                    }
+                    primeiroClique = false;
+                    SalvarResposta.salvarResposta(idUsuarioLogado, feedback);
+                }
+                if (terceiroClique == true){
+                    SalvarResposta.pontuacao += 1;
+                    feedback = 13;
+                    terceiroClique = false;
+                    SalvarResposta.salvarResposta(idUsuarioLogado, feedback);
+                }
             }
         });
 
@@ -132,8 +164,8 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         btnVoltar.setOpaque(true);
         btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, ordemCliques)));
 
-        add(botao1);
-        add(botao2);
+        add(botaoPA);
+        add(botaoCCO);
         add(btnVoltar);
     }
 
@@ -172,8 +204,8 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         int w = getWidth();
         int h = getHeight();
 
-        botao1.setBounds((int) (w * 0.164), (int) (h * 0.257), (int) (w * 0.04), (int) (h * 0.06));
-        botao2.setBounds((int) (w * 0.159), (int) (h * 0.559), (int) (w * 0.04), (int) (h * 0.06));
+        botaoPA.setBounds((int) (w * 0.164), (int) (h * 0.257), (int) (w * 0.04), (int) (h * 0.06));
+        botaoCCO.setBounds((int) (w * 0.159), (int) (h * 0.559), (int) (w * 0.04), (int) (h * 0.06));
         btnVoltar.setBounds((int) (w * 0.005), (int) (h * 0.009), (int) (w * 0.052), (int) (h * 0.028));
         labelMensagem.setBounds((int)(w * 0.1), (int)(h * 0.8), (int)(w * 0.8), (int)(h *0.2));
     }

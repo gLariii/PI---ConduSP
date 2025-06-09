@@ -3,6 +3,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CabineDeControleTela",
+            "request": "launch",
+            "mainClass": "CabineDeControleTela.CabineDeControleTela",
+            "projectName": "PI---ConduSP_a8da1cef"
+        },
+        {
+            "type": "java",
+            "name": "Inicial",
+            "request": "launch",
+            "mainClass": "TelaMetro1.Entrada.Inicial",
+            "projectName": "PI---ConduSP_a8da1cef"
+        },
+        {
+            "type": "java",
             "name": "Inicial",
             "request": "launch",
             "mainClass": "TelaMetro1.Entrada.Inicial",
