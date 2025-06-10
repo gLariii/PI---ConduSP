@@ -38,6 +38,8 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     public static boolean primeiroClique = true;
     public static boolean segundoClique = true;
     public static boolean terceiroClique = true;
+    public static boolean quartoClique = true;
+    public static boolean quintoClique = true;
     private int feedback;
 
     // Mensagens para PA
@@ -107,6 +109,12 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
                     segundoClique = false;
                     SalvarResposta.salvarResposta(idUsuarioLogado, feedback);
                 }
+                if (quartoClique == true && Portas.index != 0){
+                    SalvarResposta.pontuacao += 2;
+                    feedback = 31;
+                    quartoClique = false;
+                    SalvarResposta.salvarResposta(idUsuarioLogado, feedback);
+                }
                 carregarImagemFundo();
                 repaint();
                 pararEscrita();
@@ -148,6 +156,12 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
                     SalvarResposta.pontuacao += 1;
                     feedback = 13;
                     terceiroClique = false;
+                    SalvarResposta.salvarResposta(idUsuarioLogado, feedback);
+                }
+                if (quintoClique == true && Portas.index != 0){
+                    SalvarResposta.pontuacao += 1;
+                    feedback = 32;
+                    quintoClique = false;
                     SalvarResposta.salvarResposta(idUsuarioLogado, feedback);
                 }
             }

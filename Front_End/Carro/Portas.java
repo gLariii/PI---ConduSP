@@ -20,7 +20,11 @@ public class Portas extends JPanel {
     
     private int ordemCliques;
     private int idUsuarioLogado;
-    private boolean primeiroClique = true;
+    private static boolean primeiroCliqueEmergencia = true;
+    private static boolean primeiroCliqueSoleira = true;
+    private static boolean primeiroCliqueFechar = true;
+    private static boolean primeiroCliqueVerificar = true;
+    private static boolean primeiroCliqueLacrar = true;
     private int feedback;
     
 
@@ -80,17 +84,34 @@ public class Portas extends JPanel {
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVoltar.setOpaque(true);
         add(btnVoltar);
-        botao1 = criarBotao(() -> substituirPainel(new DispositivosDeEmergência(parentFrame, ordemCliques)));
+
+        botao1 = new JButton("");
+        botao1.addActionListener(e -> {
+            if (primeiroCliqueEmergencia == true){
+                SalvarResposta.pontuacao += 1;
+                this.feedback = 21;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                primeiroCliqueEmergencia = false;
+            }
+            substituirPainel(new DispositivosDeEmergência(parentFrame, ordemCliques));
+        });
+        botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        botao1.setOpaque(false);
+        botao1.setContentAreaFilled(false);
+        botao1.setFocusPainted(false);
+        botao1.setVisible(false);
+        botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        botao1.setForeground(Color.BLACK); // cor padrão da borda
         botao1.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 3, true));
         add(botao1);
 
         botao2 = new JButton("");
         botao2.addActionListener(e -> {
-            if (primeiroClique == true){
+            if (primeiroCliqueSoleira == true){
                 SalvarResposta.pontuacao += 1;
-                this.feedback = 18;
+                this.feedback = 20;
                 SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
-                primeiroClique = false;
+                primeiroCliqueSoleira = false;
             }
             substituirPainel(new Soleira(parentFrame, ordemCliques));
         });
@@ -130,6 +151,12 @@ public class Portas extends JPanel {
                 btnVerificar.setVisible(false);
                 btnFechar.setText("Fechar");
             }
+            if (primeiroCliqueFechar == true){
+                SalvarResposta.pontuacao += 2;
+                this.feedback = 26;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                primeiroCliqueFechar = false;
+            }
             index = (index + 1) % (backgrounds.length - 1);
             carregarImagemFundo();
             revalidate();
@@ -147,6 +174,12 @@ public class Portas extends JPanel {
         btnLacrar.setOpaque(true);
         btnLacrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnLacrar.addActionListener(e -> {
+            if (primeiroCliqueLacrar == true){
+                SalvarResposta.pontuacao += 2;
+                this.feedback = 28;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                primeiroCliqueLacrar = false;
+            }
             AudioPlayer.playSound("SomFita.wav");
             index = 2;
             btnFechar.setVisible(false);
@@ -169,6 +202,12 @@ public class Portas extends JPanel {
         btnVerificar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVerificar.addActionListener(e -> {
             JOptionPane.showMessageDialog(this, "A porta foi fechada corretamente", "Correto", JOptionPane.INFORMATION_MESSAGE);
+            if (primeiroCliqueVerificar == true){
+                SalvarResposta.pontuacao += 2;
+                this.feedback = 27;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                primeiroCliqueVerificar = false;
+            }
             btnVerificar.setVisible(false);
             revalidate();
             repaint();

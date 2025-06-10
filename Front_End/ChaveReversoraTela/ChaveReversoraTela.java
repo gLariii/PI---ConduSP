@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import CabineDeControleTela.*;
+import Carro.*;
 import Controller.RespostaUsuarioController;
 import DAO.RespostaUsuarioDAO;
 import Model.*;
@@ -73,6 +74,8 @@ public class ChaveReversoraTela extends JPanel {
                     SalvarResposta.salvarResposta(idUsuario, this.feedback);
                 }
             }
+            // if (Portas.index != 0 && indexChaveReversora == 2 && PainelCBTCeChave.indexCBCT == 00 && PainelCBTCeChave.indexChave == 0){ -- Código para terminar o jogo corretamente
+
             voltarParaCabine();
         });
         

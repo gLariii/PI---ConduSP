@@ -4,6 +4,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
 import ChaveReversoraTela.*;
+import Carro.*;
 import Model.*;
 public class PainelCBTCeChave extends JPanel {
     private int idUsuarioLogado;
@@ -15,7 +16,8 @@ public class PainelCBTCeChave extends JPanel {
     private boolean geraPontuacao = false;
     private int pontuacao;
     private int feedback;
-    private boolean primeiroClique = true;
+    private static boolean primeiroClique = true;
+    private static boolean segundoClique = true;
 
     private final String[] backgroundsCBTC = {
         "Imagens/ChaveCBTCAM.jpg",
@@ -105,6 +107,13 @@ public class PainelCBTCeChave extends JPanel {
                 this.feedback = 16;
                 SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
                 primeiroClique = false;
+                segundoClique = true;
+            }
+            if (segundoClique == true && Portas.index != 0){
+                SalvarResposta.pontuacao += 2;
+                this.feedback = 33;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                segundoClique = false;
             }
         });
         atualizarIconeChave(); // <- Aqui! Para carregar inicialmente

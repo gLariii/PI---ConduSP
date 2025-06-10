@@ -23,7 +23,7 @@ public class EscolhaDeCarro extends JPanel {
 
     private int ordemCliques;
     private int idUsuarioLogado;
-    private boolean primeiroClique = true;
+    private static boolean primeiroClique = true;
     private int feedback;
 
     public EscolhaDeCarro(JFrame frame, int idUsuario) {
@@ -85,6 +85,9 @@ public class EscolhaDeCarro extends JPanel {
                 primeiroClique = false;
             }
             } else {
+                SalvarResposta.pontuacao -= 3;
+                this.feedback = 19;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
                 AudioPlayer.playSound("SomErro.wav"); 
                 JOptionPane.showMessageDialog(this, "Você clicou no botão errado!", "Aviso", JOptionPane.WARNING_MESSAGE);
             }

@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import CabineDeControleTela.*;
+import Model.SalvarResposta;
 
 
 public class PainelExternoAberto extends JPanel {
@@ -30,9 +31,15 @@ public class PainelExternoAberto extends JPanel {
     private JButton btnPorta7;
     private JButton btnPorta8;
 
+    private int idUsuarioLogado;
+    private static boolean primeiroClique = true;
+    private static boolean primeiroCliqueFechar = true;
+    private int feedback;
     private int ordemCliques;
 
-    public PainelExternoAberto(JFrame frame, int ordemCliques) {
+    public PainelExternoAberto(JFrame frame,  int idUsuario) {
+        this.parentFrame = frame;
+        this.idUsuarioLogado = idUsuario;
         this.ordemCliques = ordemCliques;
         this.parentFrame = frame;
         setLayout(null);
@@ -65,7 +72,16 @@ public class PainelExternoAberto extends JPanel {
         btnFechar.setBorderPainted(true);
         btnFechar.setFocusPainted(false);
         btnFechar.setForeground(new Color(0, 0, 0, 0));
-        btnFechar.addActionListener(e -> {AudioPlayer.playSound("SomPorta.wav");substituirPainel(new PainelExternoFechado(parentFrame, ordemCliques));});
+        btnFechar.addActionListener(e -> {
+            AudioPlayer.playSound("SomPorta.wav");
+            if (primeiroCliqueFechar == true){
+                    SalvarResposta.pontuacao += 1;
+                    this.feedback = 24;
+                    SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                    primeiroCliqueFechar = false;
+            }
+            substituirPainel(new PainelExternoFechado(parentFrame, ordemCliques));
+        });
         add(btnFechar);
 
         btnVoltar = new JButton("Voltar");
@@ -77,7 +93,15 @@ public class PainelExternoAberto extends JPanel {
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
         btnVoltar.setOpaque(true);
-        btnVoltar.addActionListener(e -> substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> {
+            if (primeiroCliqueFechar == true){
+                    SalvarResposta.pontuacao -= 3;
+                    this.feedback = 25;
+                    SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                    primeiroCliqueFechar = false;
+            }
+            substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques));
+        });
         add(btnVoltar);
 
         adicionarListenerRedimensionamento();
@@ -97,9 +121,19 @@ public class PainelExternoAberto extends JPanel {
         if (e.getSource() != btnPorta6) {
             AudioPlayer.playSound("SomErro.wav");
             JOptionPane.showMessageDialog(this, "Você clicou no botão errado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            SalvarResposta.pontuacao -= 3;
+            this.feedback = 23;
+            SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+            primeiroClique = false;
         } else {
             ChaveReversoraTela.AudioPlayer.playSound("SomAlavanca.wav");
             index = (index + 1) % backgrounds.length;
+            if (primeiroClique == true){
+                SalvarResposta.pontuacao += 3;
+                this.feedback = 22;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                primeiroClique = false;
+            }
             carregarImagemFundo();
             repaint();
         }

@@ -17,7 +17,7 @@ public class Cinturao extends JPanel {
         "Imagens/ItensColetados.jpg"
     };
     private int idUsuarioLogado;
-    private boolean primeiroClique = true;
+    private static boolean primeiroClique = true;
     private int feedback;
     public static int index = 0;
     private Image imagemDeFundo;
