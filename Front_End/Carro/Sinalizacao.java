@@ -15,11 +15,15 @@ public class Sinalizacao extends JPanel {
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private int ordemCliques;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
+    private int idUsuarioLogado; // Variável para armazenar o ID do usuário logado
 
     // Botões como atributos
     private JButton btnVoltar;
 
-    public Sinalizacao(JFrame frame) {
+    public Sinalizacao(JFrame frame, String tipo_usuario, int idUsuario) {
+        this.tipo_usuarioLogado = tipo_usuario;
+        this.idUsuarioLogado = idUsuario; // Armazena o ID do usuário logado
         this.ordemCliques = ordemCliques;
         ordemCliques++;
         this.parentFrame = frame;
@@ -49,7 +53,7 @@ public class Sinalizacao extends JPanel {
 
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques));});
+        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Carro5VisaoGeral(parentFrame, tipo_usuarioLogado, idUsuarioLogado));});
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));

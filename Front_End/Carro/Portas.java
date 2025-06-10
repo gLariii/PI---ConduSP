@@ -20,6 +20,7 @@ public class Portas extends JPanel {
     
     private int ordemCliques;
     private int idUsuarioLogado;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
     private static boolean primeiroCliqueEmergencia = true;
     private static boolean primeiroCliqueSoleira = true;
     private static boolean primeiroCliqueFechar = true;
@@ -28,7 +29,8 @@ public class Portas extends JPanel {
     private int feedback;
     
 
-    public Portas(JFrame frame, int idUsuario) {
+    public Portas(JFrame frame, String tipo_usuario, int idUsuario) {
+        this.tipo_usuarioLogado = tipo_usuario; // Armazena o tipo de usuário logado
         this.parentFrame = frame;
         this.idUsuarioLogado = idUsuario;
         this.ordemCliques = ordemCliques;
@@ -74,7 +76,7 @@ public class Portas extends JPanel {
 
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques));});
+        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Carro5VisaoGeral(parentFrame, tipo_usuarioLogado, idUsuarioLogado));});
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));
@@ -93,7 +95,7 @@ public class Portas extends JPanel {
                 SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
                 primeiroCliqueEmergencia = false;
             }
-            substituirPainel(new DispositivosDeEmergência(parentFrame, ordemCliques));
+            substituirPainel(new DispositivosDeEmergência(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
         });
         botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botao1.setOpaque(false);
@@ -113,7 +115,7 @@ public class Portas extends JPanel {
                 SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
                 primeiroCliqueSoleira = false;
             }
-            substituirPainel(new Soleira(parentFrame, ordemCliques));
+            substituirPainel(new Soleira(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
         });
         botao2.setContentAreaFilled(false);
         botao2.setVisible(false);

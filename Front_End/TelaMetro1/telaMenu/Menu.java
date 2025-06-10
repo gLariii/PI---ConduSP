@@ -242,7 +242,7 @@ public class Menu extends JLayeredPane {
             playVideoIntro("/Assets/Imagens/videoJogo.mp4", () -> {
                 SwingUtilities.invokeLater(() -> {
                     InicialMusica.stopMusic();
-                    parentFrame.setContentPane(new CabineDeControleTela(parentFrame, idUsuarioLogado));
+                    parentFrame.setContentPane(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
                     parentFrame.revalidate();
                     parentFrame.repaint();
                     SalvarResposta.pontuacao = 0;

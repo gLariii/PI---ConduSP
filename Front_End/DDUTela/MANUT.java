@@ -18,8 +18,12 @@ public class MANUT extends JPanel {
     private JButton btnVoltar;
 
     private int ordemCliques;
+    private int idUsuarioLogado;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
 
-    public MANUT(JFrame frame, int ordemCliques) {
+    public MANUT(JFrame frame, String tipo_usuario, int idUsuario) {
+        this.tipo_usuarioLogado = tipo_usuario;
+        this.idUsuarioLogado = idUsuario; // Armazena o ID do usuário logado
         this.ordemCliques = ordemCliques;
         this.parentFrame = frame;
         setLayout(null);
@@ -52,11 +56,11 @@ public class MANUT extends JPanel {
     }
 
     private void adicionarBotoes() {
-        botao1 = criarBotao(e -> trocarTela(new DDUMenu(parentFrame, ordemCliques)));
-        botao2 = criarBotao(e -> trocarTela(new FE(parentFrame, ordemCliques)));
-        botao3 = criarBotao(e -> trocarTela(new INFOPASS(parentFrame, ordemCliques)));
-        botao5 = criarBotao(e -> trocarTela(new MANUT(parentFrame, ordemCliques)));
-        btnVoltar = criarBotaoVoltar(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
+        botao1 = criarBotao(e -> trocarTela(new DDUMenu(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
+        botao2 = criarBotao(e -> trocarTela(new FE(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
+        botao3 = criarBotao(e -> trocarTela(new INFOPASS(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
+        botao5 = criarBotao(e -> trocarTela(new MANUT(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
+        btnVoltar = criarBotaoVoltar(e -> trocarTela(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));

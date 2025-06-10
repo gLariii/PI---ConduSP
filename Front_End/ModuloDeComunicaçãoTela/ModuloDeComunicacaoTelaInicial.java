@@ -20,6 +20,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     };
 
     private int idUsuarioLogado;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
     
     private static int index = 0;
     private Image imagemDeFundo;
@@ -66,8 +67,9 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
             + "</html>";
 
 
-    public ModuloDeComunicacaoTelaInicial(JFrame frame, int idUsuario) {
+    public ModuloDeComunicacaoTelaInicial(JFrame frame, String tipo_usuario, int idUsuario) {
         this.idUsuarioLogado = idUsuario;
+        this.tipo_usuarioLogado = tipo_usuario; // Armazena o tipo de usuário logado
         this.parentFrame = frame;
         this.ordemCliques = ordemCliques;
         setLayout(null);
@@ -176,7 +178,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
         btnVoltar.setOpaque(true);
-        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
 
         add(botaoPA);
         add(botaoCCO);

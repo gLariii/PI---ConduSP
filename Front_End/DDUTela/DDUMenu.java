@@ -24,10 +24,14 @@ public class DDUMenu extends JPanel {
     private JButton btnVoltar;
 
     private int ordemCliques;
+    private int idUsuarioLogado;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
 
 
 
-    public DDUMenu(JFrame frame, int ordemCliques) {
+    public DDUMenu(JFrame frame, String tipo_usuario, int idUsuario) {
+        this.tipo_usuarioLogado = tipo_usuario;
+        this.idUsuarioLogado = idUsuario; // Armazena o ID do usuário logado
         this.ordemCliques = ordemCliques;
         ordemCliques++;
 
@@ -64,9 +68,9 @@ public class DDUMenu extends JPanel {
     }
 
     private void adicionarBotoes() {
-        botaoFE = criarBotao(e -> trocarTela(new FE(parentFrame, ordemCliques)));
-        botaoINFOPASS = criarBotao(e -> trocarTela(new INFOPASS(parentFrame, ordemCliques)));
-        botaoMANUT = criarBotao(e -> trocarTela(new MANUT(parentFrame, ordemCliques)));
+        botaoFE = criarBotao(e -> trocarTela(new FE(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
+        botaoINFOPASS = criarBotao(e -> trocarTela(new INFOPASS(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
+        botaoMANUT = criarBotao(e -> trocarTela(new MANUT(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         btnVoltar = new JButton("Voltar");
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
@@ -75,7 +79,7 @@ public class DDUMenu extends JPanel {
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
         btnVoltar.setOpaque(true);
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
 
         add(botaoFE);
         add(botaoINFOPASS);

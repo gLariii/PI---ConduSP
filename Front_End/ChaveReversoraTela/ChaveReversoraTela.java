@@ -24,13 +24,15 @@ public class ChaveReversoraTela extends JPanel {
     private JButton btnTrocar;
     private JButton btnVoltar;
     private int idUsuarioLogado;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
     private boolean primeiroClique = true;
     private int feedback;
     private int ordemCliques;
     
 
     // Modifique o construtor para receber o idUsuario
-    public ChaveReversoraTela(JFrame frame, int idUsuario) {
+    public ChaveReversoraTela(JFrame frame, String tipo_usuario, int idUsuario) {
+        this.tipo_usuarioLogado = tipo_usuario;
         this.parentFrame = frame;
         this.idUsuarioLogado = idUsuario; // Atribua o valor do parâmetro à variável de instância
         this.ordemCliques = 0; // Você pode redefinir ou gerenciar 'ordemCliques' de outra forma se precisar
@@ -92,7 +94,7 @@ public class ChaveReversoraTela extends JPanel {
 
     private void voltarParaCabine() {
         // Ao voltar para a CabineDeControleTela, passe o idUsuarioLogado novamente
-        parentFrame.setContentPane(new CabineDeControleTela(parentFrame, idUsuarioLogado));
+        parentFrame.setContentPane(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
         parentFrame.revalidate();
         parentFrame.repaint();
     }

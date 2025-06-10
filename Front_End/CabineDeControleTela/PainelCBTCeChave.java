@@ -8,6 +8,7 @@ import Carro.*;
 import Model.*;
 public class PainelCBTCeChave extends JPanel {
     private int idUsuarioLogado;
+    private String tipo_usuarioLogado;
     public static int indexCBCT = 0;
     public static int indexChave = 0;
     private Image imagemDeFundo;
@@ -18,6 +19,7 @@ public class PainelCBTCeChave extends JPanel {
     private int feedback;
     private static boolean primeiroClique = true;
     private static boolean segundoClique = true;
+    public static boolean chaveInserida = true; 
 
     private final String[] backgroundsCBTC = {
         "Imagens/ChaveCBTCAM.jpg",
@@ -31,9 +33,10 @@ public class PainelCBTCeChave extends JPanel {
     // Botões como atributos
     private JButton btnVoltar, btnCBTC, btnChave;
 
-    public PainelCBTCeChave(JFrame frame, int idUsuario) {
-        this.parentFrame = frame;
+    public PainelCBTCeChave(JFrame frame, String tipo_usuario, int idUsuario) { // Construtor agora recebe o ID do usuário
         this.idUsuarioLogado = idUsuario;
+        this.tipo_usuarioLogado = tipo_usuario;
+        this.parentFrame = frame;
         this.ordemCliques = 0;
 
         setLayout(null);
@@ -115,12 +118,13 @@ public class PainelCBTCeChave extends JPanel {
                 SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
                 segundoClique = false;
             }
+            chaveInserida = !chaveInserida;
         });
         atualizarIconeChave(); // <- Aqui! Para carregar inicialmente
         add(btnChave);
 
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, idUsuarioLogado)));
+        btnVoltar.addActionListener(e -> substituirPainel(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));

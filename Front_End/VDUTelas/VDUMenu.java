@@ -13,8 +13,12 @@ public class VDUMenu extends JPanel {
     private JButton btnVoltar;
 
     private int ordemCliques;
+    private int idUsuarioLogado;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
 
-    public VDUMenu(JFrame frame, int ordemCliques) {
+    public VDUMenu(JFrame frame, String tipo_usuario, int idUsuario) {
+        this.tipo_usuarioLogado = tipo_usuario;
+        this.idUsuarioLogado = idUsuario; // Armazena o ID do usuário logado
         this.ordemCliques = ordemCliques;
         //ordemCliques++;
 
@@ -33,7 +37,7 @@ public class VDUMenu extends JPanel {
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
         btnVoltar.setOpaque(true);
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         add(btnVoltar);
 
         adicionarListenerRedimensionamento();

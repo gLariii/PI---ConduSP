@@ -13,8 +13,12 @@ public class Soleira extends JPanel {
     private JButton  btnVoltar;
 
     private int ordemCliques;
+    private int idUsuarioLogado;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
 
-    public Soleira(JFrame frame, int ordemCliques) {
+    public Soleira(JFrame frame, String tipo_usuario, int idUsuario) {
+        this.tipo_usuarioLogado = tipo_usuario;
+        this.idUsuarioLogado = idUsuario; // Armazena o ID do usuário logado
         this.ordemCliques = ordemCliques;
         ordemCliques++;
 
@@ -53,7 +57,7 @@ public class Soleira extends JPanel {
     }
 
     private void adicionarBotoes() {
-        btnVoltar = criarBotao(() -> substituirPainel(new Portas(parentFrame, ordemCliques)));
+        btnVoltar = criarBotao(() -> substituirPainel(new Portas(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));

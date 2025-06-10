@@ -13,9 +13,13 @@ public class ADUMenu extends JPanel {
     private Image imagemDeFundo;
     private JButton btnVoltar;
     private int ordemCliques;
+    private int idUsuarioLogado; // Variável para armazenar o ID do usuário logado
+    private String tipo_usuarioLogado; 
 
-    public ADUMenu(JFrame frame, int ordemCliques) {
+    public ADUMenu(JFrame frame, String tipo_usuario, int idUsuario) { // Construtor agora recebe o ID do usuário
+        this.tipo_usuarioLogado = tipo_usuario;
         this.parentFrame = frame;
+        this.idUsuarioLogado = idUsuario; // Armazena o ID do usuário logado
         this.ordemCliques = ordemCliques;
         //ordemCliques++;
 
@@ -42,7 +46,7 @@ public class ADUMenu extends JPanel {
 
     private void adicionarComponentes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, 0)));
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));

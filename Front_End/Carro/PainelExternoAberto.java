@@ -32,14 +32,16 @@ public class PainelExternoAberto extends JPanel {
     private JButton btnPorta8;
 
     private int idUsuarioLogado;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
     private static boolean primeiroClique = true;
     private static boolean primeiroCliqueFechar = true;
     private int feedback;
     private int ordemCliques;
 
-    public PainelExternoAberto(JFrame frame,  int idUsuario) {
+    public PainelExternoAberto(JFrame frame, String tipo_usuario, int idUsuario) {
         this.parentFrame = frame;
         this.idUsuarioLogado = idUsuario;
+        this.tipo_usuarioLogado = tipo_usuario; // Armazena o tipo de usuário logado
         this.ordemCliques = ordemCliques;
         this.parentFrame = frame;
         setLayout(null);
@@ -80,7 +82,7 @@ public class PainelExternoAberto extends JPanel {
                     SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
                     primeiroCliqueFechar = false;
             }
-            substituirPainel(new PainelExternoFechado(parentFrame, ordemCliques));
+            substituirPainel(new PainelExternoFechado(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
         });
         add(btnFechar);
 
@@ -100,7 +102,7 @@ public class PainelExternoAberto extends JPanel {
                     SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
                     primeiroCliqueFechar = false;
             }
-            substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques));
+            substituirPainel(new Carro5VisaoGeral(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
         });
         add(btnVoltar);
 

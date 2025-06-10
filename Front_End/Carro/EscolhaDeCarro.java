@@ -23,12 +23,14 @@ public class EscolhaDeCarro extends JPanel {
 
     private int ordemCliques;
     private int idUsuarioLogado;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
     private static boolean primeiroClique = true;
     private int feedback;
 
-    public EscolhaDeCarro(JFrame frame, int idUsuario) {
+    public EscolhaDeCarro(JFrame frame, String tipo_usuario, int idUsuario) {
         this.parentFrame = frame;
         this.idUsuarioLogado = idUsuario;
+        this.tipo_usuarioLogado = tipo_usuario; // Armazena o tipo de usuário logado
         this.ordemCliques = ordemCliques;
         this.parentFrame = frame;
         setLayout(null);
@@ -59,7 +61,7 @@ public class EscolhaDeCarro extends JPanel {
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
         btnVoltar.setOpaque(true);
-        btnVoltar.addActionListener(e -> substituirPainel(new AreaLateral(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> substituirPainel(new AreaLateral(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         add(btnVoltar);
 
         adicionarListenerRedimensionamento();
@@ -77,7 +79,7 @@ public class EscolhaDeCarro extends JPanel {
         btn.addActionListener(e -> {
             if (isBotaoCorreto) {
                 AudioPlayer.playSound("SomPorta.wav");
-                substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques));
+                substituirPainel(new Carro5VisaoGeral(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
                 if (primeiroClique == true){
                 SalvarResposta.pontuacao += 1;
                 this.feedback = 18;

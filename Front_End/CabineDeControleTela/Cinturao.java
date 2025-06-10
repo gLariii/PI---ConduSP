@@ -17,6 +17,7 @@ public class Cinturao extends JPanel {
         "Imagens/ItensColetados.jpg"
     };
     private int idUsuarioLogado;
+    private String tipo_usuarioLogado;
     private static boolean primeiroClique = true;
     private int feedback;
     public static int index = 0;
@@ -27,7 +28,8 @@ public class Cinturao extends JPanel {
 
     private int ordemCliques;
 
-    public Cinturao(JFrame frame, int idUsuario) {
+    public Cinturao(JFrame frame, String tipo_usuario, int idUsuario) { // Construtor agora recebe o ID do usuário
+        this.tipo_usuarioLogado = tipo_usuario;
         this.parentFrame = frame;
         this.idUsuarioLogado = idUsuario;
         this.ordemCliques = ordemCliques;
@@ -69,7 +71,7 @@ public class Cinturao extends JPanel {
 
     private void adicionarComponentes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, ordemCliques)));
+        btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));

@@ -13,8 +13,12 @@ public class PainelExternoFechado extends JPanel {
     private JButton btnAbrir, btnVoltar;
 
     private int ordemCliques;
+    private int idUsuarioLogado;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
 
-    public PainelExternoFechado(JFrame frame, int ordemCliques) {
+    public PainelExternoFechado(JFrame frame, String tipo_usuario, int idUsuario) {
+        this.tipo_usuarioLogado = tipo_usuario;
+        this.idUsuarioLogado = idUsuario; // Armazena o ID do usuário logado
         this.parentFrame = frame;
         setLayout(null);
         adicionarBotoes();
@@ -50,7 +54,7 @@ public class PainelExternoFechado extends JPanel {
     }
 
     private void adicionarBotoes() {
-        btnAbrir = criarBotao(() -> substituirPainel(new PainelExternoAberto(parentFrame, ordemCliques)));
+        btnAbrir = criarBotao(() -> substituirPainel(new PainelExternoAberto(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         add(btnAbrir);
         btnVoltar = new JButton("Voltar");
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -61,7 +65,7 @@ public class PainelExternoFechado extends JPanel {
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
         btnVoltar.setOpaque(true);
-        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Carro5VisaoGeral(parentFrame, ordemCliques));});
+        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Carro5VisaoGeral(parentFrame, tipo_usuarioLogado, idUsuarioLogado));});
         add(btnVoltar);
         reposicionarBotoes();
         

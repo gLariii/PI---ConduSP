@@ -16,6 +16,8 @@ public class Carro5VisaoGeral extends JPanel {
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private JComponent lblSinalizacaoTexto;
+    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
+    private int idUsuarioLogado; // Variável para armazenar o ID do usuário logado
 
 
     private int ordemCliques;
@@ -23,7 +25,9 @@ public class Carro5VisaoGeral extends JPanel {
     // Botões como atributos
     private JButton btnPortas, btnVoltar, btnPainel, btnSinalização;
 
-    public Carro5VisaoGeral(JFrame frame, int ordemCliques) {
+    public Carro5VisaoGeral(JFrame frame, String tipo_usuario, int idUsuario) {
+        this.tipo_usuarioLogado = tipo_usuario;
+        this.idUsuarioLogado = idUsuario; // Armazena o ID do usuário logado
         this.ordemCliques = ordemCliques;
         ordemCliques++;
         this.parentFrame = frame;
@@ -78,7 +82,7 @@ public class Carro5VisaoGeral extends JPanel {
 
     private void adicionarBotoes() {
         btnVoltar = new JButton("Voltar");
-        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomPorta.wav");substituirPainel(new AreaLateral(parentFrame, ordemCliques));});
+        btnVoltar.addActionListener(e -> {AudioPlayer.playSound("SomPorta.wav");substituirPainel(new AreaLateral(parentFrame, tipo_usuarioLogado, idUsuarioLogado));});
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
         btnVoltar.setForeground(Color.WHITE);
         btnVoltar.setBackground(new Color(30, 60, 90));
@@ -86,9 +90,9 @@ public class Carro5VisaoGeral extends JPanel {
         btnVoltar.setFocusPainted(false);
         btnVoltar.setContentAreaFilled(false);
         btnVoltar.setOpaque(true);
-        btnPortas = criarBotao(() -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Portas(parentFrame, ordemCliques));});
-        btnPainel = criarBotao(() -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new PainelExternoFechado(parentFrame, ordemCliques));});
-        btnSinalização = criarBotao (() -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Sinalizacao(parentFrame));});
+        btnPortas = criarBotao(() -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Portas(parentFrame, tipo_usuarioLogado, idUsuarioLogado));});
+        btnPainel = criarBotao(() -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new PainelExternoFechado(parentFrame, tipo_usuarioLogado, idUsuarioLogado));});
+        btnSinalização = criarBotao (() -> {AudioPlayer.playSound("SomCaminhar.wav");substituirPainel(new Sinalizacao(parentFrame, tipo_usuarioLogado, idUsuarioLogado));});
         
         lblSinalizacaoTexto = new JComponent() {
         @Override

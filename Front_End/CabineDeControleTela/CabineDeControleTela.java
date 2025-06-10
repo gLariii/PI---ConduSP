@@ -16,13 +16,16 @@ public class CabineDeControleTela extends JPanel {
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private int idUsuarioLogado; // Variável para armazenar o ID do usuário logado
+    private String tipo_usuarioLogado; 
     
     // Botões como atributos
     private JButton botao1, botao2, botao3, botao4, botao5, botao6, botao7;
     
-    public CabineDeControleTela(JFrame frame, int idUsuario) { // Construtor agora recebe o ID do usuário
+    public CabineDeControleTela(JFrame frame, String tipo_usuario, int idUsuario) { // Construtor agora recebe o ID do usuário
+        this.tipo_usuarioLogado = tipo_usuario;
         this.parentFrame = frame;
         this.idUsuarioLogado = idUsuario; // Armazena o ID do usuário logado
+        
         
         setLayout(null);
         adicionarBotoes();
@@ -59,23 +62,23 @@ public class CabineDeControleTela extends JPanel {
     
     private void adicionarBotoes() {
         // Passando o idUsuarioLogado para as novas telas
-        botao1 = criarBotao(() -> substituirPainel(new ChaveReversoraTela(parentFrame, idUsuarioLogado)));
+        botao1 = criarBotao(() -> substituirPainel(new ChaveReversoraTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         add(botao1);
     
-        botao2 = criarBotao(() -> substituirPainel(new ModuloDeComunicacaoTelaInicial(parentFrame, idUsuarioLogado)));
+        botao2 = criarBotao(() -> substituirPainel(new ModuloDeComunicacaoTelaInicial(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         add(botao2);
     
-        botao3 = criarBotao(() -> substituirPainel(new DDUMenu(parentFrame, idUsuarioLogado)));
+        botao3 = criarBotao(() -> substituirPainel(new DDUMenu(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         add(botao3);
     
-        botao4 = criarBotao(() -> substituirPainel(new VDUMenu(parentFrame, idUsuarioLogado)));
+        botao4 = criarBotao(() -> substituirPainel(new VDUMenu(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         add(botao4);
 
-        botao5 = criarBotao(() -> substituirPainel(new ADUMenu(parentFrame, idUsuarioLogado)));
+        botao5 = criarBotao(() -> substituirPainel(new ADUMenu(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         add(botao5);
     
         botao6 = new JButton("<html><center>Barra<br>Lateral</center></html>");
-        botao6.addActionListener(e -> substituirPainel(new AreaLateral(parentFrame, idUsuarioLogado)));
+        botao6.addActionListener(e -> substituirPainel(new AreaLateral(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         botao6.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botao6.setBackground(new Color(30, 60, 90));
         botao6.setForeground(Color.WHITE);
@@ -86,7 +89,7 @@ public class CabineDeControleTela extends JPanel {
         add(botao6);
 
         botao7 = new JButton("<html><center>Painel<br>Chave</center></html>");
-        botao7.addActionListener(e -> substituirPainel(new PainelCBTCeChave(parentFrame, idUsuarioLogado)));
+        botao7.addActionListener(e -> substituirPainel(new PainelCBTCeChave(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         botao7.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botao7.setBackground(new Color(30, 60, 90));
         botao7.setForeground(Color.WHITE);
@@ -140,7 +143,7 @@ public class CabineDeControleTela extends JPanel {
             
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setUndecorated(true);
-            frame.setContentPane(new CabineDeControleTela(frame, 0)); // Exemplo: passando 0 para o ID do usuário no main
+            frame.setContentPane(new CabineDeControleTela(frame, "operario", 0)); // Exemplo: passando 0 para o ID do usuário no main
             frame.setVisible(true);
         });
     }
