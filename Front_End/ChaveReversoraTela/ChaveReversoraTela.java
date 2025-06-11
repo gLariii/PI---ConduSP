@@ -35,7 +35,7 @@ public class ChaveReversoraTela extends JPanel {
     private float alpha = 0.0f;
     
 
-    // Modifique o construtor para receber o idUsuario
+    // Construtor que inicializa o painel da chave reversora.
     public ChaveReversoraTela(JFrame frame, String tipo_usuario, int idUsuario) {
         this.tipo_usuarioLogado = tipo_usuario;
         this.parentFrame = frame;
@@ -106,11 +106,13 @@ public class ChaveReversoraTela extends JPanel {
         reposicionarComponentes();
     }
 
+    // Carrega a imagem de fundo com base na posição atual da chave reversora.
     private void carregarImagemFundo() {
         ImageIcon icon = new ImageIcon(getClass().getResource(backgrounds[indexChaveReversora]));
         imagemDeFundo = icon.getImage();
     }
 
+    // Navega de volta para a tela principal da cabine de controle.
     private void voltarParaCabine() {
         // Ao voltar para a CabineDeControleTela, passe o idUsuarioLogado novamente
         parentFrame.setContentPane(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
@@ -118,6 +120,7 @@ public class ChaveReversoraTela extends JPanel {
         parentFrame.repaint();
     }
 
+    // Inicia uma transição suave de fade out para um novo painel.
     private void trocarTelaComFade(JPanel novoPainel) {
         // Impede que um novo fade comece se outro já estiver em andamento
         if (fadeOutTimer != null && fadeOutTimer.isRunning()) {
@@ -156,6 +159,7 @@ public class ChaveReversoraTela extends JPanel {
         fadeOutTimer.start();
     }
 
+    // Sobrescreve o método para desenhar a imagem de fundo, ícones e o efeito de fade.
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -182,6 +186,7 @@ public class ChaveReversoraTela extends JPanel {
         }
     }
 
+    // Reposiciona e redimensiona os componentes com base no tamanho do painel.
     private void reposicionarComponentes() {
         int w = getWidth();
         int h = getHeight();
@@ -191,6 +196,7 @@ public class ChaveReversoraTela extends JPanel {
         btnTrocar.setBounds((int)(w * 0.396), (int)(h * 0.296), (int)(w * 0.208), (int)(h * 0.407));
     }
 
+    // Adiciona um listener que ajusta o layout quando o painel é redimensionado.
     private void adicionarListenerRedimensionamento() {
         this.addComponentListener(new ComponentAdapter() {
             @Override

@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+//conexão com o banco de dados MySQL
+// precisa da lib para funcionar, que é o mysql-connector-java-8.0.32.jar
+//conexao por um banco de dados remoto, hospedado na Aiven
+
 public class Conexao 
 {
     public static Connection getConexao() throws SQLException 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FeedbackGeralDAO {
-
+// Método para listar todos os feedbacks gerais (pega da view vw_feedback_supervisor todos os feedbacks)
     public List<FeedbackGeral> listarTodos() {
         List<FeedbackGeral> lista = new ArrayList<>();
         try {
@@ -47,6 +47,7 @@ public class FeedbackGeralDAO {
         return lista;
     }
 
+    // Método para listar feedbacks gerais por ID de usuário (pega da view vw_feedback_supervisor todos os feedbacks do usuario logado)
     public List<FeedbackGeral> listarPorIdUsuario(int idUsuario) {
         List<FeedbackGeral> lista = new ArrayList<>();
         try {

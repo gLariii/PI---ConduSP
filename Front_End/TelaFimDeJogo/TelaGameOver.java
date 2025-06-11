@@ -26,6 +26,7 @@ public class TelaGameOver extends JPanel {
     private Timer fadeInTimer;
     private float alpha = 0f;
 
+    // Construtor que inicializa a tela de fim de jogo (sucesso ou falha).
     public TelaGameOver(JFrame frame, String tipo_usuario, int idUsuarioLogado) {
         this.parentFrame = frame;
         this.tipo_usuarioLogado = tipo_usuario;
@@ -43,6 +44,7 @@ public class TelaGameOver extends JPanel {
         });
     }
 
+    // Inicia um timer para criar um efeito de fade-in gradual na tela.
     public void iniciarFadeIn() {
         if (fadeInTimer != null && fadeInTimer.isRunning()) {
             return;
@@ -59,6 +61,7 @@ public class TelaGameOver extends JPanel {
         fadeInTimer.start();
     }
 
+    // Sobrescreve o método 'paint' para aplicar o efeito de transparência (alpha) em todos os componentes.
     @Override
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
@@ -70,6 +73,7 @@ public class TelaGameOver extends JPanel {
         }
     }
 
+    // Desenha os elementos de fundo do painel, como a cor e o logotipo.
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -92,6 +96,7 @@ public class TelaGameOver extends JPanel {
         }
     }
 
+    // Adiciona os componentes visuais, como textos e botões, com base no resultado do jogo.
     private void adicionarComponentes() {
     // Variáveis para ambos os textos
     String tituloTexto;
@@ -130,8 +135,7 @@ public class TelaGameOver extends JPanel {
     reposicionarComponentes();
 }
     
-    // --- NOVO MÉTODO ---
-    // Cria um JButton estilizado para parecer com o da imagem, sem usar um arquivo de imagem.
+    // Cria um botão customizado com um estilo visual específico (fonte, cor, etc.).
     private JButton criarBotaoEstilizado(String texto, Runnable action) {
         JButton botao = new JButton(texto);
         
@@ -154,6 +158,7 @@ public class TelaGameOver extends JPanel {
         return botao;
     }
 
+    // Reposiciona e redimensiona os componentes com base no tamanho do painel.
     private void reposicionarComponentes() {
         int w = getWidth();
         int h = getHeight();
@@ -168,6 +173,7 @@ public class TelaGameOver extends JPanel {
         }
     }
 
+    // Substitui o conteúdo da janela principal por um novo painel.
     private void substituirPainel(Container novoPainel) {
         parentFrame.setContentPane(novoPainel);
         parentFrame.revalidate();

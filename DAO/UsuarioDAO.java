@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 public class UsuarioDAO {
 
+//Autentica um usuário verificando o rg e a senha
     public boolean autenticar(Usuario usuario) {
         String sql = "SELECT * FROM tb_usuario WHERE rg = ? AND senha = ?";
 
@@ -27,6 +28,8 @@ public class UsuarioDAO {
         }
     }
 
+    //Verifica se o RG existe
+
     public boolean existeRg(String rg) {
         String sql = "SELECT COUNT(*) FROM tb_usuario WHERE rg = ?";
         try (Connection conn = Conexao.getConexao();
@@ -42,14 +45,14 @@ public class UsuarioDAO {
         return false;
     }
 
-    // New method: Get user by ID
+//Métodos de Busca de Usuário
     public Usuario getUsuarioById(int id) {
         String sql = "SELECT id, rg, senha, nome, tipo_usuario, volume FROM tb_usuario WHERE id = ?";
 
         try (Connection conn = Conexao.getConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id); // Set ID in the prepared statement
+            stmt.setInt(1, id); 
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -68,7 +71,6 @@ public class UsuarioDAO {
         return null;
     }
 
-    // Keep getUsuarioByRg as it might be used for other purposes, like login
     public Usuario getUsuarioByRg(String rg) {
         String sql = "SELECT id, rg, senha, nome, tipo_usuario, volume FROM tb_usuario WHERE rg = ?";
 
@@ -114,6 +116,8 @@ public class UsuarioDAO {
         }
         return null;
     }
+
+//Métodos de Atualização de Usuário
 
     public boolean atualizartipo_usuario(String rg, String novotipo_usuario) {
         String sql = "UPDATE tb_usuario SET tipo_usuario = ? WHERE rg = ?";

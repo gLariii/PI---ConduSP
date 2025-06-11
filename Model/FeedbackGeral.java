@@ -2,6 +2,8 @@ package Model;
 
 import java.sql.Date;
 
+//Atributos da classe feedbackGeral
+
 public class FeedbackGeral {
     private int idUsuario;
     private String nomeUsuario;
@@ -21,6 +23,8 @@ public class FeedbackGeral {
     private int idFase;
     private String nomeFase;
     private String descricaoFase;
+
+//contrutor para criar os objetos do feedbackGeral
 
     public FeedbackGeral(int idUsuario, String nomeUsuario, String rg, String tipoUsuario,
                                int idResposta, int pontuacaoAtual, Date dataResposta,
@@ -43,6 +47,8 @@ public class FeedbackGeral {
         this.nomeFase = nomeFase;
         this.descricaoFase = descricaoFase;
     }
+
+    // getters e setters(para puxar os dados do banco de dados e atualiza-los)
 
     public int getIdUsuario() {
         return idUsuario;

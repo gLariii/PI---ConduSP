@@ -12,6 +12,8 @@ import java.util.List;
 
 public class RespostaUsuarioDAO {
 
+// Método para obter as respostas do usuário por ID
+
     public List<RespostaUsuario> obterRespostasDoUsuario(int idUsuario) {
         List<RespostaUsuario> respostas = new ArrayList<>();
         String sql = "SELECT id_resposta, id_usuario, id_feedback, pontuacaoAtual, data " +
@@ -41,7 +43,9 @@ public class RespostaUsuarioDAO {
         }
         return respostas;
     }
-    
+
+// Método para salvar a resposta do usuário
+
 public boolean salvarRespostaUsuario(RespostaUsuario resposta) {
     String sql = "INSERT INTO RespostaUsuario (id_usuario, id_feedback, pontuacaoAtual, data) VALUES (?, ?, ?, ?)";
 

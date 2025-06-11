@@ -6,6 +6,7 @@ import javax.swing.*;
 import ChaveReversoraTela.*;
 import Carro.*;
 import Model.*;
+
 public class PainelCBTCeChave extends JPanel {
     private int idUsuarioLogado;
     private String tipo_usuarioLogado;
@@ -34,6 +35,7 @@ public class PainelCBTCeChave extends JPanel {
     // Botões como atributos
     private JButton btnVoltar, btnCBTC, btnChave;
 
+    // Construtor que inicializa o painel do CBTC e da chave do operador.
     public PainelCBTCeChave(JFrame frame, String tipo_usuario, int idUsuario) { // Construtor agora recebe o ID do usuário
         this.idUsuarioLogado = idUsuario;
         this.tipo_usuarioLogado = tipo_usuario;
@@ -43,7 +45,7 @@ public class PainelCBTCeChave extends JPanel {
         setLayout(null);
         adicionarBotoes();
 
-        // Listener para redimensionar os botões conforme a tela
+        // Listener para redimensionar os botões conforme a tela.
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 reposicionarBotoes();
@@ -51,6 +53,7 @@ public class PainelCBTCeChave extends JPanel {
         });
     }
 
+    // Sobrescreve o método para desenhar a imagem de fundo e os ícones de status.
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -73,6 +76,7 @@ public class PainelCBTCeChave extends JPanel {
         }
     }
 
+    // Inicializa e adiciona os botões interativos do painel e suas ações.
     private void adicionarBotoes() {
         // Dentro do construtor, após criar o btnCBTC:
         btnCBTC = new JButton("");
@@ -146,48 +150,50 @@ public class PainelCBTCeChave extends JPanel {
         reposicionarBotoes();
     }
 
+    // Atualiza o ícone do botão CBTC de acordo com o estado atual.
     private void atualizarIconeCBTC() {
     ImageIcon icon = new ImageIcon(getClass().getResource(backgroundsCBTC[indexCBCT]));
     Image img = icon.getImage();
 
-    // Garante que o botão já foi posicionado
+    // Garante que o botão já foi posicionado.
     int largura = btnCBTC.getWidth();
     int altura = btnCBTC.getHeight();
 
-    // Só redimensiona se o botão tiver tamanho definido
+    // Só redimensiona se o botão tiver tamanho definido.
     if (largura > 0 && altura > 0) {
         Image imgRedimensionada = img.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
         btnCBTC.setIcon(new ImageIcon(imgRedimensionada));
     } else {
-        // Se o botão ainda não tiver tamanho (em layout inicial), usa ícone normal
+        // Se o botão ainda não tiver tamanho (em layout inicial), usa ícone normal.
         btnCBTC.setIcon(icon);
     }
 }
 
+    // Atualiza o ícone do botão da chave do operador de acordo com o estado atual.
     private void atualizarIconeChave() {
     ImageIcon icon = new ImageIcon(getClass().getResource(backgroundsChave[indexChave]));
     Image img = icon.getImage();
 
-    // Garante que o botão já foi posicionado
+    // Garante que o botão já foi posicionado.
     int largura = btnChave.getWidth();
     int altura = btnChave.getHeight();
 
-    // Só redimensiona se o botão tiver tamanho definido
+    // Só redimensiona se o botão tiver tamanho definido.
     if (largura > 0 && altura > 0) {
         Image imgRedimensionada = img.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
         btnChave.setIcon(new ImageIcon(imgRedimensionada));
     } else {
-        // Se o botão ainda não tiver tamanho (em layout inicial), usa ícone normal
+        // Se o botão ainda não tiver tamanho (em layout inicial), usa ícone normal.
         btnChave.setIcon(icon);
     }
 }
 
-
+    // Reposiciona e redimensiona os componentes com base no tamanho do painel.
     private void reposicionarBotoes() {
         int w = getWidth();
         int h = getHeight();
 
-        //Tamanho e Posicionamento
+        //Tamanho e Posicionamento.
         btnCBTC.setBounds((int)(w * 0.438), (int)(h * 0.775), (int)(w * 0.065), (int)(h * 0.12));
         btnChave.setBounds((int)(w * 0.435), (int)(h * 0.467), (int)(w * 0.08), (int)(h * 0.095));
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
@@ -196,6 +202,7 @@ public class PainelCBTCeChave extends JPanel {
         repaint();
     }
 
+    // Substitui o conteúdo da janela principal por um novo painel.
     private void substituirPainel(JPanel novoPainel) {
         parentFrame.setContentPane(novoPainel);
         parentFrame.revalidate();

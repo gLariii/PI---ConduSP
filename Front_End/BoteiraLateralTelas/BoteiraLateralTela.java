@@ -29,13 +29,14 @@ public class BoteiraLateralTela extends JPanel {
     private boolean primeiroClique = true;
     private int feedback;
     private int ordemCliques;
-    private Timer flashTimer; // Timer para controlar o efeito de flash
+    private Timer flashTimer;
 
+    // Construtor da classe, inicializa o painel e seus componentes.
     public BoteiraLateralTela(JFrame frame, String tipo_usuario, int idUsuario) {
         this.tipo_usuarioLogado = tipo_usuario;
         this.parentFrame = frame;
         this.idUsuarioLogado = idUsuario;
-        if  (PainelExternoAberto.index == 1) {
+        if (PainelExternoAberto.index == 1) {
             index = 0;
         } else {
             index = 1;
@@ -44,7 +45,6 @@ public class BoteiraLateralTela extends JPanel {
 
         carregarImagemFundo();
 
-        // Botão para trocar o fundo
         btnTrocar = new JButton("") {
             private boolean isHovering = false;
 
@@ -71,6 +71,7 @@ public class BoteiraLateralTela extends JPanel {
                 });
             }
 
+            // Desenha o componente do botão, com um efeito de borda amarela ao passar o mouse.
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
@@ -99,6 +100,7 @@ public class BoteiraLateralTela extends JPanel {
                 g2.dispose();
             }
 
+            // Sobrescreve o método 'contains' para que a área de clique do botão seja circular.
             @Override
             public boolean contains(int x, int y) {
                 int radius = getWidth() / 2;
@@ -108,14 +110,13 @@ public class BoteiraLateralTela extends JPanel {
 
         btnTrocar.addActionListener(e -> {
             if (ChaveReversoraTela.indexChaveReversora != 1) {
-                // Verifica se um flash já está em andamento para evitar múltiplos cliques
+                // Verifica se um flash já está em andamento para evitar múltiplos cliques.
                 if (flashTimer != null && flashTimer.isRunning()) {
                     return;
                 }
 
-                // Condição para o comportamento de flash
                 if (ModuloDeComunicacaoTelaInicial.primeiroClique == false){
-                    // Lógica de pontuação executada no primeiro clique válido
+                    // Lógica de pontuação executada no primeiro clique válido.
                     if (primeiroClique) {
                         SalvarResposta.pontuacao += 2;
                         feedback = 10;
@@ -124,24 +125,24 @@ public class BoteiraLateralTela extends JPanel {
                     }
                 }
                 if (PainelExternoAberto.index != 1) {
-                    // Lógica do flash: muda a imagem e a restaura após 1 segundo
+                    // Lógica do flash: muda a imagem e a restaura após um tempo.
                     final int originalIndex = index;
                     int flashedIndex = (index + 1) % backgrounds.length;
 
-                    // Muda para o estado "aceso"
+                    // Muda para o estado "aceso".
                     index = flashedIndex;
                     carregarImagemFundo();
                     reposicionarComponentes();
                     repaint();
 
-                    // Cria e inicia um Timer para reverter a imagem
+                    // Cria e inicia um Timer para reverter a imagem.
                     flashTimer = new Timer(1000, event -> {
-                    index = originalIndex; // Volta ao estado original
-                    carregarImagemFundo();
-                    reposicionarComponentes();
-                    repaint();
+                        index = originalIndex; // Volta ao estado original.
+                        carregarImagemFundo();
+                        reposicionarComponentes();
+                        repaint();
                     });
-                    flashTimer.setRepeats(false); // Garante que o timer execute apenas uma vez
+                    flashTimer.setRepeats(false); // Garante que o timer execute apenas uma vez.
                     flashTimer.start();
                 }
             }
@@ -151,7 +152,6 @@ public class BoteiraLateralTela extends JPanel {
             add(btnTrocar);
         }
 
-        // Botão Voltar
         btnVoltar = new JButton("Voltar");
         btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVoltar.setFont(new Font("Arial", Font.BOLD, 14));
@@ -168,17 +168,20 @@ public class BoteiraLateralTela extends JPanel {
         reposicionarComponentes();
     }
 
+    // Carrega a imagem de fundo a partir do caminho especificado no array 'backgrounds'.
     private void carregarImagemFundo() {
         ImageIcon icon = new ImageIcon(getClass().getResource(backgrounds[index]));
         imagemDeFundo = icon.getImage();
     }
 
+    // Navega de volta para a tela da Área Lateral.
     private void voltarParaLateral() {
         parentFrame.setContentPane(new AreaLateral(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
         parentFrame.revalidate();
         parentFrame.repaint();
     }
 
+    // Sobrescreve o método para desenhar a imagem de fundo e ícones de status no painel.
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -199,13 +202,14 @@ public class BoteiraLateralTela extends JPanel {
         }
     }
 
+    // Define a posição e o tamanho dos botões com base nas dimensões do painel.
     private void reposicionarComponentes() {
         int w = getWidth();
         int h = getHeight();
 
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
 
-        // Troca posição do botão de acordo com a imagem de fundo
+        // Troca a posição do botão de acordo com a imagem de fundo.
         if (index == 0) {
             btnTrocar.setBounds((int)(w * 0.472), (int)(h * 0.467), (int)(w * 0.06), (int)(h * 0.09));
         } else {
@@ -213,6 +217,7 @@ public class BoteiraLateralTela extends JPanel {
         }
     }
 
+    // Adiciona um listener que chama 'reposicionarComponentes' sempre que o painel é redimensionado.
     private void adicionarListenerRedimensionamento() {
         this.addComponentListener(new ComponentAdapter() {
             @Override

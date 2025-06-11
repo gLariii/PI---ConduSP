@@ -2,12 +2,16 @@ package Model;
 
 import java.sql.Timestamp;
 
+//Atributos da classe respostaUsuario
+
 public class RespostaUsuario {
     private int idResposta;
     private int idUsuario;
     private int idFeedback;
     private int pontuacaoAtual;
     private Timestamp data;
+
+//contrutor para criar os objetos do respostaUsuario
 
     public RespostaUsuario(int idResposta, int idUsuario, int idFeedback, int pontuacaoAtual, Timestamp data) {
         this.idResposta = idResposta;
@@ -16,6 +20,8 @@ public class RespostaUsuario {
         this.pontuacaoAtual = pontuacaoAtual;
         this.data = data;
     }
+
+// getters e setters(para puxar os dados do banco de dados e atualiza-los)
 
     public RespostaUsuario() {
     }

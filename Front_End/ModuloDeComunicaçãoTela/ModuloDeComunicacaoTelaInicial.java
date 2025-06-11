@@ -67,6 +67,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
             + "</html>";
 
 
+    // Construtor que inicializa a tela do módulo de comunicação.
     public ModuloDeComunicacaoTelaInicial(JFrame frame, String tipo_usuario, int idUsuario) {
         this.idUsuarioLogado = idUsuario;
         this.tipo_usuarioLogado = tipo_usuario; // Armazena o tipo de usuário logado
@@ -81,6 +82,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         reposicionarBotoes();
     }
 
+    // Cria e configura os botões de comunicação (PA e CCO) e o botão de voltar.
     private void criarBotoes() {
         botaoCCO = new CircleButton("", null);
         botaoCCO.addMouseListener(new MouseAdapter() {
@@ -185,6 +187,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         add(btnVoltar);
     }
 
+    // Cria e formata o label onde as mensagens de comunicação serão exibidas.
     private void criarLabelMensagem() {
         labelMensagem = new JLabel("");
         labelMensagem.setForeground(Color.WHITE);
@@ -193,6 +196,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         labelMensagem.setFont(new Font("Arial", Font.BOLD, 20));
     }
 
+    // Sobrescreve o método para desenhar a imagem de fundo e os ícones de status.
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -211,11 +215,13 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         }
     }
 
+    // Carrega a imagem de fundo com base na interação do usuário com os botões.
     private void carregarImagemFundo() {
         ImageIcon icon = new ImageIcon(getClass().getResource(backgrounds[index]));
         imagemDeFundo = icon.getImage();
     }
 
+    // Reposiciona e redimensiona os componentes com base no tamanho do painel.
     private void reposicionarBotoes() {
         int w = getWidth();
         int h = getHeight();
@@ -226,6 +232,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         labelMensagem.setBounds((int)(w * 0.1), (int)(h * 0.8), (int)(w * 0.8), (int)(h *0.2));
     }
 
+    // Adiciona um listener que ajusta o layout quando o painel é redimensionado.
     private void adicionarListenerRedimensionamento() {
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -235,12 +242,14 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         });
     }
 
+    // Substitui o conteúdo da janela principal por um novo painel.
     private void substituirPainel(JPanel novoPainel) {
         parentFrame.setContentPane(novoPainel);
         parentFrame.revalidate();
         parentFrame.repaint();
     }
 
+    // Inicia um timer para exibir uma mensagem com efeito de digitação.
     private void iniciarEscrita(String mensagemCompleta) {
         mensagemParcial.setLength(0);
         labelMensagem.setText("");
@@ -253,6 +262,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         timerEscrita = new Timer(delay, new ActionListener() {
             int pos = 0;
 
+            // A cada pulso do timer, adiciona um caractere da mensagem ao label.
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (pos < mensagemCompleta.length()) {
@@ -268,6 +278,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
         timerEscrita.start();
     }
 
+    // Interrompe a animação de escrita e limpa o texto do label.
     private void pararEscrita() {
         if (timerEscrita != null && timerEscrita.isRunning()) {
             timerEscrita.stop();
@@ -278,6 +289,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     class CircleButton extends JButton {
         private boolean isHovering = false;
 
+        // Construtor do botão circular customizado.
         public CircleButton(String texto, java.awt.event.ActionListener acao) {
             super(texto);
             if (acao != null) addActionListener(acao);
@@ -303,6 +315,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
             });
         }
 
+        // Desenha uma borda circular para o botão, com efeito de hover.
         @Override
         protected void paintBorder(Graphics g) {
             Graphics2D g2 = (Graphics2D) g;
@@ -316,6 +329,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
             g2.drawOval(0, 0, getWidth() - 1, getHeight() - 1);
         }
 
+        // Define a área de clique do botão como um círculo, em vez do retângulo padrão.
         @Override
         public boolean contains(int x, int y) {
             int radius = getWidth() / 2;

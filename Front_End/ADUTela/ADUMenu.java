@@ -7,21 +7,22 @@ import java.awt.event.ComponentEvent;
 import CabineDeControleTela.*;
 import Assets.*;
 
+// Representa o painel do menu ADU.
 public class ADUMenu extends JPanel {
 
     private JFrame parentFrame;
     private Image imagemDeFundo;
     private JButton btnVoltar;
     private int ordemCliques;
-    private int idUsuarioLogado; // Variável para armazenar o ID do usuário logado
+    private int idUsuarioLogado;
     private String tipo_usuarioLogado; 
 
-    public ADUMenu(JFrame frame, String tipo_usuario, int idUsuario) { // Construtor agora recebe o ID do usuário
+    // Construtor da classe, inicializa o painel com os dados do usuário e da janela principal.
+    public ADUMenu(JFrame frame, String tipo_usuario, int idUsuario) {
         this.tipo_usuarioLogado = tipo_usuario;
         this.parentFrame = frame;
-        this.idUsuarioLogado = idUsuario; // Armazena o ID do usuário logado
+        this.idUsuarioLogado = idUsuario;
         this.ordemCliques = ordemCliques;
-        //ordemCliques++;
 
         this.parentFrame = frame;
 
@@ -29,10 +30,10 @@ public class ADUMenu extends JPanel {
         setSize(frame.getSize());
 
         adicionarComponentes();
-
         adicionarListenerDeRedimensionamento();
     }
 
+    // Sobrescreve o método paintComponent para desenhar a imagem de fundo no painel.
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -44,6 +45,8 @@ public class ADUMenu extends JPanel {
         
     }
 
+
+    // Inicializa e adiciona todos os componentes visuais, como botões, ao painel.
     private void adicionarComponentes() {
         btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
@@ -60,6 +63,7 @@ public class ADUMenu extends JPanel {
         reposicionarComponentes();
     }
 
+    // Define a posição e o tamanho dos componentes com base nas dimensões atuais do painel.
     private void reposicionarComponentes() {
         int w = getWidth();
         int h = getHeight();
@@ -69,6 +73,7 @@ public class ADUMenu extends JPanel {
         repaint();
     }
 
+    // Adiciona um listener que chama 'reposicionarComponentes' sempre que o painel é redimensionado.
     private void adicionarListenerDeRedimensionamento() {
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -78,6 +83,7 @@ public class ADUMenu extends JPanel {
         });
     }
 
+    // Substitui o painel atual no JFrame por um novo painel.
     private void trocarTela(JPanel novaTela) {
         parentFrame.setContentPane(novaTela);
         parentFrame.revalidate();

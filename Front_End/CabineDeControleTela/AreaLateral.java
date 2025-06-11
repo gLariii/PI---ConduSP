@@ -30,6 +30,7 @@ public class AreaLateral extends JPanel {
     private Timer fadeOutTimer;
     private float alpha = 0.0f;
 
+    // Construtor que inicializa o painel da área lateral da cabine.
     public AreaLateral(JFrame frame, String tipo_usuario, int idUsuario) { // Construtor agora recebe o ID do usuário
         this.idUsuarioLogado = idUsuario;
         this.tipo_usuarioLogado = tipo_usuario;
@@ -38,7 +39,7 @@ public class AreaLateral extends JPanel {
         setLayout(null);
         adicionarBotoes();
 
-        // Listener para responsividade
+        // Listener para responsividade.
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 reposicionarBotoes();
@@ -46,6 +47,7 @@ public class AreaLateral extends JPanel {
         });
     }
 
+    // Sobrescreve o método para desenhar a imagem de fundo, ícones e o efeito de fade.
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -67,7 +69,7 @@ public class AreaLateral extends JPanel {
             g.drawImage(imagemExtra2, (int)(w * 0.7), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
         }
 
-        // Desenha a sobreposição para o fade out
+        // Desenha a sobreposição para o fade out.
         if (fadeOutTimer != null && fadeOutTimer.isRunning()) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setColor(new Color(0, 0, 0, alpha)); // Cor preta com alpha variável
@@ -75,6 +77,7 @@ public class AreaLateral extends JPanel {
         }
     }
 
+    // Inicializa e adiciona todos os botões e suas respectivas ações ao painel.
     private void adicionarBotoes() {
         botao1 = new JButton("");
         botao1.addActionListener(e -> trocarTela(new BoteiraLateralTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
@@ -89,10 +92,10 @@ public class AreaLateral extends JPanel {
         btnPorta = new JButton("");
         btnPorta.addActionListener(e -> {
             if(PainelCBTCeChave.chaveInserida == true) {
-                SalvarResposta.pontuacao = 0; // Zera a pontuação ao entrar na tela de Game Over 
+                SalvarResposta.pontuacao = 0; // Zera a pontuação ao entrar na tela de Game Over.
                 this.feedback = 17;
                 SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
-                // Inicia a transição com fade para a tela de fim de jogo
+                // Inicia a transição com fade para a tela de fim de jogo.
                 trocarTelaComFade(new TelaGameOver(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
             } else {
                 trocarTela(new EscolhaDeCarro(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
@@ -116,6 +119,7 @@ public class AreaLateral extends JPanel {
         reposicionarBotoes();
     }
 
+    // Aplica uma configuração padrão para criar um botão transparente e sem bordas.
     private void configurarBotaoTransparente(JButton button) {
         button.setOpaque(false);
         button.setContentAreaFilled(false);
@@ -123,6 +127,7 @@ public class AreaLateral extends JPanel {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
+    // Reposiciona e redimensiona todos os componentes com base no tamanho do painel.
     private void reposicionarBotoes() {
         int w = getWidth();
         int h = getHeight();
@@ -135,27 +140,30 @@ public class AreaLateral extends JPanel {
         repaint();
     }
 
+    // Substitui o conteúdo da janela principal por um novo painel de forma instantânea.
     private void trocarTela(JPanel novaTela) {
         parentFrame.setContentPane(novaTela);
         parentFrame.revalidate();
         parentFrame.repaint();
     }
 
+    // Inicia uma transição suave de fade out para um novo painel.
     private void trocarTelaComFade(final JPanel novaTela) {
         if (fadeOutTimer != null && fadeOutTimer.isRunning()) {
-            return; // Já está em transição
+            return; // Já está em transição.
         }
 
-        // Configuração do Timer para o fade out
+        // Configuração do Timer para o fade out.
         fadeOutTimer = new Timer(50, new ActionListener() {
+            // Executado pelo Timer para atualizar o nível de opacidade a cada passo do fade.
             @Override
             public void actionPerformed(ActionEvent e) {
-                alpha += 0.05f; // Aumenta a opacidade da sobreposição
+                alpha += 0.05f; // Aumenta a opacidade da sobreposição.
                 if (alpha >= 1.0f) {
                     alpha = 1.0f;
                     fadeOutTimer.stop();
                     
-                    // Lógica para o fade in na nova tela (simplificado)
+                    // Lógica para o fade in na nova tela (simplificado).
                     if (novaTela instanceof TelaGameOver) {
                         ((TelaGameOver) novaTela).iniciarFadeIn();
                     }
@@ -168,7 +176,7 @@ public class AreaLateral extends JPanel {
             }
         });
 
-        alpha = 0.0f; // Reseta o alpha
+        alpha = 0.0f; // Reseta o alpha.
         fadeOutTimer.start();
     }
 }

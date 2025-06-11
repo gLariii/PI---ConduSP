@@ -74,7 +74,7 @@ public class Musica {
             if (volume <= 0) {
                 gainControl.setValue(minDb);
             } else {
-                float scaledVolume = volume / 100.0f;
+                float scaledVolume = volume / 50.0f;
                 float db = minDb + (maxDb - minDb) * (float) (Math.log10(scaledVolume * 9 + 1) / Math.log10(10));
                 db = Math.max(minDb, Math.min(db, maxDb));
                 gainControl.setValue(db);

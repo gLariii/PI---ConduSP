@@ -4,6 +4,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+// classe para criptografia de dados, especificamente para hashes SHA-256( usados no cadastro do bd como a criptografia de senha)
+
 public class Criptografia {
 
     public static String gerarHashSHA256(String texto) {

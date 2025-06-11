@@ -1,5 +1,7 @@
 package Model;
 
+//Atributos da classe Usuario
+
 public class Usuario {
     private int id;
     private String rg;
@@ -8,6 +10,7 @@ public class Usuario {
     private String tipo_usuario;
     private int volume;
 
+//contrutor para criar os objetos do usuario
     public Usuario(String rg, String senha) {
         this.rg = rg;
         this.senha = senha;
@@ -27,6 +30,8 @@ public class Usuario {
         this.tipo_usuario = tipo_usuario;
         this.volume = volume;
     }
+
+// getters e setters(para puxar os dados do banco de dados e atualiza-los)
 
     public int getId() {
         return id;

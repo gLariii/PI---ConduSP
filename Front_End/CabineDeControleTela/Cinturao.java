@@ -27,6 +27,7 @@ public class Cinturao extends JPanel {
     private JLabel labelItensColetados;
     private int ordemCliques;
 
+    // Construtor que inicializa a tela para coletar o cinturão e o adesivo.
     public Cinturao(JFrame frame, String tipo_usuario, int idUsuario) { // Construtor agora recebe o ID do usuário
         this.tipo_usuarioLogado = tipo_usuario;
         this.parentFrame = frame;
@@ -48,6 +49,7 @@ public class Cinturao extends JPanel {
         });
     }
 
+    // Sobrescreve o método para desenhar a imagem de fundo e os ícones de status.
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -68,6 +70,7 @@ public class Cinturao extends JPanel {
         }
     }
 
+    // Inicializa e adiciona os componentes da tela, como botões e labels.
     private void adicionarComponentes() {
         btnVoltar = new JButton("Voltar");
         btnVoltar.addActionListener(e -> trocarTela(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
@@ -120,6 +123,7 @@ public class Cinturao extends JPanel {
         reposicionarComponentes();
     }
 
+    // Reposiciona e redimensiona os componentes com base no tamanho do painel.
     private void reposicionarComponentes() {
         int w = getWidth();
         int h = getHeight();
@@ -131,11 +135,13 @@ public class Cinturao extends JPanel {
         repaint();
     }
 
+    // Carrega a imagem de fundo correspondente ao estado atual do painel.
     private void carregarImagemFundo() {
         ImageIcon icon = new ImageIcon(getClass().getResource(backgrounds[index]));
         imagemDeFundo = icon.getImage();
     }
 
+    // Substitui o conteúdo da janela principal por um novo painel.
     private void trocarTela(JPanel novaTela) {
         parentFrame.setContentPane(novaTela);
         parentFrame.revalidate();

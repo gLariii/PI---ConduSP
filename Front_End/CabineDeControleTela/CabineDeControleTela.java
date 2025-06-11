@@ -21,6 +21,7 @@ public class CabineDeControleTela extends JPanel {
     // Botões como atributos
     private JButton botao1, botao2, botao3, botao4, botao5, botao6, botao7;
     
+    // Construtor que inicializa o painel principal da cabine de controle.
     public CabineDeControleTela(JFrame frame, String tipo_usuario, int idUsuario) { // Construtor agora recebe o ID do usuário
         this.tipo_usuarioLogado = tipo_usuario;
         this.parentFrame = frame;
@@ -30,7 +31,7 @@ public class CabineDeControleTela extends JPanel {
         setLayout(null);
         adicionarBotoes();
         
-        // Listener para redimensionar os botões conforme a tela
+        // Listener para redimensionar os botões conforme a tela.
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 reposicionarBotoes();
@@ -38,6 +39,7 @@ public class CabineDeControleTela extends JPanel {
         });
     }
     
+    // Sobrescreve o método para desenhar a imagem de fundo e os ícones de status.
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -60,8 +62,9 @@ public class CabineDeControleTela extends JPanel {
         }
     }
     
+    // Inicializa e adiciona todos os botões que levam às diferentes áreas da cabine.
     private void adicionarBotoes() {
-        // Passando o idUsuarioLogado para as novas telas
+        // Passando o idUsuarioLogado para as novas telas.
         botao1 = criarBotao(() -> substituirPainel(new ChaveReversoraTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado)));
         add(botao1);
     
@@ -102,6 +105,7 @@ public class CabineDeControleTela extends JPanel {
         reposicionarBotoes();
     }
     
+    // Cria um botão transparente e sem bordas que executa uma ação específica.
     private JButton criarBotao(Runnable action) {
         JButton botao = new JButton("");
         botao.addActionListener(e -> action.run());
@@ -114,11 +118,12 @@ public class CabineDeControleTela extends JPanel {
         return botao;
     }
     
+    // Reposiciona e redimensiona todos os componentes com base no tamanho do painel.
     private void reposicionarBotoes() {
         int w = getWidth();
         int h = getHeight();
     
-        //Tamanho e Posicionamento
+        //Tamanho e Posicionamento.
         botao1.setBounds((int)(w * 0.29), (int)(h * 0.56), (int)(w * 0.08), (int)(h * 0.05));
         botao2.setBounds((int)(w * 0.25), (int)(h * 0.38), (int)(w * 0.08), (int)(h * 0.08));
         botao3.setBounds((int)(w * 0.06), (int)(h * 0.43), (int)(w * 0.16), (int)(h * 0.14));
@@ -130,12 +135,14 @@ public class CabineDeControleTela extends JPanel {
         repaint();
     }
     
+    // Substitui o conteúdo da janela principal por um novo painel.
     private void substituirPainel(JPanel novoPainel) {
         parentFrame.setContentPane(novoPainel);
         parentFrame.revalidate();
         parentFrame.repaint();
     }
     
+    // Método principal para executar e testar esta tela de forma independente.
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Cabine de Controle");
@@ -143,7 +150,7 @@ public class CabineDeControleTela extends JPanel {
             
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setUndecorated(true);
-            frame.setContentPane(new CabineDeControleTela(frame, "operario", 1)); // Exemplo: passando 0 para o ID do usuário no main
+            frame.setContentPane(new CabineDeControleTela(frame, "operario", 1)); // Exemplo: passando 0 para o ID do usuário no main.
             frame.setVisible(true);
         });
     }
