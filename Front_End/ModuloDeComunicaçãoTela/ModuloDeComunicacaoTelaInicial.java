@@ -20,7 +20,7 @@ public class ModuloDeComunicacaoTelaInicial extends JPanel {
     };
 
     private int idUsuarioLogado;
-    private String tipo_usuarioLogado; // Variável para armazenar o tipo de usuário logado
+    private String tipo_usuarioLogado;
     
     private static int index = 0;
     private Image imagemDeFundo;

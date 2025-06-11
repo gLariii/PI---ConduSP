@@ -7,10 +7,12 @@ import java.awt.event.ComponentEvent;
 import CabineDeControleTela.*;
 import Carro.PainelExternoAberto;
 import ChaveReversoraTela.*;
+import ChaveReversoraTela.AudioPlayer;
 import Model.SalvarResposta;
 import ModuloDeComunicaçãoTela.*;
 import Assets.*;
 import ChaveReversoraTela.*;
+import DDUTela.*;
 
 public class BoteiraLateralTela extends JPanel {
 
@@ -125,6 +127,8 @@ public class BoteiraLateralTela extends JPanel {
                     }
                 }
                 if (PainelExternoAberto.index != 1) {
+                    AudioPlayer.playSound("SomPortaFechando.wav");
+                    DDUMenu.index = 1;
                     // Lógica do flash: muda a imagem e a restaura após um tempo.
                     final int originalIndex = index;
                     int flashedIndex = (index + 1) % backgrounds.length;
@@ -146,9 +150,10 @@ public class BoteiraLateralTela extends JPanel {
                     flashTimer.start();
                 }
             }
+            
         });
 
-        if (ChaveReversoraTela.indexChaveReversora != 0) {
+        if (ChaveReversoraTela.indexChaveReversora != 0 && PainelExternoAberto.index != 1) {
             add(btnTrocar);
         }
 

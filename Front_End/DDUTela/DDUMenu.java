@@ -11,8 +11,9 @@ public class DDUMenu extends JPanel {
 
     // Array de caminhos para as imagens de fundo
     private final String[] backgrounds = {
+        "assets/images/DDUTodasPortasAbertas.jpg",
         "assets/images/DDUMenuPortaAberta.jpg",
-        "assets/images/DDUPortaIsolada.jpg",
+        "assets/images/DDUPortaIsolada.png",
     };
 
     // Índice para selecionar a imagem de fundo a ser exibida
@@ -41,7 +42,7 @@ public class DDUMenu extends JPanel {
 
         this.parentFrame = frame;
         if (PainelExternoAberto.index == 1) {
-            index = 1;
+            index = 2;
         }
         setLayout(null); // Usa layout absoluto para posicionar componentes manualmente
         setSize(frame.getSize());

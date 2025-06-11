@@ -6,9 +6,19 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import CabineDeControleTela.*;
 import Assets.*;
+import Carro.*;
 
 // Representa o painel do menu ADU.
 public class ADUMenu extends JPanel {
+
+    // Array de caminhos para as imagens de fundo
+    private final String[] backgrounds = {
+        "imagens/ADUMenu.jpg",
+        "imagens/ADULuzAcesa.png",
+    };
+
+    // Índice para selecionar a imagem de fundo a ser exibida
+    public static int index = 0;
 
     private JFrame parentFrame;
     private Image imagemDeFundo;
@@ -23,26 +33,43 @@ public class ADUMenu extends JPanel {
         this.parentFrame = frame;
         this.idUsuarioLogado = idUsuario;
         this.ordemCliques = ordemCliques;
-
         this.parentFrame = frame;
 
+        if (PainelExternoAberto.index == 1) {
+            index = 1;
+        }else {
+            index = 0;
+        }
         setLayout(null);
         setSize(frame.getSize());
 
         adicionarComponentes();
         adicionarListenerDeRedimensionamento();
+        carregarImagemFundo();
     }
 
     // Sobrescreve o método paintComponent para desenhar a imagem de fundo no painel.
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (imagemDeFundo == null) {
-            ImageIcon icon = new ImageIcon(getClass().getResource("/ADUTela/imagens/ADUMenu.jpg"));
-            imagemDeFundo = icon.getImage();
+        if (imagemDeFundo != null) {
+            g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
         }
-        g.drawImage(imagemDeFundo, 0, 0, getWidth(), getHeight(), this);
-        
+
+        int w = getWidth();
+        int h = getHeight();
+
+        // Adiciona o cinturão e adesivo se eles tiverem sido coletados.
+        if (PainelCBTCeChave.indexChave == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/ChaveIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.9), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
+        if (Cinturao.index == 1) {
+            Image imagemExtra = new ImageIcon(getClass().getResource("/Assets/Imagens/CinturaoIcone.png")).getImage();
+            g.drawImage(imagemExtra, (int)(w * 0.8), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+            Image imagemExtra2 = new ImageIcon(getClass().getResource("/Assets/Imagens/AdesivoIcone.png")).getImage();
+            g.drawImage(imagemExtra2, (int)(w * 0.7), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
     }
 
 
@@ -71,6 +98,11 @@ public class ADUMenu extends JPanel {
         btnVoltar.setBounds((int)(w * 0.005), (int)(h * 0.009), (int)(w * 0.052), (int)(h * 0.028));
         
         repaint();
+    }
+
+    private void carregarImagemFundo() {
+        ImageIcon icon = new ImageIcon(getClass().getResource(backgrounds[index]));
+        imagemDeFundo = icon.getImage();
     }
 
     // Adiciona um listener que chama 'reposicionarComponentes' sempre que o painel é redimensionado.
