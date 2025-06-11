@@ -8,6 +8,7 @@ import Carro.*;
 import Controller.RespostaUsuarioController;
 import DAO.RespostaUsuarioDAO;
 import Model.*;
+import TelaFimDeJogo.TelaGameOver;
 import ChaveReversoraTela.AudioPlayer;
 
 public class ChaveReversoraTela extends JPanel {
@@ -28,6 +29,10 @@ public class ChaveReversoraTela extends JPanel {
     private boolean primeiroClique = true;
     private int feedback;
     private int ordemCliques;
+    public static boolean falhaResolviada = false;
+
+    private Timer fadeOutTimer;
+    private float alpha = 0.0f;
     
 
     // Modifique o construtor para receber o idUsuario
@@ -50,10 +55,26 @@ public class ChaveReversoraTela extends JPanel {
         btnTrocar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnTrocar.addActionListener(e -> {
             AudioPlayer.playSound("SomAlavanca.wav");
-            indexChaveReversora = (indexChaveReversora + 1) % backgrounds.length;
+            if (indexChaveReversora == 0 || indexChaveReversora == 1) {
+                indexChaveReversora = (indexChaveReversora + 1) % backgrounds.length;
+            } else {
+                if(Portas.index == 0 || PainelCBTCeChave.indexCBCT == 1 || PainelCBTCeChave.indexChave == 1){//Código para terminar o jogo corretamente
+                    SalvarResposta.pontuacao -= 1;
+                    this.feedback = 37;
+                    SalvarResposta.salvarResposta(idUsuario, this.feedback);
+                    AudioPlayer.playSound("SomErro.wav"); 
+                    JOptionPane.showMessageDialog(this, "Você ainda não pode seguir viajem, verfique se tudo está correto!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    indexChaveReversora = 2;
+                }else{
+                    indexChaveReversora = (indexChaveReversora + 1) % backgrounds.length;
+                    falhaResolviada = true;
+                    trocarTelaComFade(new TelaGameOver(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
+                }
+            }
             carregarImagemFundo();
             repaint();
         });
+        
         add(btnTrocar);
 
        // Botão Voltar
@@ -76,8 +97,6 @@ public class ChaveReversoraTela extends JPanel {
                     SalvarResposta.salvarResposta(idUsuario, this.feedback);
                 }
             }
-            // if (Portas.index != 0 && indexChaveReversora == 2 && PainelCBTCeChave.indexCBCT == 00 && PainelCBTCeChave.indexChave == 0){ -- Código para terminar o jogo corretamente
-
             voltarParaCabine();
         });
         
@@ -99,6 +118,44 @@ public class ChaveReversoraTela extends JPanel {
         parentFrame.repaint();
     }
 
+    private void trocarTelaComFade(JPanel novoPainel) {
+        // Impede que um novo fade comece se outro já estiver em andamento
+        if (fadeOutTimer != null && fadeOutTimer.isRunning()) {
+            return;
+        }
+
+        // Garante que o alpha comece em 0 (totalmente transparente) para o fade-out
+        this.alpha = 0.0f;
+
+        // Cria um Timer para controlar a animação
+        fadeOutTimer = new Timer(25, e -> { // Ação executada a cada 25ms
+            this.alpha += 0.05f; // Aumenta a opacidade gradualmente
+
+            if (this.alpha >= 1.0f) {
+                // O fade-out está completo
+                this.alpha = 1.0f;
+                fadeOutTimer.stop(); // Para o timer de fade-out
+
+                // Troca para a nova tela
+                parentFrame.setContentPane(novoPainel);
+
+                // Se a nova tela for a TelaGameOver, inicia o fade-in dela
+                if (novoPainel instanceof TelaGameOver) {
+                    ((TelaGameOver) novoPainel).iniciarFadeIn();
+                }
+
+                parentFrame.revalidate();
+                parentFrame.repaint();
+            } else {
+                // Se o fade ainda não terminou, apenas redesenha a tela
+                // A lógica em paintComponent vai desenhar o retângulo mais escuro
+                repaint();
+            }
+        });
+
+        fadeOutTimer.start();
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -117,6 +174,11 @@ public class ChaveReversoraTela extends JPanel {
             g.drawImage(imagemExtra, (int)(w * 0.8), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
             Image imagemExtra2 = new ImageIcon(getClass().getResource("/Assets/Imagens/AdesivoIcone.png")).getImage();
             g.drawImage(imagemExtra2, (int)(w * 0.7), (int)(h * 0.05), (int)(w * 0.1), (int)(h * 0.1), this);
+        }
+        if (fadeOutTimer != null && fadeOutTimer.isRunning()) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setColor(new Color(0, 0, 0, alpha)); // Cor preta com alpha variável
+            g2d.fillRect(0, 0, getWidth(), getHeight());
         }
     }
 

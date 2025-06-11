@@ -10,6 +10,7 @@ import ChaveReversoraTela.*;
 import Model.SalvarResposta;
 import ModuloDeComunicaçãoTela.*;
 import Assets.*;
+import ChaveReversoraTela.*;
 
 public class BoteiraLateralTela extends JPanel {
 
@@ -105,43 +106,44 @@ public class BoteiraLateralTela extends JPanel {
             }
         };
 
-        // ActionListener MODIFICADO para o btnTrocar
         btnTrocar.addActionListener(e -> {
-            // Verifica se um flash já está em andamento para evitar múltiplos cliques
-            if (flashTimer != null && flashTimer.isRunning()) {
-                return;
-            }
-
-            // Condição para o comportamento de flash
-            if (ModuloDeComunicacaoTelaInicial.primeiroClique == false){
-                // Lógica de pontuação executada no primeiro clique válido
-                if (primeiroClique) {
-                    SalvarResposta.pontuacao += 2;
-                    feedback = 10;
-                    SalvarResposta.salvarResposta(idUsuarioLogado, feedback);
-                    primeiroClique = false;
+            if (ChaveReversoraTela.indexChaveReversora != 1) {
+                // Verifica se um flash já está em andamento para evitar múltiplos cliques
+                if (flashTimer != null && flashTimer.isRunning()) {
+                    return;
                 }
-            }
-            if (PainelExternoAberto.index != 1) {
-                // Lógica do flash: muda a imagem e a restaura após 1 segundo
-                final int originalIndex = index;
-                int flashedIndex = (index + 1) % backgrounds.length;
 
-                // Muda para o estado "aceso"
-                index = flashedIndex;
-                carregarImagemFundo();
-                reposicionarComponentes();
-                repaint();
+                // Condição para o comportamento de flash
+                if (ModuloDeComunicacaoTelaInicial.primeiroClique == false){
+                    // Lógica de pontuação executada no primeiro clique válido
+                    if (primeiroClique) {
+                        SalvarResposta.pontuacao += 2;
+                        feedback = 10;
+                        SalvarResposta.salvarResposta(idUsuarioLogado, feedback);
+                        primeiroClique = false;
+                    }
+                }
+                if (PainelExternoAberto.index != 1) {
+                    // Lógica do flash: muda a imagem e a restaura após 1 segundo
+                    final int originalIndex = index;
+                    int flashedIndex = (index + 1) % backgrounds.length;
 
-                // Cria e inicia um Timer para reverter a imagem
-                flashTimer = new Timer(1000, event -> {
-                index = originalIndex; // Volta ao estado original
-                carregarImagemFundo();
-                reposicionarComponentes();
-                repaint();
-                });
-                flashTimer.setRepeats(false); // Garante que o timer execute apenas uma vez
-                flashTimer.start();
+                    // Muda para o estado "aceso"
+                    index = flashedIndex;
+                    carregarImagemFundo();
+                    reposicionarComponentes();
+                    repaint();
+
+                    // Cria e inicia um Timer para reverter a imagem
+                    flashTimer = new Timer(1000, event -> {
+                    index = originalIndex; // Volta ao estado original
+                    carregarImagemFundo();
+                    reposicionarComponentes();
+                    repaint();
+                    });
+                    flashTimer.setRepeats(false); // Garante que o timer execute apenas uma vez
+                    flashTimer.start();
+                }
             }
         });
 

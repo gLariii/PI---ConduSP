@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+import ChaveReversoraTela.ChaveReversoraTela;
 import TelaMetro1.telaMenu.Menu;
 
 public class TelaGameOver extends JPanel {
@@ -92,28 +93,42 @@ public class TelaGameOver extends JPanel {
     }
 
     private void adicionarComponentes() {
-        String tituloTexto = "<html><center>VOCÊ COMETEU UM<br>ERRO GRAVE</center></html>";
-        tituloLabel = new JLabel(tituloTexto);
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 46)); 
-        tituloLabel.setForeground(new Color(25, 47, 89));
-        tituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        add(tituloLabel);
-        
-        subtituloLabel = new JLabel("Por favor, tente novamente.", SwingConstants.CENTER);
-        subtituloLabel.setFont(new Font("Arial", Font.PLAIN, 22)); 
-        subtituloLabel.setForeground(Color.DARK_GRAY);
-        add(subtituloLabel);
+    // Variáveis para ambos os textos
+    String tituloTexto;
+    String subtituloTexto; // <-- 1. Declare a nova variável
 
-        // --- ALTERADO --- Chamada para o novo método de criação do botão
-        botaoMenu = criarBotaoEstilizado("VOLTAR", () -> {
-            String imagemPath = "/Assets/Imagens/TelaInicial4Corrigida.png";
-            Menu painelMenu = new Menu(parentFrame, imagemPath, tipo_usuarioLogado, idUsuarioLogado);
-            substituirPainel(painelMenu);
-        });
-        add(botaoMenu);
-        
-        reposicionarComponentes();
+    // Checa a condição UMA VEZ para definir ambos os textos
+    if (!ChaveReversoraTela.falhaResolviada) {
+        tituloTexto = "<html><center>VOCÊ COMETEU UM<br>ERRO GRAVE</center></html>";
+        subtituloTexto = "Por favor, tente novamente."; // <-- 2. Defina o texto de falha
+    } else {
+        tituloTexto = "<html><center>PARABÉNS<br>FALHA RESOLVIDA</center></html>";
+        subtituloTexto = "Por favor, volte ao menu."; // <-- 2. Defina o texto de sucesso
     }
+
+    // Cria o JLabel do título
+    tituloLabel = new JLabel(tituloTexto);
+    tituloLabel.setFont(new Font("Arial", Font.BOLD, 46));
+    tituloLabel.setForeground(new Color(25, 47, 89));
+    tituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    add(tituloLabel);
+
+    // Cria o JLabel do subtítulo usando a variável
+    subtituloLabel = new JLabel(subtituloTexto, SwingConstants.CENTER); // <-- 3. Use a variável aqui
+    subtituloLabel.setFont(new Font("Arial", Font.PLAIN, 22));
+    subtituloLabel.setForeground(Color.DARK_GRAY);
+    add(subtituloLabel);
+
+    // O resto do código continua igual...
+    botaoMenu = criarBotaoEstilizado("VOLTAR", () -> {
+        String imagemPath = "/Assets/Imagens/TelaInicial4Corrigida.png";
+        Menu painelMenu = new Menu(parentFrame, imagemPath, tipo_usuarioLogado, idUsuarioLogado);
+        substituirPainel(painelMenu);
+    });
+    add(botaoMenu);
+
+    reposicionarComponentes();
+}
     
     // --- NOVO MÉTODO ---
     // Cria um JButton estilizado para parecer com o da imagem, sem usar um arquivo de imagem.
