@@ -239,7 +239,7 @@ public class Menu extends JLayeredPane {
             sobrePanel.setVisible(false);
             videoJFXPanel.setVisible(true);
 
-            playVideoIntro("/Assets/Imagens/videoJogo.mp4", () -> {
+            playVideoIntro("/Assets/Imagens/VideodeInicio.mp4", () -> {
                 SwingUtilities.invokeLater(() -> {
                     InicialMusica.stopMusic();
                     parentFrame.setContentPane(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
