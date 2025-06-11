@@ -13,13 +13,8 @@ import CabineDeControleTela.CabineDeControleTela;
 import Model.*;
 import TelaMetro1.Musica.InicialMusica;
 
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
-import javafx.application.Platform;
+// Importação da nova tela de vídeo
+import TelaMetro1.telaMenu.Video;
 
 public class Menu extends JLayeredPane {
     private Image ImagemDeFundo, logoOriginal, logoRedimensionada;
@@ -40,10 +35,6 @@ public class Menu extends JLayeredPane {
     private int idUsuarioLogado;
 
     private final int SIDEBAR_WIDTH = 300;
-
-    private JFXPanel videoJFXPanel;
-    private MediaPlayer currentMediaPlayer;
-
 
     public Menu(JFrame frame, String imagemPath, String tipo_usuario, int idUsuarioLogado) {
         this.parentFrame = frame;
@@ -135,11 +126,6 @@ public class Menu extends JLayeredPane {
         });
         add(sobrePanel, JLayeredPane.MODAL_LAYER);
 
-        videoJFXPanel = new JFXPanel();
-        videoJFXPanel.setBackground(Color.BLACK);
-        videoJFXPanel.setOpaque(true);
-        add(videoJFXPanel, JLayeredPane.PALETTE_LAYER);
-
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
@@ -154,15 +140,13 @@ public class Menu extends JLayeredPane {
                 supervisorPanel.setBounds(0, 0, getWidth(), getHeight());
                 feedbackPanel.setBounds(0, 0, getWidth(), getHeight());
                 sobrePanel.setBounds(0, 0, getWidth(), getHeight());
-                videoJFXPanel.setBounds(0, 0, getWidth(), getHeight());
-
+                
                 revalidate();
                 repaint();
             }
         });
 
         showPanel("main");
-        videoJFXPanel.setVisible(false);
     }
 
     private void carregarImagens(String imagemPath) {
@@ -231,23 +215,15 @@ public class Menu extends JLayeredPane {
         btnFeedbacks = botoes.criarBotaoFeedBackPessoal();
         btnSupervisor = botoes.criarBotaoSupervisor();
 
+        // ActionListener do botão foi modificado para chamar a nova tela "Video.java"
         btnMaquinario.addActionListener(e -> {
-            mainContentPanel.setVisible(false);
-            sidebarContainerPanel.setVisible(false);
-            supervisorPanel.setVisible(false);
-            feedbackPanel.setVisible(false);
-            sobrePanel.setVisible(false);
-            videoJFXPanel.setVisible(true);
+            // Para a música do menu
+            InicialMusica.stopMusic();
 
-            playVideoIntro("/Assets/Imagens/VideodeInicio.mp4", () -> {
-                SwingUtilities.invokeLater(() -> {
-                    InicialMusica.stopMusic();
-                    parentFrame.setContentPane(new CabineDeControleTela(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
-                    parentFrame.revalidate();
-                    parentFrame.repaint();
-                    SalvarResposta.pontuacao = 0;
-                });
-            });
+            // Cria e transiciona para a nova tela de texto animado
+            parentFrame.setContentPane(new Video(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
+            parentFrame.revalidate();
+            parentFrame.repaint();
         });
 
         btnSupervisor.addActionListener(e -> {
@@ -294,8 +270,7 @@ public class Menu extends JLayeredPane {
         supervisorPanel.setVisible(false);
         feedbackPanel.setVisible(false);
         sobrePanel.setVisible(false);
-        videoJFXPanel.setVisible(false);
-
+        
         switch (panelName) {
             case "main":
                 mainContentPanel.setVisible(true);
@@ -353,119 +328,5 @@ public class Menu extends JLayeredPane {
             }
         });
         timer.start();
-    }
-
-    private void playVideoIntro(String videoPath, Runnable onVideoEnd) {
-        if (currentMediaPlayer != null) {
-            currentMediaPlayer.stop();
-            currentMediaPlayer.dispose();
-        }
-
-        JButton skipButton = new JButton("Pular Introdução");
-        skipButton.setFont(new Font("Arial", Font.BOLD, 20));
-        skipButton.setBackground(Cores.AZUL_METRO);
-        skipButton.setForeground(Color.WHITE);
-        skipButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-        skipButton.setFocusPainted(false);
-        skipButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        skipButton.setOpaque(true);
-
-        add(skipButton, JLayeredPane.DRAG_LAYER);
-
-        skipButton.setBounds(
-            getWidth() - skipButton.getPreferredSize().width - 20,
-            getHeight() - skipButton.getPreferredSize().height - 20,
-            skipButton.getPreferredSize().width,
-            skipButton.getPreferredSize().height
-        );
-        skipButton.setVisible(true);
-        revalidate();
-        repaint();
-
-
-        Platform.runLater(() -> {
-            try {
-                java.net.URL resource = getClass().getResource(videoPath);
-                if (resource == null) {
-                    System.err.println("Recurso de vídeo não encontrado: " + videoPath);
-                    JOptionPane.showMessageDialog(parentFrame,
-                        "Erro: Arquivo de vídeo não encontrado! Caminho: " + videoPath,
-                        "Erro de Carregamento", JOptionPane.ERROR_MESSAGE);
-                    videoJFXPanel.setVisible(false);
-                    skipButton.setVisible(false);
-                    remove(skipButton);
-                    if (onVideoEnd != null) {
-                        onVideoEnd.run();
-                    }
-                    return;
-                }
-                InicialMusica.stopMusic();
-                Media media = new Media(resource.toExternalForm());
-                currentMediaPlayer = new MediaPlayer(media);
-                MediaView mediaView = new MediaView(currentMediaPlayer);
-
-                Group root = new Group();
-                Scene scene = new Scene(root);
-                videoJFXPanel.setScene(scene);
-
-                root.getChildren().add(mediaView);
-
-                mediaView.fitWidthProperty().bind(scene.widthProperty());
-                mediaView.fitHeightProperty().bind(scene.heightProperty());
-                mediaView.setPreserveRatio(false);
-
-
-                Runnable finishAction = () -> {
-                    if (currentMediaPlayer != null) {
-                        currentMediaPlayer.stop();
-                        currentMediaPlayer.dispose();
-                        currentMediaPlayer = null;
-                    }
-                    videoJFXPanel.setScene(null);
-                    videoJFXPanel.setVisible(false);
-                    skipButton.setVisible(false);
-                    remove(skipButton);
-                    if (onVideoEnd != null) {
-                        onVideoEnd.run();
-                    }
-                    revalidate();
-                    repaint();
-                };
-
-                skipButton.addActionListener(e -> {
-                    System.out.println("Vídeo pulado pelo usuário.");
-                    finishAction.run();
-                });
-
-                currentMediaPlayer.setOnEndOfMedia(() -> {
-                    System.out.println("Vídeo de introdução terminou.");
-                    finishAction.run();
-                });
-
-                currentMediaPlayer.setOnError(() -> {
-                    System.err.println("Erro durante a reprodução do vídeo: " + currentMediaPlayer.getError());
-                    JOptionPane.showMessageDialog(parentFrame,
-                        "Erro ao reproduzir o vídeo: " + currentMediaPlayer.getError().getMessage(),
-                        "Erro de Vídeo", JOptionPane.ERROR_MESSAGE);
-                    finishAction.run();
-                });
-
-                currentMediaPlayer.play();
-            } catch (Exception ex) {
-                System.err.println("Erro ao inicializar o player de vídeo: " + ex.getMessage());
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(parentFrame,
-                    "Erro inesperado ao carregar o vídeo: " + ex.getMessage(),
-                    "Erro de Vídeo", JOptionPane.ERROR_MESSAGE);
-                videoJFXPanel.setVisible(false);
-                skipButton.setVisible(false);
-                remove(skipButton);
-                if (onVideoEnd != null) {
-                    onVideoEnd.run();
-                }
-                revalidate();
-                repaint();
-            }
-        });
     }
 }
