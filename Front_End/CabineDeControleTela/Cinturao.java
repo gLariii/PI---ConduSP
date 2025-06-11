@@ -18,14 +18,13 @@ public class Cinturao extends JPanel {
     };
     private int idUsuarioLogado;
     private String tipo_usuarioLogado;
-    private static boolean primeiroClique = true;
+    public static boolean primeiroClique = true;
     private int feedback;
     public static int index = 0;
     private Image imagemDeFundo;
     private JButton botao1;
     private JButton btnVoltar;
     private JLabel labelItensColetados;
-
     private int ordemCliques;
 
     public Cinturao(JFrame frame, String tipo_usuario, int idUsuario) { // Construtor agora recebe o ID do usuário

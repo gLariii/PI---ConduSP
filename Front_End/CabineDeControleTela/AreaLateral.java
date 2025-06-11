@@ -3,6 +3,7 @@ package CabineDeControleTela;
 import javax.swing.*;
 import BoteiraLateralTelas.BoteiraLateralTela;
 import Carro.EscolhaDeCarro;
+import Model.SalvarResposta;
 import TelaFimDeJogo.TelaGameOver;
 
 import java.awt.*;
@@ -21,10 +22,9 @@ public class AreaLateral extends JPanel {
     private JButton btnPorta;
     private JButton btnVoltar;
 
-    private int ordemCliques;
-
     private String tipo_usuarioLogado;
     private int idUsuarioLogado;
+    private int feedback;
 
     // Variáveis para o efeito de fade
     private Timer fadeOutTimer;
@@ -33,7 +33,6 @@ public class AreaLateral extends JPanel {
     public AreaLateral(JFrame frame, String tipo_usuario, int idUsuario) { // Construtor agora recebe o ID do usuário
         this.idUsuarioLogado = idUsuario;
         this.tipo_usuarioLogado = tipo_usuario;
-        this.ordemCliques = 0; // Inicializando a variável
 
         this.parentFrame = frame;
         setLayout(null);
@@ -90,6 +89,9 @@ public class AreaLateral extends JPanel {
         btnPorta = new JButton("");
         btnPorta.addActionListener(e -> {
             if(PainelCBTCeChave.chaveInserida == true) {
+                SalvarResposta.pontuacao = 0; // Zera a pontuação ao entrar na tela de Game Over 
+                this.feedback = 17;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
                 // Inicia a transição com fade para a tela de fim de jogo
                 trocarTelaComFade(new TelaGameOver(parentFrame, tipo_usuarioLogado, idUsuarioLogado));
             } else {

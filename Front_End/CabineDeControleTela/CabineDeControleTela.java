@@ -143,7 +143,7 @@ public class CabineDeControleTela extends JPanel {
             
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setUndecorated(true);
-            frame.setContentPane(new CabineDeControleTela(frame, "operario", 0)); // Exemplo: passando 0 para o ID do usuário no main
+            frame.setContentPane(new CabineDeControleTela(frame, "operario", 1)); // Exemplo: passando 0 para o ID do usuário no main
             frame.setVisible(true);
         });
     }

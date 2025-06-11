@@ -14,7 +14,8 @@ public class PainelCBTCeChave extends JPanel {
     private Image imagemDeFundo;
     private JFrame parentFrame;
     private int ordemCliques;
-    private boolean geraPontuacao = false;
+    private static boolean geraPontuacao = false;
+    private static boolean geraPontuacao2 = false;
     private int pontuacao;
     private int feedback;
     private static boolean primeiroClique = true;
@@ -84,6 +85,13 @@ public class PainelCBTCeChave extends JPanel {
             if (geraPontuacao == false && ChaveReversoraTela.indexChaveReversora == 2){
                 SalvarResposta.pontuacao +=1;
                 this.feedback = 4;
+                SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
+                geraPontuacao = true;
+                geraPontuacao2 = true;
+            }
+            if (geraPontuacao2 == true && Portas.index != 0){
+                SalvarResposta.pontuacao +=1;
+                this.feedback = 35;
                 SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
                 geraPontuacao = true;
             }

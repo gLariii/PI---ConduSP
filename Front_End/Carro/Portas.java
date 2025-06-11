@@ -143,7 +143,9 @@ public class Portas extends JPanel {
             if (index == 0){
                 botao1.setVisible(false);
                 botao2.setVisible(false);
-                btnLacrar.setVisible(true);
+                if (Cinturao.primeiroClique == false){
+                    btnLacrar.setVisible(true);
+                }
                 btnFechar.setText("Abrir");
                 btnVerificar.setVisible(true);
             }else if (index == 1){
@@ -230,7 +232,9 @@ public class Portas extends JPanel {
         }
         if (index == 1){
             btnFechar.setText("Abrir");
-            btnLacrar.setVisible(true);
+            if (Cinturao.primeiroClique == false){
+                btnLacrar.setVisible(true);
+            }
         }
         if (index == 2){
             btnLacrar.setVisible(false);
