@@ -13,7 +13,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
-//Fundo da tela de inicio(com a logo, imagem) - Castilho
+//Fundo da tela de inicio - Setando a logo - Castilho
 public class ImagemPainel extends JPanel {
     private LoginPainel loginPainel;
     private JLabel logoLabel;
@@ -28,6 +28,9 @@ public class ImagemPainel extends JPanel {
         initComponents();
     }
 
+
+
+// Caso de Erro 
     private void loadImage() {
         try (InputStream is = getClass().getResourceAsStream(imagePath)) {
             if (is != null) {
@@ -52,6 +55,8 @@ public class ImagemPainel extends JPanel {
         }
     }
 
+
+    // Incluindo a logo e o painel 
     private void initComponents() {
         loginPainel = new LoginPainel();
         loginPainel.setBounds(85, 170, 500, 640);
@@ -68,6 +73,7 @@ public class ImagemPainel extends JPanel {
         add(logoLabel);
     }
 
+    // Caso de Erro 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

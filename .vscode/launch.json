@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "fundoMenu",
+            "request": "launch",
+            "mainClass": "TelaMetro1.telaMenu.fundoMenu",
+            "projectName": "PI---ConduSP_21baeb8a"
+        },
+        {
+            "type": "java",
             "name": "CabineDeControleTela",
             "request": "launch",
             "mainClass": "CabineDeControleTela.CabineDeControleTela",

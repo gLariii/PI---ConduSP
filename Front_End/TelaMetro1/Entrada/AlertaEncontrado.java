@@ -9,21 +9,20 @@ public class AlertaEncontrado extends JDialog {
         super(parent, title, true); 
         initUI(message);
     }
-
+//Interface inicial 
     private void initUI(String message) {
         JPanel panel = new JPanel();
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panel.setLayout(new BorderLayout(10, 10));
 
-      
-        JLabel iconLabel = new JLabel(new ImageIcon("src/Assets/Imagens/warning.png"));
-        panel.add(iconLabel, BorderLayout.WEST);
-
+        // Mensagem de sucesso
         JLabel messageLabel = new JLabel("<html><h2 style='color:#333;'>Usuario Encontrado com sucesso</h2>"
                 + "<p>" + message + "</p></html>");
         panel.add(messageLabel, BorderLayout.CENTER);
 
+
+        // Botão de confirmação
         JButton okButton = new JButton("OK");
         okButton.setFocusPainted(false);
         okButton.setBackground(new Color(59, 89, 182));

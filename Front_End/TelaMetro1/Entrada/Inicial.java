@@ -9,7 +9,7 @@ public class Inicial {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        ImagemPainel backgroundPanel = new ImagemPainel("/Assets/Imagens/TelaInicial4Corrigida.png"); 
+        ImagemPainel backgroundPanel = new ImagemPainel("/Assets/Imagens/TelaInicial4Corrigida.png"); // Troca de Logo - Castilho
 
         frame.getContentPane().add(backgroundPanel); 
         frame.setVisible(true);

@@ -1,5 +1,6 @@
 package TelaMetro1.Entrada;
 
+// Setando Alerta de Erro de Login 
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,15 +17,12 @@ public class Alerta extends JDialog {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panel.setLayout(new BorderLayout(10, 10));
 
-        JLabel iconLabel = new JLabel(new ImageIcon("src/Assets/Imagens/warning.png"));
-        panel.add(iconLabel, BorderLayout.WEST);
-
-  
         JLabel messageLabel = new JLabel("<html><h2 style='color:#333;'>Erro de Login</h2>"
                 + "<p>" + message + "</p></html>");
-        panel.add(messageLabel, BorderLayout.CENTER);
+        panel.add(messageLabel, BorderLayout.CENTER); // Menssagem de erro 
 
     
+        // Botão de confirmação
         JButton okButton = new JButton("OK");
         okButton.setFocusPainted(false);
         okButton.setBackground(new Color(59, 89, 182));
@@ -33,6 +31,7 @@ public class Alerta extends JDialog {
         okButton.setPreferredSize(new Dimension(80, 35));
         okButton.addActionListener(e -> dispose());
 
+        // Criando o painel do botão e posição 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(okButton);

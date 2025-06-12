@@ -22,6 +22,8 @@ public class LoginPainel extends JPanel {
         initComponents();
     }
 
+    // Dentro do painel - Confirme seus dados 
+
     private void initComponents() {
         tituloLabel = new JLabel("Confirme seus dados");
         tituloLabel.setForeground(Color.WHITE);
@@ -32,6 +34,7 @@ public class LoginPainel extends JPanel {
         TelaInicial telaInicial = new TelaInicial();
         telaInicial.setBounds(10, 50, 560, 460);
 
+        // Rodapé do painel 
         rodapeLabel = new JLabel("Condução SP");
         rodapeLabel.setForeground(Color.WHITE);
         rodapeLabel.setFont(new Font("Helvetica", Font.BOLD, 30));
@@ -50,7 +53,7 @@ public class LoginPainel extends JPanel {
 
         int width = 400;
         int height = 500;
-        int arcWidth = 30;
+        int arcWidth = 30; // posição 
         int arcHeight = 30;
 
         g2d.setColor(Cores.AZUL_METRO_TRANSPARENTE);
