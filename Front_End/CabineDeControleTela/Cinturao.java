@@ -87,7 +87,6 @@ public class Cinturao extends JPanel {
 
         botao1 = new JButton("Coletar Cinturão e Adesivo");
         botao1.addActionListener(e -> {
-            AudioPlayer.playSound("SomColetado.wav");
             index = 1;
             carregarImagemFundo();
             repaint();

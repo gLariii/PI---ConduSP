@@ -3,6 +3,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CabineDeControleTela",
+            "request": "launch",
+            "mainClass": "CabineDeControleTela.CabineDeControleTela",
+            "projectName": "PI---ConduSP_59d25cef"
+        },
+        {
+            "type": "java",
+            "name": "Inicial",
+            "request": "launch",
+            "mainClass": "TelaMetro1.Entrada.Inicial",
+            "projectName": "PI---ConduSP_59d25cef"
+        },
+        {
+            "type": "java",
+            "name": "Inicial",
+            "request": "launch",
+            "mainClass": "Inicial",
+            "projectName": "PI---ConduSP_59d25cef"
+        },
+        {
+            "type": "java",
             "name": "fundoMenu",
             "request": "launch",
             "mainClass": "TelaMetro1.telaMenu.fundoMenu",

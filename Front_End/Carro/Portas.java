@@ -93,6 +93,11 @@ public class Portas extends JPanel {
 
         // Botão Emergência
         botao1 = new JButton("");
+        botao1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        botao1.setOpaque(false);
+        botao1.setContentAreaFilled(false);
+        botao1.setFocusPainted(false);
+        botao1.setVisible(false);
         botao1.addActionListener(e -> {
             if (primeiroCliqueEmergencia) {
                 SalvarResposta.pontuacao += 1;
@@ -106,6 +111,14 @@ public class Portas extends JPanel {
 
         // Botão Soleira
         botao2 = new JButton("");
+        botao2.setFont(new Font("Arial", Font.BOLD, 14));
+        botao2.setForeground(Color.WHITE);
+        botao2.setBackground(new Color(30, 60, 90));
+        botao2.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        botao2.setFocusPainted(false);
+        botao2.setContentAreaFilled(false);
+        botao2.setOpaque(true);
+        botao2.setCursor(new Cursor(Cursor.HAND_CURSOR));
         botao2.addActionListener(e -> {
             if (primeiroCliqueSoleira) {
                 SalvarResposta.pontuacao += 1;
@@ -153,11 +166,6 @@ public class Portas extends JPanel {
 
     // Define estilo para botões invisíveis
     private void configurarBotaoOculto(JButton botao) {
-        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        botao.setOpaque(false);
-        botao.setContentAreaFilled(false);
-        botao.setFocusPainted(false);
-        botao.setVisible(false);
         add(botao);
     }
 

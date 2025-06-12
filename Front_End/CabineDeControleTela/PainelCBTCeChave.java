@@ -86,6 +86,7 @@ public class PainelCBTCeChave extends JPanel {
         btnCBTC.setBorderPainted(false);
         btnCBTC.setFocusPainted(false);
         btnCBTC.addActionListener(e -> {
+            AudioPlayer.playSound("SomCBTC.wav");
             if (geraPontuacao == false && ChaveReversoraTela.indexChaveReversora == 2){
                 SalvarResposta.pontuacao +=1;
                 this.feedback = 4;

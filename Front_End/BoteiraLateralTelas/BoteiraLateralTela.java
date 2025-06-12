@@ -111,6 +111,7 @@ public class BoteiraLateralTela extends JPanel {
         };
 
         btnTrocar.addActionListener(e -> {
+            AudioPlayer.playSound("SomPortaFechando.wav");
             if (ChaveReversoraTela.indexChaveReversora != 1) {
                 // Verifica se um flash já está em andamento para evitar múltiplos cliques.
                 if (flashTimer != null && flashTimer.isRunning()) {
@@ -127,7 +128,6 @@ public class BoteiraLateralTela extends JPanel {
                     }
                 }
                 if (PainelExternoAberto.index != 1) {
-                    AudioPlayer.playSound("SomPortaFechando.wav");
                     DDUMenu.index = 1;
                     // Lógica do flash: muda a imagem e a restaura após um tempo.
                     final int originalIndex = index;
