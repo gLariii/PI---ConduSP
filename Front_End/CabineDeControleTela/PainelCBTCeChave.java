@@ -95,7 +95,6 @@ public class PainelCBTCeChave extends JPanel {
                 geraPontuacao2 = true;
             }
             if (geraPontuacao2 == true && Portas.index != 0){
-                SalvarResposta.pontuacao +=1;
                 this.feedback = 35;
                 SalvarResposta.salvarResposta(idUsuarioLogado, this.feedback);
                 geraPontuacao = true;
