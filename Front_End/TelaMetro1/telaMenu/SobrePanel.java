@@ -15,17 +15,20 @@ public class SobrePanel extends JPanel {
     private int logoHeight = 40;
     private Runnable voltarAcao;
 
+    // Cria o painel "Sobre"
     public SobrePanel(String imagemPath, Runnable voltarAcao) {
         this.voltarAcao = voltarAcao;
         carregarImagens(imagemPath);
         setLayout(new BorderLayout());
         setOpaque(true);
 
+        // Adiciona a barra de navegação e o painel central com conteúdo
         add(criarNavBar(), BorderLayout.NORTH);
         add(criarPainelCentralComConteudo(), BorderLayout.CENTER);
         redimensionadaLogo(logoWidth, logoHeight);
     }
 
+    // Carrega imagens de fundo e logo
     private void carregarImagens(String imagemPath) {
         try {
             InputStream isFundo = getClass().getResourceAsStream(imagemPath);
@@ -47,6 +50,7 @@ public class SobrePanel extends JPanel {
         }
     }
 
+    // Redimensiona a imagem da logo
     private void redimensionadaLogo(int width, int height) {
         if (logoOriginal != null) {
             this.logoWidth = width;
@@ -56,11 +60,13 @@ public class SobrePanel extends JPanel {
         }
     }
 
+    // Cria a barra de navegação
     private JPanel criarNavBar() {
         JPanel navBar = new JPanel(new BorderLayout());
         navBar.setBackground(Cores.AZUL_METRO);
         navBar.setPreferredSize(new Dimension(getWidth(), 60));
 
+        // Cria o botão "Voltar"
         JButton btnVoltar = botoes.criarBotaoVoltar();
         btnVoltar.addActionListener(e -> {
             if (voltarAcao != null) {
@@ -68,16 +74,19 @@ public class SobrePanel extends JPanel {
             }
         });
 
+        // Cria painel esquerdo para o botão "Voltar"
         JPanel painelEsquerdo = new JPanel(new FlowLayout(FlowLayout.LEFT, 25, 0));
         painelEsquerdo.setOpaque(false);
         painelEsquerdo.add(btnVoltar);
         navBar.add(painelEsquerdo, BorderLayout.WEST);
 
+        // Cria o título da barra de navegação
         JLabel titulo = new JLabel("Sobre o Condução SP", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 32));
         titulo.setForeground(Color.WHITE);
         navBar.add(titulo, BorderLayout.CENTER);
 
+        // Cria painel direito vazio para alinhamento
         JPanel painelDireito = new JPanel();
         painelDireito.setOpaque(false);
         painelDireito.setPreferredSize(new Dimension(btnVoltar.getPreferredSize().width + 30, 60));
@@ -86,12 +95,14 @@ public class SobrePanel extends JPanel {
         return navBar;
     }
 
+    // Cria o painel central com o conteúdo informativo
     private JPanel criarPainelCentralComConteudo() {
         JPanel painelCentral = new JPanel();
         painelCentral.setLayout(new BoxLayout(painelCentral, BoxLayout.Y_AXIS));
         painelCentral.setOpaque(false);
         painelCentral.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
 
+        // Cria painel "O que é o Condução SP?"
         RoundedPanel oQueEhPanel = new RoundedPanel(20, Cores.AZUL_METRO, Cores.AZUL_METRO.darker());
         oQueEhPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         oQueEhPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -99,10 +110,11 @@ public class SobrePanel extends JPanel {
 
         JLabel tituloOQueEh = new JLabel("<html><b style='font-size:24px;'>O que é o Condução SP?</b></html>");
         tituloOQueEh.setForeground(Color.WHITE);
-        tituloOQueEh.setAlignmentX(Component.RIGHT_ALIGNMENT); // ALINHADO À DIREITA
+        tituloOQueEh.setAlignmentX(Component.RIGHT_ALIGNMENT);
         tituloOQueEh.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
         oQueEhPanel.add(tituloOQueEh);
 
+        // Cria e estiliza a área de texto com a descrição do Condução SP
         JTextArea textoConducaoSP = new JTextArea();
         textoConducaoSP.setText(
                 "O Condução SP é um projeto inovador, desenvolvido por alunos do Instituto Mauá de Tecnologia em " +
@@ -122,6 +134,7 @@ public class SobrePanel extends JPanel {
         painelCentral.add(oQueEhPanel);
         painelCentral.add(Box.createVerticalStrut(40));
 
+        // Cria painel "Quem Somos Nós"
         RoundedPanel quemSomosNosPanel = new RoundedPanel(20, Cores.AZUL_METRO, Cores.AZUL_METRO.darker());
         quemSomosNosPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         quemSomosNosPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -140,6 +153,7 @@ public class SobrePanel extends JPanel {
         equipeDevLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         quemSomosNosPanel.add(equipeDevLabel);
 
+        // Nomes dos membros da equipe
         String[] nomes = {
                 "Lucas Castilho",
                 "Larissa Gomes",
@@ -149,6 +163,7 @@ public class SobrePanel extends JPanel {
                 "Bernardo Coelho"
         };
 
+        // Adiciona cada nome à lista da equipe
         for (String nome : nomes) {
             JLabel nomeLabel = new JLabel(nome);
             nomeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -163,6 +178,7 @@ public class SobrePanel extends JPanel {
         return painelCentral;
     }
 
+    // Estiliza a JTextArea
     private void estilizarTextArea(JTextArea textArea, int horizontalPadding) {
         textArea.setFont(new Font("Arial", Font.PLAIN, 16));
         textArea.setForeground(Color.WHITE);
@@ -175,13 +191,14 @@ public class SobrePanel extends JPanel {
         textArea.setFocusable(false);
     }
 
+    // Desenha componentes personalizados no painel (imagem de fundo e logo)
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (ImagemDeFundo != null) {
             g.drawImage(ImagemDeFundo, 0, 0, getWidth(), getHeight(), this);
         } else {
-            g.setColor(Color.BLACK);
+            g.setColor(Color.BLACK); // Preenche com preto se a imagem de fundo não carregar
             g.fillRect(0, 0, getWidth(), getHeight());
         }
 
@@ -190,6 +207,7 @@ public class SobrePanel extends JPanel {
             int y = getHeight() - logoHeight - 15;
             g.drawImage(logoRedimensionada, x, y, this);
 
+            // Desenha o texto "Condução SP"
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             g2d.setColor(Color.WHITE);

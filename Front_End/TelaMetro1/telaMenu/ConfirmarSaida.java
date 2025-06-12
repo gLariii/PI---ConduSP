@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
 
-import Assets.Cores; 
+import Assets.Cores;
 
 public class ConfirmarSaida extends JDialog {
 
@@ -18,86 +18,104 @@ public class ConfirmarSaida extends JDialog {
     public ConfirmarSaida(JFrame parent) {
         super(parent, "Confirmação de Saída", true);
 
+        // Configura o diálogo para não ter barra de título e ser transparente
         setUndecorated(true);
         setBackground(new Color(0, 0, 0, 0));
 
-        // Use GridBagLayout para um controle mais preciso do layout geral do diálogo
+        // Cria o painel de conteúdo principal com GridBagLayout para controle preciso
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(Cores.AZUL_METRO);
         contentPanel.setBorder(new RoundBorder(20, Cores.AZUL_METRO));
 
-        GridBagConstraints gbc = new GridBagConstraints(); // Objeto para configurar constraints do GridBagLayout
-        gbc.gridx = 0; // Coluna 0 para todos os componentes principais
-        gbc.weightx = 3.0; // Pega todo o espaço horizontal disponível
+        // ADIÇÃO IMPORTANTE: Define o tamanho preferido para o contentPanel
+        contentPanel.setPreferredSize(new Dimension(400, 300)); // Ajuste esses valores conforme necessário
+        // Você pode usar setMinimumSize() se quiser que ele possa crescer, mas não encolher abaixo disso.
+        // contentPanel.setMinimumSize(new Dimension(400, 300));
+
+
+        // Configurações do GridBagLayout para os componentes principais
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0; // Todos os componentes na primeira coluna
+        gbc.weightx = 1.0; // Faz com que a coluna se expanda
         gbc.anchor = GridBagConstraints.CENTER; // Centraliza horizontalmente
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Faz o componente preencher horizontalmente
 
-        // 1. Painel para a mensagem e o ícone
+        // Cria Painel para o ícone e a mensagem
         JPanel iconAndTextPanel = new JPanel();
-        iconAndTextPanel.setLayout(new BoxLayout(iconAndTextPanel, BoxLayout.Y_AXIS)); 
-        iconAndTextPanel.setOpaque(false); // Torna transparente para ver o fundo
+        iconAndTextPanel.setLayout(new BoxLayout(iconAndTextPanel, BoxLayout.Y_AXIS));
+        iconAndTextPanel.setOpaque(false);
 
+        // Carrega e configura o ícone de aviso
         ImageIcon avisoIcon = carregarIcone("/Assets/Imagens/aviso.png", 70, 70);
 
         JLabel avisoLabel = new JLabel();
         if (avisoIcon != null) {
             avisoLabel.setIcon(avisoIcon);
         }
-        // Centraliza o ícone horizontalmente dentro do BoxLayout
-        avisoLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // <-- ADIÇÃO
+        avisoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Cria e configura o rótulo da mensagem de confirmação
-        // Usamos HTML para quebrar a linha e centralizar o texto internamente
         JLabel messageLabel = new JLabel("<html><center>Você tem certeza <br>que deseja sair?</center></html>", SwingConstants.CENTER);
         messageLabel.setFont(new Font("Arial", Font.BOLD, 32));
         messageLabel.setForeground(Color.WHITE);
-        // Centraliza o texto horizontalmente dentro do BoxLayout
-        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // <-- ADIÇÃO
-        messageLabel.setBorder(new EmptyBorder(5, 0, 0, 0)); // Pequena margem superior para separar do ícone
+        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        messageLabel.setBorder(new EmptyBorder(5, 0, 0, 0));
 
-        // Adiciona o ícone e o texto ao painel, na ordem desejada
-        iconAndTextPanel.add(avisoLabel); // Primeiro o ícone
-        iconAndTextPanel.add(Box.createVerticalStrut(10)); // Espaçamento entre ícone e texto
-        iconAndTextPanel.add(messageLabel); // Depois o texto
+        // Adiciona o ícone e a mensagem ao painel, empilhando-os
+        iconAndTextPanel.add(avisoLabel);
+        iconAndTextPanel.add(Box.createVerticalStrut(10));
+        iconAndTextPanel.add(messageLabel);
 
-        // Adiciona o painel que contém o ícone e o texto ao contentPanel principal
-        gbc.gridy = 0; // Linha 0 no GridBagLayout
-        gbc.insets = new Insets(20, 0, 10, 0); // Margem superior 20, inferior 10
+        // Adiciona o painel de ícone/mensagem ao painel de conteúdo principal
+        gbc.gridy = 0; // Primeira linha
+        gbc.insets = new Insets(20, 0, 10, 0); // Margens
         contentPanel.add(iconAndTextPanel, gbc);
 
-
-        // 2. Painel para os botões "Sim" e "Não"
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
+        // Cria Painel para os botões "Sim" e "Não"
+        JPanel buttonPanel = new JPanel(new GridBagLayout()); // Usar GridBagLayout para os botões
         buttonPanel.setOpaque(false);
 
+        // Configurações do GridBagLayout para os botões dentro do buttonPanel
+        GridBagConstraints gbcButtons = new GridBagConstraints();
+        gbcButtons.weightx = 1.0; // Faz com que cada botão se estique horizontalmente
+        gbcButtons.fill = GridBagConstraints.HORIZONTAL; // Preenche o espaço horizontal
+        gbcButtons.insets = new Insets(0, 10, 0, 10); // Espaçamento entre os botões
+
+        // Cria Botão "Sim"
         JButton simButton = createStyledButton("", new Color(40, 160, 40), "/Assets/Imagens/sim.png", 40, 40);
         simButton.addActionListener(e -> {
             confirmed = true;
             dispose();
         });
 
+        // Cria Botão "Não"
         JButton naoButton = createStyledButton("", new Color(160, 40, 40), "/Assets/Imagens/nao.png", 40, 40);
         naoButton.addActionListener(e -> {
             confirmed = false;
             dispose();
         });
 
-        buttonPanel.add(simButton);
-        buttonPanel.add(naoButton);
+        // Adiciona os botões ao painel de botões
+        gbcButtons.gridx = 0; // Botão "Sim" na primeira coluna do buttonPanel
+        buttonPanel.add(simButton, gbcButtons);
 
-        // Adiciona o buttonPanel ao contentPanel usando GridBagLayout
-        gbc.gridy = 1; // Linha 1 no GridBagLayout
-        gbc.insets = new Insets(10, 0, 20, 0); // Margem superior 10, inferior 20
+        gbcButtons.gridx = 1; // Botão "Não" na segunda coluna do buttonPanel
+        buttonPanel.add(naoButton, gbcButtons);
+
+        // Adiciona o painel de botões ao painel de conteúdo principal
+        gbc.gridy = 1; // Segunda linha
+        gbc.insets = new Insets(10, 20, 20, 20); // Margens
         contentPanel.add(buttonPanel, gbc);
 
-        // Define o contentPanel como o painel de conteúdo do diálogo
+        // Define o painel de conteúdo como o conteúdo principal do diálogo
         setContentPane(contentPanel);
 
-        // Ajusta o tamanho do diálogo ao seu conteúdo e centraliza-o na tela pai
+        // Ajusta o tamanho do diálogo e centraliza na tela pai
         pack();
         setLocationRelativeTo(parent);
     }
 
-    // Método auxiliar para carregar e redimensionar ícones
+    // Carrega e redimensiona ícones
     private ImageIcon carregarIcone(String path, int width, int height) {
         try (InputStream is = getClass().getResourceAsStream(path)) {
             if (is != null) {
@@ -110,7 +128,7 @@ public class ConfirmarSaida extends JDialog {
         return null;
     }
 
-    // Método auxiliar para criar botões estilizados com ícones e efeitos de hover
+    // Cria botões estilizados com ícones e efeitos de hover
     private JButton createStyledButton(String text, Color bgColor, String iconPath, int iconWidth, int iconHeight) {
         JButton button = new JButton();
 
@@ -118,14 +136,14 @@ public class ConfirmarSaida extends JDialog {
 
         if (buttonIcon != null) {
             JLabel iconLabel = new JLabel(buttonIcon);
-            iconLabel.setPreferredSize(new Dimension(iconWidth, iconHeight));
-            iconLabel.setMaximumSize(new Dimension(iconWidth, iconHeight));
-            iconLabel.setMinimumSize(new Dimension(iconWidth, iconHeight));
+            iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            iconLabel.setVerticalAlignment(SwingConstants.CENTER);
 
-            button.setLayout(new BorderLayout()); // Usa BorderLayout para centralizar o ícone
+            button.setLayout(new BorderLayout());
             button.add(iconLabel, BorderLayout.CENTER);
         } else {
             button.setText(text);
+            button.setHorizontalAlignment(SwingConstants.CENTER);
         }
 
         button.setFont(new Font("Arial", Font.BOLD, 18));
@@ -134,8 +152,11 @@ public class ConfirmarSaida extends JDialog {
         button.setFocusPainted(false);
         button.setBorder(new RoundBorder(15, bgColor));
 
-        button.setPreferredSize(new Dimension(140, 80));
+        // Define tamanho mínimo e máximo para controle do esticamento
+        button.setMinimumSize(new Dimension(80, 80));
+        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80)); // Permite esticar horizontalmente
 
+        // Cores para efeitos de mouse
         Color hoverColor = new Color(Math.max(0, bgColor.getRed() - 20),
                                       Math.max(0, bgColor.getGreen() - 20),
                                       Math.max(0, bgColor.getBlue() - 20));
@@ -143,6 +164,7 @@ public class ConfirmarSaida extends JDialog {
                                        Math.max(0, bgColor.getGreen() - 40),
                                        Math.max(0, bgColor.getBlue() - 40));
 
+        // Adiciona listeners para efeitos de mouse
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -169,12 +191,12 @@ public class ConfirmarSaida extends JDialog {
         return button;
     }
 
-    // Método para retornar o estado de confirmação (true se "Sim", false se "Não")
+    // Retorna se a ação foi confirmada
     public boolean isConfirmed() {
         return confirmed;
     }
 
-    // Classe interna para criar bordas arredondadas personalizadas
+    // Classe interna: RoundBorder
     private static class RoundBorder extends AbstractBorder {
         private int radius;
         private Color color;
@@ -184,6 +206,7 @@ public class ConfirmarSaida extends JDialog {
             this.color = color;
         }
 
+        // Desenha a borda arredondada
         @Override
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             Graphics2D g2 = (Graphics2D) g.create();
@@ -193,6 +216,7 @@ public class ConfirmarSaida extends JDialog {
             g2.dispose();
         }
 
+        // Define as margens da borda
         @Override
         public Insets getBorderInsets(Component c) {
             return new Insets(radius / 2, radius / 2, radius / 2, radius / 2);
