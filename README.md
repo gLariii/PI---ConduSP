@@ -1,7 +1,5 @@
 # 🚇 Condução SP
 
-![Trenzinho animado](https://media.giphy.com/media/IU5iB6pUttkYw/giphy.gif)
-
 **Condução SP** é um projeto inovador, desenvolvido por alunos do **Instituto Mauá de Tecnologia** em colaboração estratégica com o **Metrô de São Paulo**. Nosso foco principal é a **Linha 1-Azul**, com o objetivo de promover a **capacitação e o aprimoramento contínuo dos operadores de metrô**, utilizando uma metodologia **interativa e envolvente**.
 
 ## 🎮 Sobre o jogo
