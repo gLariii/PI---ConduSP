@@ -1,12 +1,12 @@
 # 🚇 Condução SP
 
-![Logo do Metrô de São Paulo](./Assets/Imagens/logo_metro_sp.png)
+![Trenzinho animado](https://media.giphy.com/media/IU5iB6pUttkYw/giphy.gif)
 
 **Condução SP** é um projeto inovador, desenvolvido por alunos do **Instituto Mauá de Tecnologia** em colaboração estratégica com o **Metrô de São Paulo**. Nosso foco principal é a **Linha 1-Azul**, com o objetivo de promover a **capacitação e o aprimoramento contínuo dos operadores de metrô**, utilizando uma metodologia **interativa e envolvente**.
 
-## 🎮 Sobre o Simulador
+## 🎮 Sobre o jogo
 
-Criamos um simulador no formato de **jogo point & click**, onde os operadores podem:
+Criamos um jogo no formato de **point & click**, onde os operadores podem:
 
 - Vivenciar **cenários realistas de falhas operacionais**;
 - Treinar a **identificação e correção de erros**;
@@ -40,7 +40,7 @@ ConducaoSP/
 ├── Front_End/
 │   ├── Assets/
 │   │   └── Imagens/
-│   │       └── logo_metro_sp.png
+│   │       └── VideodeInicio.mp4
 │   ├── telaMenu/
 │   ├── CabineDeControleTela/
 │   └── ...
