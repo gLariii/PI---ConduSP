@@ -159,8 +159,7 @@ public class SobrePanel extends JPanel {
                 "Larissa Gomes",
                 "Vinicius Xavier",
                 "Sergio Henrique",
-                "Maria Gatti",
-                "Bernardo Coelho"
+                "Maria Gatti"
         };
 
         // Adiciona cada nome à lista da equipe

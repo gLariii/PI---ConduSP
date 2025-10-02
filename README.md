@@ -29,7 +29,6 @@ Projeto desenvolvido por:
 - **Vinicius Xavier**
 - **Sergio Henrique**
 - **Maria Gatti**
-- **Bernardo Coelho**
 
 ## 📂 Estrutura do Projeto
 

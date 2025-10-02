@@ -1,26 +1,30 @@
-package TelaMetro1.Musica; 
+package TelaMetro1.Musica;
 
 public class InicialMusica {
 
-    // Variável para tocar a música de fundo
-    private static Musica backgroundMusicPlayer; 
+    private static Musica backgroundMusicPlayer;
 
-    // Inicia a música de fundo
+    // ---> ESTE É O MÉTODO QUE SUA CLASSE MENU ESTÁ CHAMANDO <---
+    // Ele deve existir! Ele age como um atalho para o método principal.
     public static void startBackgroundMusic(String audioFilePath, boolean loop) {
+        // Ele chama a versão completa com um volume padrão (ex: 75.0f)
+        startBackgroundMusic(audioFilePath, loop, 0.5f);
+    }
+    
+    // Método principal que aceita o volume
+    public static void startBackgroundMusic(String audioFilePath, boolean loop, float initialVolume) {
         if (backgroundMusicPlayer == null) {
             backgroundMusicPlayer = new Musica();
         }
-        backgroundMusicPlayer.play(audioFilePath, loop);
+        backgroundMusicPlayer.play(audioFilePath, loop, initialVolume);
     }
 
-    // Cancela a música de fundo
     public static void stopMusic() {
         if (backgroundMusicPlayer != null) {
             backgroundMusicPlayer.stop();
         }
     }
 
-    // Retorna o player de música 
     public static Musica getBackgroundMusicPlayer() {
         return backgroundMusicPlayer;
     }

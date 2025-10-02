@@ -6,6 +6,20 @@
             "name": "Inicial",
             "request": "launch",
             "mainClass": "TelaMetro1.Entrada.Inicial",
+            "projectName": "PI---ConduSP-1_35c6616d"
+        },
+        {
+            "type": "java",
+            "name": "CabineDeControleTela",
+            "request": "launch",
+            "mainClass": "CabineDeControleTela.CabineDeControleTela",
+            "projectName": "PI---ConduSP-1_35c6616d"
+        },
+        {
+            "type": "java",
+            "name": "Inicial",
+            "request": "launch",
+            "mainClass": "TelaMetro1.Entrada.Inicial",
             "projectName": "PI---ConduSP_e630a9cd"
         },
         {
